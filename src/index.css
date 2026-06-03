@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+/* IFM-Design-System — Farben & Schrift aus dem Konzept (Abschnitt 11) */
+@theme {
+  --color-ifm-blue: #2a4566; /* Dunkelblau — Primärfarbe, Buttons, Überschriften */
+  --color-ifm-red: #ad0131; /* Rot — Akzent, Trennstriche, "falsch"-Marker */
+  --color-ifm-yellow: #fabb17; /* Gelb — Hinweise, "unsicher"-Marker */
+  --color-ifm-green: #1ba56e; /* Grün — Erfolg, "richtig"-Marker, bestanden */
+  --color-ifm-lightblue: #e1eaf5; /* Hellblau — Hintergrund-Boxen, Hinweis-Container */
+  --color-ifm-gray: #8293a7; /* Grau — Sekundärtext */
+
+  --font-sans: 'Ubuntu', Arial, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ifm-blue);
+}
