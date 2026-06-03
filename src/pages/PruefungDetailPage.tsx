@@ -285,7 +285,8 @@ export default function PruefungDetailPage() {
           </Button>
         </div>
         <p className="mt-2 text-xs text-ifm-gray">
-          Der Teilnehmer-Zugang (Lobby & Prüfungslauf) wird im nächsten Schritt gebaut.
+          Teilnehmer öffnen diesen Link, geben ihren Namen ein und warten in der Lobby, bis du
+          startest.
         </p>
       </Card>
 

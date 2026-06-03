@@ -9,11 +9,15 @@ import FragenpoolPage from './pages/FragenpoolPage'
 import VorlagenPage from './pages/VorlagenPage'
 import PruefungenPage from './pages/PruefungenPage'
 import PruefungDetailPage from './pages/PruefungDetailPage'
+import TeilnehmerPage from './pages/teilnehmer/TeilnehmerPage'
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+
+      {/* Öffentlicher Teilnehmer-Zugang (ohne Login) */}
+      <Route path="/p/:code" element={<TeilnehmerPage />} />
 
       {/* Geschützter Trainer-Bereich */}
       <Route element={<ProtectedRoute />}>

@@ -70,3 +70,12 @@ export function XIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function ThumbsDownIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M17 14V2" />
+      <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H17a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L9 22a2 2 0 0 1-1.42-3.88Z" />
+    </svg>
+  )
+}

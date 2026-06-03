@@ -482,7 +482,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      antwort_speichern: {
+        Args: {
+          p_optionen: string[]
+          p_pruefung_frage_id: string
+          p_teilnehmer_id: string
+          p_unsicher: boolean
+        }
+        Returns: undefined
+      }
+      pruefung_abgeben: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_beitreten: {
+        Args: { p_code: string; p_name: string }
+        Returns: Json
+      }
+      pruefung_fragen: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_status: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never
