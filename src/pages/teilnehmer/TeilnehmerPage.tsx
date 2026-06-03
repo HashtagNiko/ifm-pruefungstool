@@ -34,8 +34,8 @@ export default function TeilnehmerPage() {
     startVersucht.current = true
     ;(async () => {
       try {
+        const s = await ladeStatus() // Status geht ohne Session (anon apikey)
         await ensureAnonSession()
-        const s = await ladeStatus()
         const gespeicherterName = localStorage.getItem(nameKey)
         if (gespeicherterName && s.status !== 'entwurf') {
           try {
@@ -46,11 +46,7 @@ export default function TeilnehmerPage() {
           }
         }
       } catch (err) {
-        setFehler(
-          err instanceof Error
-            ? err.message
-            : 'Verbindung fehlgeschlagen. Sind anonyme Anmeldungen aktiviert?',
-        )
+        setFehler(err instanceof Error ? err.message : 'Verbindung fehlgeschlagen.')
       } finally {
         setInit(false)
       }
@@ -78,10 +74,17 @@ export default function TeilnehmerPage() {
 
   if (init) return <Schirm><p className="text-ifm-gray">Verbindung wird hergestellt …</p></Schirm>
 
-  if (fehler && !status)
+  if (fehler && !teilnehmerId && !ergebnis)
     return (
-      <Schirm>
+      <Schirm titel={status?.vorlage_name} unter={status?.kurs_name}>
         <ErrorBanner message={fehler} />
+        <Button
+          variant="secondary"
+          className="mt-4 w-full"
+          onClick={() => window.location.reload()}
+        >
+          Erneut versuchen
+        </Button>
       </Schirm>
     )
 

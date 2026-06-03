@@ -22,6 +22,14 @@ export async function ensureAnonSession(): Promise<void> {
   const { data } = await supabaseP.auth.getSession()
   if (!data.session) {
     const { error } = await supabaseP.auth.signInAnonymously()
-    if (error) throw error
+    if (error) {
+      if (/anonymous/i.test(error.message)) {
+        throw new Error(
+          'Anonyme Anmeldungen sind im Supabase-Projekt noch nicht aktiviert ' +
+            '(Authentication → Sign In / Providers → „Allow anonymous sign-ins").',
+        )
+      }
+      throw new Error(error.message)
+    }
   }
 }

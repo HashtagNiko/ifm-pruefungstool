@@ -55,7 +55,7 @@ export interface ErgebnisInfo {
 
 export async function statusLaden(code: string): Promise<StatusInfo> {
   const { data, error } = await supabaseP.rpc('pruefung_status', { p_code: code })
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data as unknown as StatusInfo
 }
 
@@ -64,7 +64,7 @@ export async function beitreten(code: string, name: string): Promise<BeitretenIn
     p_code: code,
     p_name: name,
   })
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data as unknown as BeitretenInfo
 }
 
@@ -72,7 +72,7 @@ export async function fragenLaden(teilnehmerId: string): Promise<FragenInfo> {
   const { data, error } = await supabaseP.rpc('pruefung_fragen', {
     p_teilnehmer_id: teilnehmerId,
   })
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data as unknown as FragenInfo
 }
 
@@ -88,13 +88,13 @@ export async function antwortSpeichern(
     p_optionen: optionen,
     p_unsicher: unsicher,
   })
-  if (error) throw error
+  if (error) throw new Error(error.message)
 }
 
 export async function abgeben(teilnehmerId: string): Promise<ErgebnisInfo> {
   const { data, error } = await supabaseP.rpc('pruefung_abgeben', {
     p_teilnehmer_id: teilnehmerId,
   })
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data as unknown as ErgebnisInfo
 }
