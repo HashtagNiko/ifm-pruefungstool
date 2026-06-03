@@ -34,4 +34,9 @@ dist-ssr
 *.sln
 *.sw?
 Thumbs.db
+
+# Fragen-Exporte / Rohdaten der Kurse -> nicht ins (oeffentliche) Repo
 weg-fragen-export.json
+hg-fragen-gesamt.json
+*-fragen-*.json
+*fragen*.json
