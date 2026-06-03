@@ -3,7 +3,18 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
-import { Button, Card, EmptyState, ErrorBanner, Modal, TextInput, Textarea } from '../components/ui'
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  EmptyState,
+  ErrorBanner,
+  IconButton,
+  Modal,
+  TextInput,
+  Textarea,
+} from '../components/ui'
+import { PencilIcon, PlusIcon, TrashIcon } from '../components/icons'
 
 type Kurs = Tables<'kurs'>
 
@@ -15,6 +26,9 @@ export default function KursePage() {
 
   // Modal-State: null = zu, sonst der zu bearbeitende Kurs (oder leeres Objekt für "neu")
   const [bearbeite, setBearbeite] = useState<Partial<Kurs> | null>(null)
+  // Lösch-Dialog
+  const [loeschKandidat, setLoeschKandidat] = useState<Kurs | null>(null)
+  const [loeschBusy, setLoeschBusy] = useState(false)
 
   async function laden_() {
     setLaden(true)
@@ -31,16 +45,17 @@ export default function KursePage() {
     laden_()
   }, [])
 
-  async function loeschen(kurs: Kurs) {
-    if (
-      !confirm(
-        `Kurs „${kurs.name}" wirklich löschen? Alle Themengebiete, Fragen und Vorlagen dieses Kurses werden mitgelöscht.`,
-      )
-    )
-      return
-    const { error } = await supabase.from('kurs').delete().eq('id', kurs.id)
-    if (error) setFehler(error.message)
-    else setKurse((k) => k.filter((x) => x.id !== kurs.id))
+  async function loeschenBestaetigt() {
+    if (!loeschKandidat) return
+    setLoeschBusy(true)
+    const { error } = await supabase.from('kurs').delete().eq('id', loeschKandidat.id)
+    if (error) {
+      setFehler(error.message)
+    } else {
+      setKurse((k) => k.filter((x) => x.id !== loeschKandidat.id))
+      setLoeschKandidat(null)
+    }
+    setLoeschBusy(false)
   }
 
   return (
@@ -52,7 +67,9 @@ export default function KursePage() {
             Deine Kurse und ihre Themengebiete.
           </p>
         </div>
-        <Button onClick={() => setBearbeite({})}>+ Neuer Kurs</Button>
+        <IconButton variant="primary" label="Neuer Kurs" onClick={() => setBearbeite({})}>
+          <PlusIcon />
+        </IconButton>
       </div>
 
       {fehler && (
@@ -78,13 +95,17 @@ export default function KursePage() {
               {kurs.beschreibung && (
                 <p className="mt-1 text-sm text-ifm-gray line-clamp-3">{kurs.beschreibung}</p>
               )}
-              <div className="mt-4 pt-3 border-t border-ifm-lightblue flex gap-2">
-                <Button variant="ghost" onClick={() => setBearbeite(kurs)}>
-                  Bearbeiten
-                </Button>
-                <Button variant="ghost" className="text-ifm-red" onClick={() => loeschen(kurs)}>
-                  Löschen
-                </Button>
+              <div className="mt-4 pt-3 border-t border-ifm-lightblue flex justify-end gap-1">
+                <IconButton label="Bearbeiten" onClick={() => setBearbeite(kurs)}>
+                  <PencilIcon />
+                </IconButton>
+                <IconButton
+                  variant="danger"
+                  label="Löschen"
+                  onClick={() => setLoeschKandidat(kurs)}
+                >
+                  <TrashIcon />
+                </IconButton>
               </div>
             </Card>
           ))}
@@ -107,6 +128,20 @@ export default function KursePage() {
           }}
         />
       )}
+
+      <ConfirmDialog
+        open={loeschKandidat !== null}
+        title="Kurs löschen"
+        message={
+          <>
+            Kurs <strong>{loeschKandidat?.name}</strong> wirklich löschen? Alle
+            Themengebiete, Fragen und Vorlagen dieses Kurses werden mitgelöscht.
+          </>
+        }
+        busy={loeschBusy}
+        onConfirm={loeschenBestaetigt}
+        onClose={() => setLoeschKandidat(null)}
+      />
     </div>
   )
 }

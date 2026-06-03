@@ -2,7 +2,23 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { Tables } from '../lib/database.types'
-import { Button, Card, EmptyState, ErrorBanner, TextInput } from '../components/ui'
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  EmptyState,
+  ErrorBanner,
+  IconButton,
+  Modal,
+  TextInput,
+} from '../components/ui'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from '../components/icons'
 
 type Kurs = Tables<'kurs'>
 type Themengebiet = Tables<'themengebiet'>
@@ -15,6 +31,10 @@ export default function KursDetailPage() {
   const [fehler, setFehler] = useState<string | null>(null)
   const [neuerName, setNeuerName] = useState('')
   const [busy, setBusy] = useState(false)
+  // Umbenennen-Modal + Lösch-Dialog
+  const [bearbeiteThema, setBearbeiteThema] = useState<Themengebiet | null>(null)
+  const [loeschThema, setLoeschThema] = useState<Themengebiet | null>(null)
+  const [loeschBusy, setLoeschBusy] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -56,25 +76,35 @@ export default function KursDetailPage() {
     setBusy(false)
   }
 
-  async function themaUmbenennen(thema: Themengebiet) {
-    const name = prompt('Neuer Name für das Themengebiet:', thema.name)
-    if (name == null || !name.trim() || name === thema.name) return
+  async function themaUmbenanntSpeichern(thema: Themengebiet, name: string) {
+    const sauber = name.trim()
+    if (!sauber || sauber === thema.name) {
+      setBearbeiteThema(null)
+      return
+    }
     const { error } = await supabase
       .from('themengebiet')
-      .update({ name: name.trim() })
+      .update({ name: sauber })
       .eq('id', thema.id)
-    if (error) setFehler(error.message)
-    else
-      setThemen((alt) =>
-        alt.map((t) => (t.id === thema.id ? { ...t, name: name.trim() } : t)),
-      )
+    if (error) {
+      setFehler(error.message)
+    } else {
+      setThemen((alt) => alt.map((t) => (t.id === thema.id ? { ...t, name: sauber } : t)))
+      setBearbeiteThema(null)
+    }
   }
 
-  async function themaLoeschen(thema: Themengebiet) {
-    if (!confirm(`Themengebiet „${thema.name}" wirklich löschen?`)) return
-    const { error } = await supabase.from('themengebiet').delete().eq('id', thema.id)
-    if (error) setFehler(error.message)
-    else setThemen((alt) => alt.filter((t) => t.id !== thema.id))
+  async function themaLoeschenBestaetigt() {
+    if (!loeschThema) return
+    setLoeschBusy(true)
+    const { error } = await supabase.from('themengebiet').delete().eq('id', loeschThema.id)
+    if (error) {
+      setFehler(error.message)
+    } else {
+      setThemen((alt) => alt.filter((t) => t.id !== loeschThema.id))
+      setLoeschThema(null)
+    }
+    setLoeschBusy(false)
   }
 
   // Zwei benachbarte Themengebiete tauschen und neue sortierung persistieren
@@ -134,34 +164,30 @@ export default function KursDetailPage() {
                 <span className="text-ifm-gray text-sm w-6 text-right">{i + 1}.</span>
                 <span className="flex-1 text-ifm-blue">{thema.name}</span>
                 <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    className="px-2 py-1"
+                  <IconButton
+                    label="Nach oben"
                     disabled={i === 0}
                     onClick={() => verschieben(i, -1)}
-                    aria-label="Nach oben"
                   >
-                    ↑
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="px-2 py-1"
+                    <ArrowUpIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Nach unten"
                     disabled={i === themen.length - 1}
                     onClick={() => verschieben(i, 1)}
-                    aria-label="Nach unten"
                   >
-                    ↓
-                  </Button>
-                  <Button variant="ghost" onClick={() => themaUmbenennen(thema)}>
-                    Umbenennen
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="text-ifm-red"
-                    onClick={() => themaLoeschen(thema)}
+                    <ArrowDownIcon />
+                  </IconButton>
+                  <IconButton label="Umbenennen" onClick={() => setBearbeiteThema(thema)}>
+                    <PencilIcon />
+                  </IconButton>
+                  <IconButton
+                    variant="danger"
+                    label="Löschen"
+                    onClick={() => setLoeschThema(thema)}
                   >
-                    Löschen
-                  </Button>
+                    <TrashIcon />
+                  </IconButton>
                 </div>
               </li>
             ))}
@@ -177,10 +203,75 @@ export default function KursDetailPage() {
             placeholder="Neues Themengebiet …"
           />
         </div>
-        <Button type="submit" disabled={busy || !neuerName.trim()}>
-          Hinzufügen
-        </Button>
+        <IconButton
+          type="submit"
+          variant="primary"
+          label="Themengebiet hinzufügen"
+          disabled={busy || !neuerName.trim()}
+        >
+          <PlusIcon />
+        </IconButton>
       </form>
+
+      {bearbeiteThema && (
+        <ThemaUmbenennenModal
+          thema={bearbeiteThema}
+          onClose={() => setBearbeiteThema(null)}
+          onSpeichern={(name) => themaUmbenanntSpeichern(bearbeiteThema, name)}
+        />
+      )}
+
+      <ConfirmDialog
+        open={loeschThema !== null}
+        title="Themengebiet löschen"
+        message={
+          <>
+            Themengebiet <strong>{loeschThema?.name}</strong> wirklich löschen?
+          </>
+        }
+        busy={loeschBusy}
+        onConfirm={themaLoeschenBestaetigt}
+        onClose={() => setLoeschThema(null)}
+      />
     </div>
+  )
+}
+
+function ThemaUmbenennenModal({
+  thema,
+  onClose,
+  onSpeichern,
+}: {
+  thema: Themengebiet
+  onClose: () => void
+  onSpeichern: (name: string) => void
+}) {
+  const [name, setName] = useState(thema.name)
+  return (
+    <Modal open onClose={onClose} title="Themengebiet umbenennen">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSpeichern(name)
+        }}
+        className="space-y-4"
+      >
+        <TextInput
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          autoFocus
+        />
+        <div className="flex justify-end gap-2 pt-2">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Abbrechen
+          </Button>
+          <Button type="submit" disabled={!name.trim()}>
+            Speichern
+          </Button>
+        </div>
+      </form>
+    </Modal>
   )
 }
