@@ -122,15 +122,23 @@ export function Card({
 
 /* ---------- Modal ---------- */
 
+const MODAL_SIZES = {
+  md: 'max-w-lg',
+  lg: 'max-w-2xl',
+  xl: 'max-w-3xl',
+} as const
+
 export function Modal({
   open,
   onClose,
   title,
+  size = 'md',
   children,
 }: {
   open: boolean
   onClose: () => void
   title: string
+  size?: keyof typeof MODAL_SIZES
   children: ReactNode
 }) {
   if (!open) return null
@@ -140,7 +148,7 @@ export function Modal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-2xl bg-white shadow-lg p-6"
+        className={`w-full ${MODAL_SIZES[size]} max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-lg p-6`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-4">

@@ -6,6 +6,7 @@ import PlaceholderPage from './pages/PlaceholderPage'
 import KursePage from './pages/KursePage'
 import KursDetailPage from './pages/KursDetailPage'
 import FragenpoolPage from './pages/FragenpoolPage'
+import VorlagenPage from './pages/VorlagenPage'
 
 export default function App() {
   return (
@@ -19,15 +20,7 @@ export default function App() {
           <Route path="kurse" element={<KursePage />} />
           <Route path="kurse/:id" element={<KursDetailPage />} />
           <Route path="fragenpool" element={<FragenpoolPage />} />
-          <Route
-            path="vorlagen"
-            element={
-              <PlaceholderPage
-                title="Vorlagen"
-                description="Erstelle Prüfungsvorlagen mit Dauer, Bestehensschwellen und Frageanzahl je Themengebiet."
-              />
-            }
-          />
+          <Route path="vorlagen" element={<VorlagenPage />} />
           <Route
             path="pruefungen"
             element={
