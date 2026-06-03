@@ -56,7 +56,9 @@ export default function DashboardLayout() {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10 text-sm">
+        <div
+          className={`${menuOffen ? 'block' : 'hidden'} md:block p-4 border-t border-white/10 text-sm`}
+        >
           <div className="truncate text-white/70 mb-2" title={user?.email ?? ''}>
             {user?.email}
           </div>
