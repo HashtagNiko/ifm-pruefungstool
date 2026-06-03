@@ -7,6 +7,8 @@ import KursePage from './pages/KursePage'
 import KursDetailPage from './pages/KursDetailPage'
 import FragenpoolPage from './pages/FragenpoolPage'
 import VorlagenPage from './pages/VorlagenPage'
+import PruefungenPage from './pages/PruefungenPage'
+import PruefungDetailPage from './pages/PruefungDetailPage'
 
 export default function App() {
   return (
@@ -21,15 +23,8 @@ export default function App() {
           <Route path="kurse/:id" element={<KursDetailPage />} />
           <Route path="fragenpool" element={<FragenpoolPage />} />
           <Route path="vorlagen" element={<VorlagenPage />} />
-          <Route
-            path="pruefungen"
-            element={
-              <PlaceholderPage
-                title="Prüfungen"
-                description="Erstelle Prüfungen aus Vorlagen, öffne die Lobby, starte sie und werte die Abgaben aus."
-              />
-            }
-          />
+          <Route path="pruefungen" element={<PruefungenPage />} />
+          <Route path="pruefungen/:id" element={<PruefungDetailPage />} />
           <Route
             path="geteilt"
             element={
