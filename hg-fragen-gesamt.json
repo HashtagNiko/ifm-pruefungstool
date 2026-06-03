@@ -1,0 +1,3131 @@
+{
+  "formTitel": "H&G - Gesamter Fragenpool (Skripte 1–5)",
+  "exportiertAm": "2026-06-03T00:00:00Z",
+  "fragen": [
+    {
+      "nr": 1,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Wie hoch ist die Eigentümerquote in Deutschland im europäischen Vergleich ungefähr?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Ca. 20–25 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "Ca. 42–45 %",
+          "ist_richtig": true
+        },
+        {
+          "text": "Ca. 60–65 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "Ca. 80–85 %",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 2,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche Bruttowertschöpfung erzielt die Immobilienwirtschaft in Deutschland jährlich ungefähr?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Über 730 Milliarden Euro",
+          "ist_richtig": true
+        },
+        {
+          "text": "Rund 250 Milliarden Euro",
+          "ist_richtig": false
+        },
+        {
+          "text": "Rund 1.500 Milliarden Euro",
+          "ist_richtig": false
+        },
+        {
+          "text": "Rund 90 Milliarden Euro",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 3,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche Rechtsgrundlage gilt vorrangig für die WEG-Verwaltung?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "BGB-Mietrecht",
+          "ist_richtig": false
+        },
+        {
+          "text": "Wohnungseigentumsgesetz (WEG)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Wohnraumförderungsgesetz (WoFG)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Makler- und Bauträgerverordnung (MaBV)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 4,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche Rechtsgrundlage gilt für die klassische Mietverwaltung im Auftrag eines Eigentümers?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Wohnungseigentumsgesetz (WEG)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Heizkostenverordnung (HeizkostenV)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Mietrecht nach BGB (§§ 535 ff. BGB)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Gebäudeenergiegesetz (GEG)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 5,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Was umfasst das Gemeinschaftseigentum nach § 1 Abs. 5 WEG?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Nur das Grundstück, nicht aber Gebäudeteile",
+          "ist_richtig": false
+        },
+        {
+          "text": "Alle Teile des Gebäudes und des Grundstücks, die nicht zum Sondereigentum gehören",
+          "ist_richtig": true
+        },
+        {
+          "text": "Ausschließlich Treppenhaus und Dach",
+          "ist_richtig": false
+        },
+        {
+          "text": "Nur die Einrichtungen, die der Verwalter ausdrücklich als gemeinschaftlich erklärt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 6,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welcher Grundsatz gilt in der kaufmännischen Verwaltung von Fremdgeldern?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Fremdgelder dürfen mit dem Verwaltervermögen vermischt werden, wenn eine separate Buchführung geführt wird",
+          "ist_richtig": false
+        },
+        {
+          "text": "Fremdgelder sind strikt vom Eigenvermögen des Verwalters zu trennen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Fremdgelder müssen verzinst auf einem privaten Konto des Verwalters angelegt werden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Fremdgelder dürfen vorübergehend für betriebliche Zwecke des Verwalters verwendet werden",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 7,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Nach welcher Vorschrift ist der WEG-Verwalter zur Aufstellung eines Wirtschaftsplans verpflichtet?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "§ 24 WEG",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 26 WEG",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 28 WEG",
+          "ist_richtig": true
+        },
+        {
+          "text": "§ 556 BGB",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 8,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Bis wann muss die Betriebskostenabrechnung dem Mieter nach § 556 Abs. 3 BGB spätestens zugegangen sein?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Innerhalb von 6 Monaten nach Ende des Abrechnungszeitraums",
+          "ist_richtig": false
+        },
+        {
+          "text": "Innerhalb von 12 Monaten nach Ende des Abrechnungszeitraums",
+          "ist_richtig": true
+        },
+        {
+          "text": "Innerhalb von 18 Monaten nach Ende des Abrechnungszeitraums",
+          "ist_richtig": false
+        },
+        {
+          "text": "Innerhalb von 24 Monaten nach Ende des Abrechnungszeitraums",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 9,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Wie lang ist die Mindestfrist für die Einberufung einer Eigentümerversammlung nach § 24 WEG?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Eine Woche",
+          "ist_richtig": false
+        },
+        {
+          "text": "Zwei Wochen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Drei Wochen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sechs Wochen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 10,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Worauf basiert das CO2-Kostenaufteilungsgesetz (CO2KostAufG) seit 2023?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Auf einer pauschalen 50:50-Aufteilung zwischen Mieter und Vermieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Auf einem 10-Stufen-Modell, das sich am energetischen Zustand des Gebäudes orientiert",
+          "ist_richtig": true
+        },
+        {
+          "text": "Auf einer vollständigen Umlage der CO2-Kosten auf den Mieter wie bisher",
+          "ist_richtig": false
+        },
+        {
+          "text": "Auf einer freien Vereinbarung zwischen Mieter und Vermieter im Mietvertrag",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 11,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Wie hoch darf die Miete bei einer Neuvermietung in Gebieten mit Mietpreisbremse höchstens über der ortsüblichen Vergleichsmiete liegen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "5 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "10 %",
+          "ist_richtig": true
+        },
+        {
+          "text": "15 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "20 %",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 12,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Wer stellt den Wohnberechtigungsschein für preisgebundenen Wohnraum aus?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Der Verwalter im Auftrag des Eigentümers",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die jeweils zuständige Behörde",
+          "ist_richtig": true
+        },
+        {
+          "text": "Das Finanzamt",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die örtliche Industrie- und Handelskammer",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 13,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche Folge hat ein Verstoß gegen das Schriftformgebot nach § 550 BGB bei einem Gewerbemietvertrag mit über einem Jahr Laufzeit?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Der Vertrag ist insgesamt unwirksam",
+          "ist_richtig": false
+        },
+        {
+          "text": "Der Vertrag gilt als auf unbestimmte Zeit geschlossen und ist mit gesetzlicher Frist kündbar",
+          "ist_richtig": true
+        },
+        {
+          "text": "Der Vertrag verlängert sich automatisch um ein weiteres Jahr",
+          "ist_richtig": false
+        },
+        {
+          "text": "Der Vertrag wandelt sich in einen Wohnraummietvertrag um",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 14,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche Kündigungsfrist gilt nach § 580a Abs. 2 BGB für unbefristete Gewerbemietverträge gesetzlich?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "3 Monate zum Monatsende",
+          "ist_richtig": false
+        },
+        {
+          "text": "Spätestens am dritten Werktag eines Quartals zum Ende des nächsten Quartals",
+          "ist_richtig": true
+        },
+        {
+          "text": "12 Monate zum Jahresende",
+          "ist_richtig": false
+        },
+        {
+          "text": "6 Wochen zum Monatsende",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 15,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Warum muss bei Mischobjekten mit Gewerbe- und Wohneinheiten häufig ein Vorwegabzug bei den Betriebskosten erfolgen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Weil Gewerbeflächen steuerlich anders behandelt werden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Weil Gewerbemieter oft höhere Kosten verursachen und eine reine Quadratmeter-Verteilung die Wohnungsmieter benachteiligen würde",
+          "ist_richtig": true
+        },
+        {
+          "text": "Weil der Vermieter sonst keine Vorsteuer abziehen darf",
+          "ist_richtig": false
+        },
+        {
+          "text": "Weil die Betriebskostenverordnung dies bei Mischobjekten zwingend vorschreibt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 16,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Funktionen erfüllt eine Immobilie aus wirtschaftlicher Sicht?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Nutzgut für den Mieter",
+          "ist_richtig": true
+        },
+        {
+          "text": "Anlagegut für den Eigentümer",
+          "ist_richtig": true
+        },
+        {
+          "text": "Steuerersatz für den Staat",
+          "ist_richtig": false
+        },
+        {
+          "text": "Tauschgut für die Bank",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 17,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Gesetze bilden das Kernfundament der Verwalterarbeit?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Wohnungseigentumsgesetz (WEG)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bürgerliches Gesetzbuch (BGB)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Handelsgesetzbuch (HGB)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bundesimmissionsschutzgesetz (BImSchG)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 18,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei der folgenden Bereiche gehören laut Skript zum klassischen Aufgabenspektrum des Verwalters?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Kaufmännische Verwaltung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Technische Verwaltung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Architekturplanung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Maklertätigkeit gegen Provision",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 19,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Rechtsgrundlagen aus Art. 6 Abs. 1 DSGVO sind bei einem laufenden Mietverhältnis typischerweise einschlägig?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "lit. b — Vertragserfüllung",
+          "ist_richtig": true
+        },
+        {
+          "text": "lit. c — Rechtliche Verpflichtung (z.B. Aufbewahrungspflichten)",
+          "ist_richtig": true
+        },
+        {
+          "text": "lit. d — Schutz lebenswichtiger Interessen",
+          "ist_richtig": false
+        },
+        {
+          "text": "lit. e — Wahrnehmung öffentlicher Aufgaben",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 20,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Besonderheiten kennzeichnen preisgebundenen Wohnraum gegenüber freifinanziertem?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vermietung nur an Inhaber eines gültigen Wohnberechtigungsscheins",
+          "ist_richtig": true
+        },
+        {
+          "text": "Kostenmiete statt ortsüblicher Vergleichsmiete",
+          "ist_richtig": true
+        },
+        {
+          "text": "Befreiung von der Heizkostenverordnung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Vollständig freie Mieterauswahl ohne Einkommensgrenze",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 21,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei der folgenden Bestandteile gehören zwingend zu „Dach und Fach\" eines Gewerbeobjekts?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Dach und Dachstuhl",
+          "ist_richtig": true
+        },
+        {
+          "text": "Tragende Wände und Außenfassade",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bodenbelag in der Mietfläche",
+          "ist_richtig": false
+        },
+        {
+          "text": "Wandanstriche und nicht-tragende Innenwände",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 22,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Voraussetzungen muss eine Indexmiete im Gewerbe nach dem Preisklauselgesetz mindestens erfüllen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Laufzeitbindung des Vermieters von mindestens 10 Jahren",
+          "ist_richtig": true
+        },
+        {
+          "text": "Symmetrische Anpassung (Erhöhung und Senkung möglich)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Zustimmung der zuständigen Behörde zur Klausel",
+          "ist_richtig": false
+        },
+        {
+          "text": "Kopplung an einen Branchenindex der IHK",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 23,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Voraussetzungen müssen für eine Option zur Umsatzsteuer nach § 9 UStG erfüllt sein?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Der Mieter ist Unternehmer und nutzt das Objekt für sein Unternehmen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Der Mieter tätigt (fast) ausschließlich Umsätze, die den Vorsteuerabzug nicht ausschließen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Vertragslaufzeit beträgt mindestens 20 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "Das Mietobjekt liegt in einem ausgewiesenen Gewerbegebiet",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 24,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Mietmodelle sind im Gewerbe zur Wertsicherung üblich?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Staffelmiete",
+          "ist_richtig": true
+        },
+        {
+          "text": "Indexmiete (gekoppelt an den Verbraucherpreisindex)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Kostenmiete nach WoFG",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sozialmiete nach Mietspiegel",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 25,
+      "themengebiet": "Grundlagen der Immobilienwirtschaft",
+      "text": "Welche zwei Aussagen zur Verwalterpyramide treffen zu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Der WEG-Verwalter handelt im Auftrag der Gemeinschaft der Wohnungseigentümer",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Sondereigentumsverwaltung betreut einzelne vermietete Wohnungen innerhalb einer WEG im Auftrag des jeweiligen Eigentümers",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Mietverwaltung wird stets durch eine staatliche Stelle ausgeübt",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine Hausverwaltung darf nur eine der drei Verwaltungsformen anbieten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 26,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche Norm steht an der Spitze der deutschen Rechtspyramide?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Das Bürgerliche Gesetzbuch (BGB)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Das Grundgesetz (GG)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Das Wohnungseigentumsgesetz (WEG)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die jeweilige kommunale Satzung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 27,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zentrale Pflicht des Vermieters regelt § 535 Abs. 1 BGB?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Die Pflicht zur jährlichen Modernisierung der Mietsache",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die Pflicht, die Mietsache zum Gebrauch zu überlassen und im vertragsgemäßen Zustand zu erhalten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Pflicht zur Übernahme aller Betriebskosten",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die Pflicht zur Auszahlung der Mietkaution mit Zinsen nach 12 Monaten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 28,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Wie lang ist die Wartefrist nach § 558 BGB, bevor eine Mieterhöhung wegen Vergleichsmiete wirksam werden kann?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "12 Monate seit letzter Mietänderung",
+          "ist_richtig": false
+        },
+        {
+          "text": "15 Monate seit letzter Mietänderung",
+          "ist_richtig": true
+        },
+        {
+          "text": "24 Monate seit letzter Mietänderung",
+          "ist_richtig": false
+        },
+        {
+          "text": "36 Monate seit letzter Mietänderung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 29,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Wie hoch darf eine Mieterhöhung nach § 558 BGB innerhalb von drei Jahren grundsätzlich höchstens ausfallen (Kappungsgrenze)?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "10 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "20 %",
+          "ist_richtig": true
+        },
+        {
+          "text": "25 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "30 %",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 30,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche Folge hat ein Verstoß gegen die Schriftform nach § 550 BGB bei einem Mietvertrag mit über einem Jahr Laufzeit?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Der Mietvertrag ist von Anfang an nichtig",
+          "ist_richtig": false
+        },
+        {
+          "text": "Der Vertrag gilt als auf unbestimmte Zeit geschlossen und kann mit gesetzlicher Frist gekündigt werden",
+          "ist_richtig": true
+        },
+        {
+          "text": "Der Mieter verliert seinen Kündigungsschutz",
+          "ist_richtig": false
+        },
+        {
+          "text": "Der Vermieter muss den Vertrag binnen 6 Monaten notariell beurkunden lassen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 31,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Wie hoch darf die Mietkaution im Wohnraummietrecht nach § 551 BGB maximal sein?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Eine Nettokaltmiete",
+          "ist_richtig": false
+        },
+        {
+          "text": "Zwei Nettokaltmieten",
+          "ist_richtig": false
+        },
+        {
+          "text": "Drei Nettokaltmieten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sechs Nettokaltmieten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 32,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche Verwalter-Pflicht wurde mit der WEG-Reform 2020 in § 26a WEG neu geregelt?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Die Pflicht, eine Erlaubnis nach § 34c GewO einzuholen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die Möglichkeit der Zertifizierung als „Zertifizierter Verwalter\"",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Pflicht zur jährlichen Bestätigung durch einen Notar",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die Pflicht zur monatlichen Rechenschaftsablegung gegenüber jedem Eigentümer",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 33,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Wie lang ist die regelmäßige Gewährleistungsfrist für Bauwerke nach einem VOB/B-Vertrag?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "2 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "4 Jahre",
+          "ist_richtig": true
+        },
+        {
+          "text": "5 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "10 Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 34,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "In welcher Abteilung des Grundbuchs wird der Eigentümer eines Grundstücks eingetragen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Bestandsverzeichnis",
+          "ist_richtig": false
+        },
+        {
+          "text": "Abteilung I",
+          "ist_richtig": true
+        },
+        {
+          "text": "Abteilung II",
+          "ist_richtig": false
+        },
+        {
+          "text": "Abteilung III",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 35,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Werke verbinden Grundbuch und Liegenschaftskataster?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Das Bestandsverzeichnis im Grundbuch verweist auf das Flurstück im Kataster",
+          "ist_richtig": true
+        },
+        {
+          "text": "Das Liegenschaftskataster ersetzt das Bestandsverzeichnis vollständig",
+          "ist_richtig": false
+        },
+        {
+          "text": "Beide Register werden vom Notariat geführt und nicht behördlich verzahnt",
+          "ist_richtig": false
+        },
+        {
+          "text": "Das Kataster wird automatisch aus dem Grundbuch erzeugt und enthält keine eigenen Daten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 36,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei großen Hauptgebiete unterteilen das deutsche Recht?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Öffentliches Recht",
+          "ist_richtig": true
+        },
+        {
+          "text": "Privates Recht (Zivilrecht)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Kirchenrecht",
+          "ist_richtig": false
+        },
+        {
+          "text": "Völkerrecht",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 37,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Anfechtungsgründe für Willenserklärungen kennt das BGB nach §§ 119 ff. BGB?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Irrtum nach § 119 BGB",
+          "ist_richtig": true
+        },
+        {
+          "text": "Arglistige Täuschung oder Drohung nach § 123 BGB",
+          "ist_richtig": true
+        },
+        {
+          "text": "Nachträgliche Reue des Erklärenden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Wechsel der Marktlage nach Vertragsschluss",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 38,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Voraussetzungen müssen vorliegen, damit ein Mietvertrag als sittenwidrig oder Wucher nichtig ist?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Auffälliges Missverhältnis (Miete über 50 % der ortsüblichen Vergleichsmiete)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Ausnutzung einer Zwangslage des Mieters",
+          "ist_richtig": true
+        },
+        {
+          "text": "Schriftliche Anzeige beim Finanzamt durch den Mieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Vorherige Eintragung im Grundbuch",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 39,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Hauptpflichten des Mieters regelt § 535 Abs. 2 BGB?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Zahlung der vereinbarten Miete",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pflegliche Behandlung der Mietsache (inkl. Anzeige von Mängeln)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Selbstständige Durchführung aller Schönheitsreparaturen ohne vertragliche Grundlage",
+          "ist_richtig": false
+        },
+        {
+          "text": "Übernahme aller Modernisierungskosten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 40,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Begründungsmittel für eine Mieterhöhung nach § 558a BGB werden in der Praxis am häufigsten genutzt?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Mietspiegel (einfach oder qualifiziert)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sachverständigengutachten oder Vergleichswohnungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Vorlage einer Bonitätsauskunft des Mieters",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bestätigung durch die zuständige Behörde",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 41,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Modelle der Mietanpassung können bereits bei Vertragsschluss vereinbart werden?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Staffelmiete nach § 557a BGB",
+          "ist_richtig": true
+        },
+        {
+          "text": "Indexmiete nach § 557b BGB",
+          "ist_richtig": true
+        },
+        {
+          "text": "Modernisierungsumlage nach § 559 BGB als Vertragsbestandteil",
+          "ist_richtig": false
+        },
+        {
+          "text": "Kostenmiete nach WoFG",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 42,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Pflichten gehören zum gesetzlich verankerten Kernkatalog des WEG-Verwalters nach § 28 WEG?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Aufstellung eines Wirtschaftsplans",
+          "ist_richtig": true
+        },
+        {
+          "text": "Erstellung der Jahresabrechnung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Persönliche Hausmeistertätigkeiten vor Ort",
+          "ist_richtig": false
+        },
+        {
+          "text": "Direkter Eintrag der Eigentümer ins Grundbuch",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 43,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Hauptaufgaben hat der Verwaltungsbeirat nach § 29 WEG?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Unterstützung des Verwalters",
+          "ist_richtig": true
+        },
+        {
+          "text": "Überwachung des Verwalters und Prüfung der Abrechnungen vor Beschlussfassung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Weisungsrecht gegenüber dem Verwalter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eigenständiger Abschluss von Bauverträgen ohne Beschluss",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 44,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Maßnahmen darf der WEG-Verwalter nach § 27 Abs. 1 WEG auch ohne Vorbeschluss ergreifen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Maßnahmen von untergeordneter Bedeutung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Maßnahmen zur Abwehr eines unmittelbar drohenden Nachteils (Notgeschäftsführung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Aufnahme eines Kredits über 100.000 € für die Gemeinschaft",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verkauf eines Stellplatzes aus dem Gemeinschaftseigentum",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 45,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Rechtsfolgen treten mit der Abnahme eines Werks ein?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Die Werklohnforderung wird fällig",
+          "ist_richtig": true
+        },
+        {
+          "text": "Die Gewährleistungsfrist beginnt zu laufen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Der Auftragnehmer haftet ab diesem Moment unbegrenzt für jeden später auftretenden Mangel",
+          "ist_richtig": false
+        },
+        {
+          "text": "Der Vertrag wird automatisch in einen Pachtvertrag umgewandelt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 46,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Abnahmeformen sind nach VOB/B besonders praxisrelevant?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Förmliche Abnahme (§ 12 Abs. 4 VOB/B)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Fiktive Abnahme (§ 12 Abs. 5 VOB/B)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Mündliche Abnahme durch einen Bauleiter ohne Protokoll",
+          "ist_richtig": false
+        },
+        {
+          "text": "Abnahme allein durch das Bauordnungsamt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 47,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei zentralen Funktionen erfüllt das Grundbuch?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Erkennbarkeit der Eigentumsverhältnisse für den Rechtsverkehr",
+          "ist_richtig": true
+        },
+        {
+          "text": "Öffentlicher Glaube nach § 891 BGB (Schutz des redlichen Erwerbers)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Festsetzung der jährlichen Grundsteuer",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verwaltung der Erhaltungsrücklage einer WEG",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 48,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Begriffe gehören zur Systematik des Liegenschaftskatasters?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Flurstück (kleinste Buchungseinheit)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Gemarkung (Katasterbezirk innerhalb einer Gemeinde)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Abteilung III (Grundpfandrechte)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Wohnungsgrundbuchblatt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 49,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Eigenschaften kennzeichnen das Sachenrecht nach dem 3. Buch des BGB?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Absolutheit (Wirkung gegen jedermann)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Typenzwang (begrenzter Katalog dinglicher Rechte)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Reine Vertragsfreiheit ohne gesetzliche Schranken",
+          "ist_richtig": false
+        },
+        {
+          "text": "Relativität (Wirkung nur zwischen Vertragsparteien)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 50,
+      "themengebiet": "Immobilienbezogenes Recht",
+      "text": "Welche zwei Voraussetzungen müssen für eine Mieterhöhung nach § 558 BGB neben der Wartefrist und der Begründung vorliegen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Einhaltung der Kappungsgrenze (20 % bzw. 15 %) in drei Jahren",
+          "ist_richtig": true
+        },
+        {
+          "text": "Zustimmung des Mieters in Textform oder ersatzweise gerichtliche Durchsetzung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Vorherige notarielle Beurkundung der Mieterhöhung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Vorherige Genehmigung durch die Landesbauverwaltung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 51,
+      "themengebiet": "Management",
+      "text": "Welches Stammkapital ist für die Gründung einer GmbH gesetzlich erforderlich?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "1 €",
+          "ist_richtig": false
+        },
+        {
+          "text": "12.500 €",
+          "ist_richtig": false
+        },
+        {
+          "text": "25.000 €",
+          "ist_richtig": true
+        },
+        {
+          "text": "50.000 €",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 52,
+      "themengebiet": "Management",
+      "text": "Welches Mindestkapital ist für die Gründung einer UG (haftungsbeschränkt) erforderlich?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "1 €",
+          "ist_richtig": true
+        },
+        {
+          "text": "5.000 €",
+          "ist_richtig": false
+        },
+        {
+          "text": "12.500 €",
+          "ist_richtig": false
+        },
+        {
+          "text": "25.000 €",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 53,
+      "themengebiet": "Management",
+      "text": "Was ist eine relative Kennzahl?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Ein einzelner absoluter Wert, etwa „Umsatz 500.000 €\"",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine Kennzahl, die zwei Werte in Beziehung zueinander setzt",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eine Kennzahl, die nur jährlich erhoben werden darf",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine reine Schätzgröße ohne Datengrundlage",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 54,
+      "themengebiet": "Management",
+      "text": "Welcher Mittelwert ist gegenüber Ausreißern besonders robust?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Arithmetisches Mittel",
+          "ist_richtig": false
+        },
+        {
+          "text": "Median",
+          "ist_richtig": true
+        },
+        {
+          "text": "Geometrisches Mittel",
+          "ist_richtig": false
+        },
+        {
+          "text": "Modus (Modalwert)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 55,
+      "themengebiet": "Management",
+      "text": "Welche Mietausfallquote gilt im Bestand bei Wohnimmobilien als noch unproblematisch?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Unter 2 %",
+          "ist_richtig": true
+        },
+        {
+          "text": "Zwischen 5 und 10 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bis 20 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bis 30 %",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 56,
+      "themengebiet": "Management",
+      "text": "Wie viele produktive Stunden pro Jahr stehen einer Vollzeitkraft in der Hausverwaltung realistisch zur Verfügung?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "ca. 800 Stunden",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 1.400–1.500 Stunden",
+          "ist_richtig": true
+        },
+        {
+          "text": "ca. 1.760 Stunden (Soll-Arbeitszeit)",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 2.080 Stunden",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 57,
+      "themengebiet": "Management",
+      "text": "Welche Höchstarbeitszeit pro Tag sieht das Arbeitszeitgesetz grundsätzlich vor?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "6 Stunden",
+          "ist_richtig": false
+        },
+        {
+          "text": "8 Stunden, unter Voraussetzungen erweiterbar auf 10 Stunden",
+          "ist_richtig": true
+        },
+        {
+          "text": "12 Stunden ohne Einschränkung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Keine gesetzliche Obergrenze",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 58,
+      "themengebiet": "Management",
+      "text": "Wie lang muss nach dem Arbeitszeitgesetz die Mindestruhezeit zwischen zwei Arbeitstagen sein?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "8 Stunden",
+          "ist_richtig": false
+        },
+        {
+          "text": "11 Stunden",
+          "ist_richtig": true
+        },
+        {
+          "text": "14 Stunden",
+          "ist_richtig": false
+        },
+        {
+          "text": "16 Stunden",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 59,
+      "themengebiet": "Management",
+      "text": "Welche Reaktionszeit gilt im Beschwerdemanagement als professioneller Standard für eine erste Eingangsbestätigung?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Innerhalb von 1 Stunde",
+          "ist_richtig": false
+        },
+        {
+          "text": "Innerhalb von 24 Stunden",
+          "ist_richtig": true
+        },
+        {
+          "text": "Innerhalb von einer Woche",
+          "ist_richtig": false
+        },
+        {
+          "text": "Innerhalb von einem Monat",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 60,
+      "themengebiet": "Management",
+      "text": "Welche Bedürfnisebene steht in der Maslow-Pyramide am untersten Platz?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Soziale Bedürfnisse",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sicherheit",
+          "ist_richtig": false
+        },
+        {
+          "text": "Grundbedürfnisse (Existenz, Lohn)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Selbstverwirklichung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 61,
+      "themengebiet": "Management",
+      "text": "Welche zwei Rechtsformen kombinieren Haftungsbeschränkung mit steuerlichen Vorteilen einer Personengesellschaft?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "GmbH & Co. KG",
+          "ist_richtig": true
+        },
+        {
+          "text": "UG & Co. KG",
+          "ist_richtig": true
+        },
+        {
+          "text": "GbR",
+          "ist_richtig": false
+        },
+        {
+          "text": "OHG",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 62,
+      "themengebiet": "Management",
+      "text": "Welche zwei Eigenschaften charakterisieren die GbR (Gesellschaft bürgerlichen Rechts)?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Persönliche, unbeschränkte und solidarische Haftung aller Gesellschafter",
+          "ist_richtig": true
+        },
+        {
+          "text": "Entstehung formfrei, sobald sich zwei oder mehr Personen zu einem gemeinsamen Zweck zusammenschließen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pflicht zur Eintragung ins Handelsregister",
+          "ist_richtig": false
+        },
+        {
+          "text": "Mindeststammkapital von 25.000 €",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 63,
+      "themengebiet": "Management",
+      "text": "Welche zwei Grundformen von Kennzahlen unterscheidet man?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Absolute Kennzahlen (einzelne Werte)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Relative Kennzahlen (Verhältniszahlen)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Geheime Kennzahlen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Schätzkennzahlen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 64,
+      "themengebiet": "Management",
+      "text": "Welche zwei Kennzahlen sind typische Steuerungsgrößen für die Wirtschaftlichkeit einer Mietimmobilie?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Mietausfallquote",
+          "ist_richtig": true
+        },
+        {
+          "text": "Leerstands- oder Vakanzquote",
+          "ist_richtig": true
+        },
+        {
+          "text": "Kalibrierungsquote",
+          "ist_richtig": false
+        },
+        {
+          "text": "Tilgungsabsatzquote",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 65,
+      "themengebiet": "Management",
+      "text": "Welche zwei Vergleichsformen machen Kennzahlen erst aussagekräftig?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Zeitvergleich (Vorperiode, Trend)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Branchen- oder Sollvergleich",
+          "ist_richtig": true
+        },
+        {
+          "text": "Werbevergleich",
+          "ist_richtig": false
+        },
+        {
+          "text": "Reklamevergleich",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 66,
+      "themengebiet": "Management",
+      "text": "Welche zwei Maße der zentralen Tendenz sind in der Praxis am wichtigsten?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Arithmetisches Mittel (Durchschnitt)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Median",
+          "ist_richtig": true
+        },
+        {
+          "text": "Quantil der oberen 10 %",
+          "ist_richtig": false
+        },
+        {
+          "text": "Spannweite",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 67,
+      "themengebiet": "Management",
+      "text": "Welche zwei strategischen Grundpositionen kann eine Hausverwaltung im Wettbewerb einnehmen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Kostenführerschaft (günstigster Anbieter)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Qualitätsführerschaft (Premium-Anbieter)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Verzichtsstrategie (kein Marketing)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Inkasso-Strategie als Hauptgeschäft",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 68,
+      "themengebiet": "Management",
+      "text": "Welche zwei Bausteine gehören zwingend zu einem professionellen Beschwerdemanagement?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Annehmen und Dokumentieren der Beschwerde innerhalb kurzer Reaktionszeit",
+          "ist_richtig": true
+        },
+        {
+          "text": "Nachfassen, ob die Lösung beim Beschwerdeführer tatsächlich angekommen ist",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pauschales Abwiegeln, um Aufwand zu vermeiden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Weiterleitung an den Mieterbund",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 69,
+      "themengebiet": "Management",
+      "text": "Welche zwei Adressatengruppen brauchen unterschiedliche Kennzahlen-Sets vom Verwalter?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Die eigene Geschäftsleitung (interne Steuerung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eigentümer und Beirat (externe Berichterstattung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Das Bauamt",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die Mieter direkt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 70,
+      "themengebiet": "Management",
+      "text": "Welche zwei Aspekte gehören zu einer sauberen Ablauforganisation in der Hausverwaltung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Klar definierte Prozesse (z. B. für Mieterwechsel, Mahnwesen, Abrechnung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Verbindliche Reaktions- und Bearbeitungszeiten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Anonymes Telefonieren ohne Dokumentation",
+          "ist_richtig": false
+        },
+        {
+          "text": "Pauschaler Verzicht auf jegliche schriftliche Kommunikation",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 71,
+      "themengebiet": "Management",
+      "text": "Welche zwei Beschäftigungsformen sind im Personalbereich der Hausverwaltung typisch?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vollzeit-Anstellung (sozialversicherungspflichtig)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Teilzeit-Anstellung (reduzierte Stundenzahl, voll versicherungspflichtig)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Schwarzarbeit ohne Vertrag",
+          "ist_richtig": false
+        },
+        {
+          "text": "Lebenslange Tarifbindung ohne Möglichkeit der Kündigung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 72,
+      "themengebiet": "Management",
+      "text": "Welche zwei Inhalte gehören in eine sinnvolle Jahresplanung der Verwaltung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Strategische Ziele mit messbaren Kennzahlen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Regelmäßige Soll-Ist-Vergleiche (z. B. quartalsweise)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Reines Bauchgefühl ohne Dokumentation",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine 30-seitige Strategie, die in der Schublade verschwindet",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 73,
+      "themengebiet": "Management",
+      "text": "Welche zwei Bestandteile sollte eine professionelle Kalkulation der Verwaltungsleistungen umfassen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Interner Stundensatz auf Basis der Selbstkosten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Geschätzter Zeitaufwand pro Mandat (z. B. WEG, Mietshaus)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Ausschließlich Festpreise ohne Stundenbetrachtung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine Pauschale, die für alle Mandate identisch ist",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 74,
+      "themengebiet": "Management",
+      "text": "Welche zwei Punkte sind kennzeichnend für die GmbH als Rechtsform?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Haftungsbeschränkung der Gesellschafter grundsätzlich auf die Stammeinlage",
+          "ist_richtig": true
+        },
+        {
+          "text": "Besteuerung mit Körperschaftsteuer (15 % zzgl. Solidaritätszuschlag)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pflicht zur jährlichen Kapitalverdopplung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Keine Geschäftsführerhaftung, auch nicht bei Pflichtverletzung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 75,
+      "themengebiet": "Management",
+      "text": "Welche zwei Kommunikationsregeln gehören zur professionellen Schriftverkehr-Praxis einer Verwaltung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Klare, fehlerfreie und sachliche Formulierung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Konsequente Dokumentation und Aktenführung des Schriftwechsels",
+          "ist_richtig": true
+        },
+        {
+          "text": "Verzicht auf jede schriftliche Bestätigung von Beschlüssen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verwendung von Umgangssprache und Insider-Witzen gegenüber Eigentümern",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 76,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche gesetzliche Grundlage verpflichtet den gewerblichen Verwalter zur strikten Trennung von Treuhand- und Eigenvermögen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "§ 4 MaBV (Makler- und Bauträgerverordnung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "§ 14 UStG",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 558 BGB",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 5 BetrKV",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 77,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche Mindestdeckungssumme schreibt die Berufshaftpflicht (Vermögensschadenhaftpflicht) für gewerbliche Verwalter pro Versicherungsfall vor?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "100.000 Euro",
+          "ist_richtig": false
+        },
+        {
+          "text": "250.000 Euro",
+          "ist_richtig": false
+        },
+        {
+          "text": "500.000 Euro",
+          "ist_richtig": true
+        },
+        {
+          "text": "1.000.000 Euro",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 78,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche regelmäßige Verjährungsfrist gilt nach § 195 BGB für Hausgeldforderungen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "1 Jahr",
+          "ist_richtig": false
+        },
+        {
+          "text": "3 Jahre",
+          "ist_richtig": true
+        },
+        {
+          "text": "5 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "10 Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 79,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Wie lange müssen Buchungsbelege und Geschäftsunterlagen nach § 257 HGB aufbewahrt werden?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "3 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "5 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "10 Jahre",
+          "ist_richtig": true
+        },
+        {
+          "text": "20 Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 80,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche gesetzliche Regel bestimmt im WEG-Recht den Verteilungsschlüssel für Kosten als Standard, wenn kein abweichender Beschluss vorliegt?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Verteilung nach Personenanzahl",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verteilung nach Miteigentumsanteilen (§ 16 Abs. 2 WEG)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Verteilung nach Wohnfläche pauschal",
+          "ist_richtig": false
+        },
+        {
+          "text": "Gleichverteilung pro Wohneinheit",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 81,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Ab welchem Mietrückstand erlaubt § 543 Abs. 2 BGB eine fristlose Kündigung wegen Zahlungsverzugs im Wohnraummietrecht?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Einem Monat Rückstand",
+          "ist_richtig": false
+        },
+        {
+          "text": "Zwei Monatsmieten Rückstand",
+          "ist_richtig": true
+        },
+        {
+          "text": "Drei Monatsmieten Rückstand",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sechs Monatsmieten Rückstand",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 82,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zentrale Verwalterpflicht ergibt sich nach der WEG-Reform 2020 zusätzlich zur Jahresabrechnung und zum Wirtschaftsplan?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Jährlicher Vermögensbericht nach § 28 Abs. 4 WEG",
+          "ist_richtig": true
+        },
+        {
+          "text": "Monatliche Cashflow-Übersicht an alle Mieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Vorlage eines Steuerbescheids beim Beirat",
+          "ist_richtig": false
+        },
+        {
+          "text": "Jährliche Bonitätsprüfung jedes Eigentümers",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 83,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche Strafnorm kann bei der bewussten Zweckentfremdung von Treuhandgeldern einschlägig sein?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "§ 222 StGB (fahrlässige Tötung)",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 229 StGB (fahrlässige Körperverletzung)",
+          "ist_richtig": false
+        },
+        {
+          "text": "§ 266 StGB (Untreue)",
+          "ist_richtig": true
+        },
+        {
+          "text": "§ 263 StGB (Betrug an Mietern)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 84,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Was ist das Mietausfallwagnis in der Mietkalkulation?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Eine reale Versicherungsprämie für ausgefallene Mieten",
+          "ist_richtig": false
+        },
+        {
+          "text": "Ein kalkulatorischer Risikopuffer für ausbleibende Mieteinnahmen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eine staatliche Erstattung für Mietausfall",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine Strafzahlung bei verspäteter Mieterhöhung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 85,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche Pflicht besteht für die Mietkaution nach § 551 Abs. 3 BGB?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Sie muss bar im Tresor des Vermieters liegen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sie muss getrennt vom Vermögen des Vermieters und verzinslich angelegt werden",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sie kann in den Wirtschaftsplan einfließen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sie ist beim Finanzamt zu hinterlegen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 86,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Bestandteile gehören in einen vollständigen Verwaltervertrag?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Genaue Leistungsbeschreibung (Was ist Grundleistung, was Sonderleistung?)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Vereinbarung der Vergütung mit klarem Abgrenzungsmodell",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bonitätsauskunft jedes Mieters als Anlage",
+          "ist_richtig": false
+        },
+        {
+          "text": "Notarielle Beurkundung des Vertrages als Pflichtbestandteil",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 87,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Versicherungen gelten für den Eigentümer einer Mietimmobilie als praktisch unverzichtbar?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Wohngebäudeversicherung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Haus- und Grundbesitzer-Haftpflichtversicherung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Tier-Op-Versicherung des Hausmeisters",
+          "ist_richtig": false
+        },
+        {
+          "text": "Reisegepäckversicherung der Eigentümer",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 88,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Versicherungen sind für den Verwalter beruflich besonders relevant?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vermögensschadenhaftpflicht (Pflicht seit 2018 für gewerbliche Verwalter)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Betriebshaftpflicht des Verwaltungsbetriebs",
+          "ist_richtig": true
+        },
+        {
+          "text": "Krankenzusatzversicherung der Mieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sturmversicherung des Eigentümer-Pkws",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 89,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Pflichten des Verwalters ergeben sich aus dem Geschäftsbesorgungsverhältnis nach §§ 675, 667 BGB?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Herausgabe alles aus der Geschäftsführung Erlangten an den Auftraggeber",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sorgfältige treuhänderische Verwaltung der anvertrauten Gelder",
+          "ist_richtig": true
+        },
+        {
+          "text": "Persönliche Übernahme der gesamten Mietzahlung im Notfall",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verpflichtung zur dauerhaften Bürgschaft für alle Mieterausfälle",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 90,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Bestandteile gehören in eine WEG-Jahresabrechnung nach § 28 Abs. 2 WEG?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Gesamtabrechnung über alle Einnahmen und Ausgaben des Wirtschaftsjahres",
+          "ist_richtig": true
+        },
+        {
+          "text": "Einzelabrechnung pro Eigentümer mit individuellem Saldo",
+          "ist_richtig": true
+        },
+        {
+          "text": "Monatlicher Liquiditätsbericht über zwölf Monate",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bonitätsauskunft jedes Mieters im Objekt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 91,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Aufgaben hat der Verwaltungsbeirat im Rahmen der Prüfung der Abrechnung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Sachliche Prüfung der Belege und Buchungen vor der Beschlussfassung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Empfehlung an die Eigentümerversammlung zur Genehmigung oder Ablehnung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eigenständige rechtsverbindliche Beschlussfassung anstelle der Versammlung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Direkte Anweisung an den Verwalter, Geld zu transferieren",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 92,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Bestandteile gehören in eine ordnungsgemäße Betriebskostenabrechnung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Zusammenstellung der umlagefähigen Gesamtkosten nach BetrKV",
+          "ist_richtig": true
+        },
+        {
+          "text": "Klare Anwendung des vertraglichen Umlageschlüssels",
+          "ist_richtig": true
+        },
+        {
+          "text": "Veröffentlichung im Mietspiegel der Gemeinde",
+          "ist_richtig": false
+        },
+        {
+          "text": "Notarielle Beglaubigung jeder Einzelposition",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 93,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Punkte sind charakteristisch für die Treuhandbuchhaltung in der Verwaltung?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Strikte Trennung zwischen Treuhand- und Eigenvermögen des Verwalters",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pro Objekt eigene Buchhaltung mit getrennten Konten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Einheitliches Sammelkonto für alle verwalteten Objekte zugleich",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bare Aufbewahrung aller Eigentümerbeiträge im Büro",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 94,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Faktoren beeinflussen die Haftungspraxis des Verwalters am stärksten?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Systematische Dokumentation aller Vorgänge und Entscheidungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Klare Leistungsbeschreibung im Verwaltervertrag",
+          "ist_richtig": true
+        },
+        {
+          "text": "Persönliches Verhältnis zum Bürgermeister",
+          "ist_richtig": false
+        },
+        {
+          "text": "Anzahl der eigenen Familienangehörigen im Beirat",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 95,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Punkte gehören zur Verwaltungsübernahme bei Mandatswechsel zwingend dazu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vollständige Übergabe aller Objektunterlagen, Verträge und Kontostände vom Vorverwalter",
+          "ist_richtig": true
+        },
+        {
+          "text": "Aktualisierung der Bankvollmachten und Stammdaten beim neuen Verwalter",
+          "ist_richtig": true
+        },
+        {
+          "text": "Notarielle Beurkundung jeder einzelnen Mietakte",
+          "ist_richtig": false
+        },
+        {
+          "text": "Persönliche Begrüßung jedes Mieters durch den Geschäftsführer",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 96,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Aufgaben übernimmt der Verwalter typischerweise im Versicherungsfall?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Sofortige Schadensmeldung an die Versicherung (oft binnen 48 Stunden)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Dokumentation des Schadens und Koordination der Schadensregulierung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eigenmächtige Auszahlung der Versicherungssumme an Eigentümer",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verhandlung der Prämienhöhe ohne Eigentümerbeschluss",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 97,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Punkte sind beim sozialen Wohnungsbau nach WoFG zu beachten?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vermietung nur an Personen mit gültigem Wohnberechtigungsschein",
+          "ist_richtig": true
+        },
+        {
+          "text": "Einhaltung der Kostenmiete statt der ortsüblichen Vergleichsmiete",
+          "ist_richtig": true
+        },
+        {
+          "text": "Freie Mieterwahl ohne behördliche Kontrolle",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verbot von Modernisierungsmaßnahmen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 98,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Kostenarten dürfen nach § 1 Abs. 2 BetrKV gerade NICHT auf den Mieter umgelegt werden?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Verwaltungskosten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Instandhaltungs- und Instandsetzungskosten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Müllabfuhrkosten",
+          "ist_richtig": false
+        },
+        {
+          "text": "Hausstromkosten",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 99,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Aussagen treffen auf den Wirtschaftsplan einer WEG zu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Er ist die vorausschauende Kalkulationsgrundlage für die Hausgeldzahlungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Beschlossen werden seit der Reform 2020 die Vorschüsse und die Zuführung zur Erhaltungsrücklage",
+          "ist_richtig": true
+        },
+        {
+          "text": "Er muss vom Notar beurkundet werden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Er gilt automatisch ohne Beschluss der Eigentümerversammlung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 100,
+      "themengebiet": "Haus- und Grundstücksverwaltung",
+      "text": "Welche zwei Aussagen gelten zur Zahlungsverpflichtung für Hausgeld bei Eigentümerwechsel?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Zahlungsverpflichtet ist der zum Zeitpunkt der Beschlussfassung im Grundbuch eingetragene Eigentümer",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bei Veräußerung haftet der bisherige Eigentümer für die im Beschlusszeitpunkt entstandenen Forderungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Der Käufer muss rückwirkend alle Hausgeldrückstände der letzten 10 Jahre übernehmen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Hausgeldforderungen verjähren erst nach 30 Jahren",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 101,
+      "themengebiet": "Facility Management",
+      "text": "Welche DIN-Norm strukturiert das Gebäudemanagement in seine vier Hauptbereiche?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "DIN 18960",
+          "ist_richtig": false
+        },
+        {
+          "text": "DIN 277",
+          "ist_richtig": false
+        },
+        {
+          "text": "DIN 32736",
+          "ist_richtig": true
+        },
+        {
+          "text": "DIN EN 15221",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 102,
+      "themengebiet": "Facility Management",
+      "text": "Welcher Bereich gehört NICHT zu den vier Säulen des Gebäudemanagements nach DIN 32736?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Kaufmännisches Gebäudemanagement (KGM)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Technisches Gebäudemanagement (TGM)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Juristisches Gebäudemanagement (JGM)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Infrastrukturelles Gebäudemanagement (IGM)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 103,
+      "themengebiet": "Facility Management",
+      "text": "Wie häufig sind Heizungsanlagen typischerweise mindestens zu warten?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Alle zwei Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "Jährlich",
+          "ist_richtig": true
+        },
+        {
+          "text": "Nur bei Beschwerden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Alle fünf Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 104,
+      "themengebiet": "Facility Management",
+      "text": "Was beschreibt die technische Lebensdauer eines Bauteils?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Den Zeitraum, in dem es vollständig abgeschrieben werden darf",
+          "ist_richtig": false
+        },
+        {
+          "text": "Den Zeitraum, bis sein Wert auf 0 sinkt und Instandsetzung erforderlich wird",
+          "ist_richtig": true
+        },
+        {
+          "text": "Den Zeitraum bis zur ersten Wartung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Die rein gesetzliche Mindestnutzungszeit",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 105,
+      "themengebiet": "Facility Management",
+      "text": "Welcher Richtwert gilt für die technische Lebensdauer von Aufzugsanlagen?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "ca. 5–10 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 15–20 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 25–35 Jahre",
+          "ist_richtig": true
+        },
+        {
+          "text": "ca. 60–80 Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 106,
+      "themengebiet": "Facility Management",
+      "text": "Welcher Lebensdauer-Richtwert ist für eine moderne Gas- oder Öl-Heizungsanlage realistisch?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "ca. 5 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 20 Jahre",
+          "ist_richtig": true
+        },
+        {
+          "text": "ca. 40–50 Jahre",
+          "ist_richtig": false
+        },
+        {
+          "text": "ca. 80 Jahre",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 107,
+      "themengebiet": "Facility Management",
+      "text": "Welche Stufe der dreistufigen Inspektion von Spielgeräten findet vierteljährlich statt?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Operative Inspektion durch geschulte Fachkraft",
+          "ist_richtig": true
+        },
+        {
+          "text": "Hauptinspektion durch unabhängigen Sachverständigen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Routineprüfung durch Mieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Notinspektion durch das Bauamt",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 108,
+      "themengebiet": "Facility Management",
+      "text": "Welche Aussage beschreibt das infrastrukturelle Gebäudemanagement (IGM) am besten?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Es umfasst überwiegend kaufmännische Vertragsverwaltung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Es umfasst nutzungsbezogene Services wie Reinigung, Winterdienst und Pflege von Außenanlagen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Es regelt ausschließlich technische Wartungsverträge",
+          "ist_richtig": false
+        },
+        {
+          "text": "Es betrifft nur das strategische Flächenmanagement",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 109,
+      "themengebiet": "Facility Management",
+      "text": "Welche Organisation hat eine zentrale, in Deutschland viel beachtete Definition von Facility Management formuliert?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "GEFMA (German Facility Management Association)",
+          "ist_richtig": true
+        },
+        {
+          "text": "VDIV (Verband der Immobilienverwalter)",
+          "ist_richtig": false
+        },
+        {
+          "text": "IHK Frankfurt am Main",
+          "ist_richtig": false
+        },
+        {
+          "text": "BMI (Bundesministerium des Innern)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 110,
+      "themengebiet": "Facility Management",
+      "text": "Was ist eine modernisierende Instandsetzung?",
+      "typ": "single",
+      "punkte_max": 1,
+      "antworten": [
+        {
+          "text": "Eine Instandsetzung, die nur bei Komplettausfall erlaubt ist",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine Maßnahme, die alten Bestand erneuert und gleichzeitig auf einen höheren technischen Standard hebt",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eine reine Designanpassung ohne technische Wirkung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eine sofortige Außerbetriebnahme von Anlagen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 111,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Bereiche zählen nach DIN 32736 zum Gebäudemanagement?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Kaufmännisches Gebäudemanagement (KGM)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Technisches Gebäudemanagement (TGM)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Politisches Gebäudemanagement (PGM)",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sozialwissenschaftliches Gebäudemanagement (SGM)",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 112,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Ausprägungen der Instandhaltung sind nach DIN am wichtigsten?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Wartung (vorbeugend, regelmäßig)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Inspektion (Feststellung des Ist-Zustands)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eigenkontrolle durch Mieter ohne Dokumentation",
+          "ist_richtig": false
+        },
+        {
+          "text": "Provisorische Hilfsmaßnahmen ohne Plan",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 113,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei typischen Aufgaben des KGM (kaufmännischen Gebäudemanagements) führt der Verwalter selbst aus?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Vertragsmanagement (Versicherungen, Wartungsverträge, Energieverträge)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Buchhaltung, Wirtschaftsplan und Abrechnung der Bewirtschaftungskosten",
+          "ist_richtig": true
+        },
+        {
+          "text": "Eigenhändige Reparatur von Heizkesseln",
+          "ist_richtig": false
+        },
+        {
+          "text": "Bauleitung von Sanierungsprojekten am Dach",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 114,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Bestandteile gehören zwingend in einen sinnvollen Instandhaltungsplan?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Bestandsverzeichnis der Bauteile (Einbaujahr, Material, Wartungsstand)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Lebensdauerprognose und Erneuerungstermine je Bauteil",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bonität der Mieter",
+          "ist_richtig": false
+        },
+        {
+          "text": "Liste aller Eigentümer mit Privatadressen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 115,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Aufgaben gehören zum infrastrukturellen Gebäudemanagement (IGM)?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Reinigung von Treppenhäusern, Aufzügen und Gemeinschaftsflächen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Winterdienst und Pflege der Außenanlagen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Abschluss von Wartungsverträgen für die Heizungsanlage",
+          "ist_richtig": false
+        },
+        {
+          "text": "Erstellung der Jahresabrechnung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 116,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Bauteile haben typischerweise die längsten Lebensdauern in einem Wohngebäude?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Tragende Wände und Geschossdecken (über 100 Jahre)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Dachstuhl (Richtwert deutlich über 50 Jahre bei guter Pflege)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Außenanstrich",
+          "ist_richtig": false
+        },
+        {
+          "text": "Heizkessel",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 117,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Aspekte machen den Verwalter zum „Betreiber\" einer technischen Anlage?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Verantwortung für den sicheren Zustand und die regelmäßige Prüfung der Anlage",
+          "ist_richtig": true
+        },
+        {
+          "text": "Pflicht zur Dokumentation von Wartungen und Mängelbehebungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Persönlich-handwerkliche Reparaturpflicht im Notfall",
+          "ist_richtig": false
+        },
+        {
+          "text": "Eigentumserwerb an der Anlage",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 118,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Faktoren beeinflussen die tatsächliche Lebensdauer eines Bauteils stark?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Qualität von Material und Einbau",
+          "ist_richtig": true
+        },
+        {
+          "text": "Regelmäßigkeit und Qualität der Wartung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Versicherungstarif des Eigentümers",
+          "ist_richtig": false
+        },
+        {
+          "text": "Höhe des Verwalterhonorars",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 119,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Aussagen treffen auf die Erhaltungsrücklage in der WEG zu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Sie ist nach § 19 Abs. 2 Nr. 4 WEG Teil ordnungsgemäßer Verwaltung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Ihre jährliche Zuführung ist im Wirtschaftsplan zu kalkulieren und zu beschließen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sie darf jederzeit für private Zwecke des Verwalters genutzt werden",
+          "ist_richtig": false
+        },
+        {
+          "text": "Sie muss in physischen Goldbarren angelegt werden",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 120,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Maßnahmen gehören zur technischen Übernahme eines Objektes durch den neuen Verwalter?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Begehung mit Bestandsaufnahme von Bauzustand und technischen Anlagen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Prüfung bestehender Wartungsverträge und Sicherheitsprüfungen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Sofortige Erneuerung aller Aufzüge ohne Beschluss",
+          "ist_richtig": false
+        },
+        {
+          "text": "Kündigung aller Mieter zur Bestandsbereinigung",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 121,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Aussagen treffen auf das Flächenmanagement (FlM) zu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Es ist strategisch und konzeptionell ausgerichtet (wer nutzt welche Fläche, wie effizient)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Es spielt vor allem bei Gewerbe- und Mischobjekten eine wichtige Rolle",
+          "ist_richtig": true
+        },
+        {
+          "text": "Es betrifft nur die reine Reinigung von Flächen",
+          "ist_richtig": false
+        },
+        {
+          "text": "Es ist in der Wohnungsverwaltung das wichtigste Aufgabenfeld",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 122,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Bestandteile gehören in eine professionelle Ausschreibung größerer Bau- oder Wartungsleistungen?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Detaillierte Leistungsbeschreibung mit klaren technischen Vorgaben",
+          "ist_richtig": true
+        },
+        {
+          "text": "Vergleichbare Angebotsunterlagen für mehrere Anbieter",
+          "ist_richtig": true
+        },
+        {
+          "text": "Mündliche Auftragsvergabe ohne Schriftform",
+          "ist_richtig": false
+        },
+        {
+          "text": "Auswahl ausschließlich nach Sympathie des Bieters",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 123,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Maßnahmen helfen dem Verwalter, Sanierungsspitzen in der Erhaltungsrücklage zu vermeiden?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Frühzeitiger Aufbau der Rücklage entsprechend dem Instandhaltungsplan",
+          "ist_richtig": true
+        },
+        {
+          "text": "Gleitende Planung mehrerer Maßnahmen über mehrere Jahre statt Bündelung",
+          "ist_richtig": true
+        },
+        {
+          "text": "Verschieben aller Maßnahmen bis zum Komplettausfall",
+          "ist_richtig": false
+        },
+        {
+          "text": "Verzicht auf jegliche Wartung, um Kosten zu sparen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 124,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Aussagen treffen auf das technische Gebäudemanagement (TGM) zu?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Es umfasst die Instandhaltung der gebäudetechnischen Anlagen",
+          "ist_richtig": true
+        },
+        {
+          "text": "Es beinhaltet die technische Betriebsführung (z. B. Hausmeisterleistungen)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Es ist Teil der Mieterauswahl und Bonitätsprüfung",
+          "ist_richtig": false
+        },
+        {
+          "text": "Es entspricht der notariellen Beurkundung von Verträgen",
+          "ist_richtig": false
+        }
+      ]
+    },
+    {
+      "nr": 125,
+      "themengebiet": "Facility Management",
+      "text": "Welche zwei Bestandteile gehören zwingend zu einer fundierten Lebensdauerprognose?",
+      "typ": "multi",
+      "punkte_max": 2,
+      "antworten": [
+        {
+          "text": "Technische Standard-Lebensdauer des Bauteils",
+          "ist_richtig": true
+        },
+        {
+          "text": "Korrektur um objektindividuelle Einflüsse (Nutzung, Wartung, Umgebung)",
+          "ist_richtig": true
+        },
+        {
+          "text": "Bewertung des Architekturstils der Region",
+          "ist_richtig": false
+        },
+        {
+          "text": "Wetterprognose für die nächsten 12 Monate",
+          "ist_richtig": false
+        }
+      ]
+    }
+  ]
+}

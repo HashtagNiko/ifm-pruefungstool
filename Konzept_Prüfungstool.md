@@ -143,9 +143,16 @@ Beispiel WEG:
 2. Eingabemaske: Name (Pflichtfeld). Kurzer Hinweistext: „Bitte gib deinen vollständigen Namen ein. Mit Klick auf ‚Beitreten' kommst du in den Wartebereich."
 3. Lobby: „Die Prüfung beginnt, sobald der Trainer startet. Bitte das Fenster geöffnet lassen."
 4. Trainer startet → Frage 1 erscheint. Timer oben sichtbar.
-5. Pro Frage: Frage und Antwortoptionen (Antwortreihenfolge zufällig pro Teilnehmer). Bei Typ `single` Radio-Buttons, bei Typ `multi` Checkboxen (es können beliebig viele angekreuzt werden — die Punkteregel ist transparent dokumentiert, siehe Abschnitt 7).
-6. „Unsicher"-Schalter pro Frage, eigene Übersicht „Fragen markiert als unsicher".
-7. Navigation: „Vorherige" / „Nächste" / Übersichtsleiste mit allen Fragen, farbig markiert (beantwortet / leer / unsicher).
+5. **Eine Frage pro Bildschirm.** Pro Frage: Fragetext und Antwortoptionen (Antwortreihenfolge zufällig pro Teilnehmer). Layout je Antwortzeile in drei Spalten:
+   - **Ausschluss** (links): Daumen-runter-Icon je Antwort — reine Denkhilfe, die die Antwort optisch durchstreicht. **Keine** echte Auswahl, beeinflusst die Wertung nicht (vorerst nur lokal, nicht gespeichert).
+   - **Antworttext** (Mitte).
+   - **Auswahlfeld** (rechtsbündig): bei Typ `single` ein Radio-Kreis, bei Typ `multi` ein Kästchen (Checkbox). Bei Multi können beliebig viele angekreuzt werden — die Punkteregel ist transparent dokumentiert, siehe Abschnitt 7.
+6. **„Als unsicher markieren"-Button (rot)** pro Frage.
+7. Navigation: oben eine **horizontal scrollbare Leiste mit einem Kreis je Frage** (Sprung zur Frage per Klick):
+   - unbeantwortet → leerer Ring, **blau**
+   - beantwortet → ausgefüllter Kreis, **grün**
+   - als unsicher markiert → Kreis mit „?", Kreis und Fragezeichen **rot**
+   - zusätzlich „Vorherige" / „Nächste".
 8. Antworten werden bei jeder Änderung automatisch in Supabase gespeichert. Bei Reload sind alle Antworten wieder da.
 9. Bei 5 Minuten Restzeit: dezente Erinnerung („Noch 5 Minuten").
 10. „Abgeben"-Button: Warnt, wenn unbeantwortete oder als „unsicher" markierte Fragen vorhanden sind. Zweite Bestätigung „Möchtest du die Prüfung wirklich abgeben?".

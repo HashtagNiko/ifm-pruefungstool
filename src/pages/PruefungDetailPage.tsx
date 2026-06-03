@@ -49,6 +49,19 @@ export default function PruefungDetailPage() {
   const [busy, setBusy] = useState(false)
   const [loeschOffen, setLoeschOffen] = useState(false)
   const [wuerfelnOffen, setWuerfelnOffen] = useState(false)
+  const [teilnehmer, setTeilnehmer] = useState<
+    { id: string; name: string; gestartet_am: string | null; abgegeben_am: string | null }[]
+  >([])
+
+  const ladeTeilnehmer = useCallback(async () => {
+    if (!id) return
+    const { data, error } = await supabase
+      .from('teilnehmer')
+      .select('id, name, gestartet_am, abgegeben_am')
+      .eq('pruefung_id', id)
+      .order('created_at', { ascending: true })
+    if (!error && data) setTeilnehmer(data)
+  }, [id])
 
   const ladeSnapshot = useCallback(async () => {
     if (!id) return
@@ -76,10 +89,26 @@ export default function PruefungDetailPage() {
         .returns<PruefungRow>()
       if (error) setFehler(error.message)
       else setPruefung(data)
-      await ladeSnapshot()
+      await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
       setLaden(false)
     })()
-  }, [id, ladeSnapshot])
+  }, [id, ladeSnapshot, ladeTeilnehmer])
+
+  // Realtime: Live-Teilnehmerliste (Lobby / Abgaben)
+  useEffect(() => {
+    if (!id) return
+    const channel = supabase
+      .channel(`teilnehmer-${id}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'teilnehmer', filter: `pruefung_id=eq.${id}` },
+        () => ladeTeilnehmer(),
+      )
+      .subscribe()
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [id, ladeTeilnehmer])
 
   const istEntwurf = pruefung?.status === 'entwurf'
 
@@ -116,6 +145,29 @@ export default function PruefungDetailPage() {
     } finally {
       setBusy(false)
     }
+  }
+
+  async function setzeStatus(
+    neu: string,
+    extra: Partial<Pick<Tables<'pruefung'>, 'start_zeit' | 'end_zeit'>> = {},
+  ) {
+    if (!pruefung) return
+    setBusy(true)
+    setFehler(null)
+    const { error } = await supabase
+      .from('pruefung')
+      .update({ status: neu, ...extra })
+      .eq('id', pruefung.id)
+    if (error) setFehler(error.message)
+    else setPruefung((p) => (p ? { ...p, status: neu, ...extra } : p))
+    setBusy(false)
+  }
+
+  function pruefungStarten() {
+    const dauer = pruefung?.pruefungsvorlage?.dauer_minuten ?? 0
+    const start = new Date()
+    const ende = new Date(start.getTime() + dauer * 60_000)
+    setzeStatus('laeuft', { start_zeit: start.toISOString(), end_zeit: ende.toISOString() })
   }
 
   async function pruefungLoeschen() {
@@ -236,6 +288,77 @@ export default function PruefungDetailPage() {
           Der Teilnehmer-Zugang (Lobby & Prüfungslauf) wird im nächsten Schritt gebaut.
         </p>
       </Card>
+
+      {/* Steuerung */}
+      <Card className="mt-4">
+        <div className="text-sm font-medium text-ifm-blue mb-3">Steuerung</div>
+        <div className="flex flex-wrap items-center gap-2">
+          {pruefung.status === 'entwurf' && (
+            <Button onClick={() => setzeStatus('lobby')} disabled={busy || snapshot.length === 0}>
+              Lobby öffnen
+            </Button>
+          )}
+          {pruefung.status === 'lobby' && (
+            <>
+              <Button onClick={pruefungStarten} disabled={busy}>
+                Prüfung starten
+              </Button>
+              <Button variant="secondary" onClick={() => setzeStatus('entwurf')} disabled={busy}>
+                Lobby schließen (zurück zu Entwurf)
+              </Button>
+            </>
+          )}
+          {pruefung.status === 'laeuft' && (
+            <Button
+              variant="danger"
+              onClick={() => setzeStatus('beendet', { end_zeit: new Date().toISOString() })}
+              disabled={busy}
+            >
+              Prüfung beenden
+            </Button>
+          )}
+          {pruefung.status === 'beendet' && (
+            <span className="text-sm text-ifm-gray">
+              Prüfung ist beendet. Auswertung folgt im nächsten Schritt.
+            </span>
+          )}
+        </div>
+      </Card>
+
+      {/* Teilnehmer (ab Lobby) */}
+      {pruefung.status !== 'entwurf' && (
+        <Card className="mt-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-sm font-medium text-ifm-blue">
+              Teilnehmer ({teilnehmer.length})
+            </div>
+            <div className="text-xs text-ifm-gray">
+              {teilnehmer.filter((t) => t.abgegeben_am).length} abgegeben
+            </div>
+          </div>
+          {teilnehmer.length === 0 ? (
+            <p className="text-sm text-ifm-gray">
+              Noch niemand beigetreten. Teilnehmer erscheinen hier live.
+            </p>
+          ) : (
+            <ul className="divide-y divide-ifm-lightblue">
+              {teilnehmer.map((t) => {
+                const zustand = t.abgegeben_am
+                  ? { label: 'abgegeben', cls: 'text-ifm-green' }
+                  : t.gestartet_am
+                    ? { label: 'schreibt', cls: 'text-ifm-blue' }
+                    : { label: 'wartet', cls: 'text-ifm-gray' }
+                return (
+                  <li key={t.id} className="flex items-center justify-between py-2 text-sm">
+                    <span className="text-ifm-blue">{t.name}</span>
+                    <span className={`font-medium ${zustand.cls}`}>{zustand.label}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </Card>
+      )}
 
       {/* Snapshot */}
       <div className="mt-6 flex items-center justify-between">
