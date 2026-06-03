@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 import KursePage from './pages/KursePage'
 import KursDetailPage from './pages/KursDetailPage'
+import FragenpoolPage from './pages/FragenpoolPage'
 
 export default function App() {
   return (
@@ -17,15 +18,7 @@ export default function App() {
           <Route index element={<Navigate to="/kurse" replace />} />
           <Route path="kurse" element={<KursePage />} />
           <Route path="kurse/:id" element={<KursDetailPage />} />
-          <Route
-            path="fragenpool"
-            element={
-              <PlaceholderPage
-                title="Fragenpool"
-                description="Pflege deine Fragen: Text, Typ (Single/Multi), Antwortoptionen und Themengebiet-Zuordnung."
-              />
-            }
-          />
+          <Route path="fragenpool" element={<FragenpoolPage />} />
           <Route
             path="vorlagen"
             element={
