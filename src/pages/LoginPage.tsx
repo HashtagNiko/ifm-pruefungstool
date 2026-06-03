@@ -1,0 +1,197 @@
+import { useState, type FormEvent } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../lib/AuthContext'
+import { isSupabaseConfigured } from '../lib/supabase'
+
+type Modus = 'login' | 'register'
+
+export default function LoginPage() {
+  const { session, loading, signIn, signUp } = useAuth()
+  const [modus, setModus] = useState<Modus>('login')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [passwort, setPasswort] = useState('')
+  const [fehler, setFehler] = useState<string | null>(null)
+  const [hinweis, setHinweis] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  // Bereits eingeloggt -> ins Dashboard
+  if (!loading && session) return <Navigate to="/" replace />
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    setFehler(null)
+    setHinweis(null)
+    setBusy(true)
+    try {
+      if (modus === 'login') {
+        const { error } = await signIn(email, passwort)
+        if (error) setFehler(uebersetzeFehler(error))
+      } else {
+        const { error, needsConfirmation } = await signUp(email, passwort, name)
+        if (error) {
+          setFehler(uebersetzeFehler(error))
+        } else if (needsConfirmation) {
+          setHinweis(
+            'Fast geschafft! Wir haben dir eine Bestätigungs-E-Mail geschickt. ' +
+              'Bitte bestätige deine Adresse und melde dich dann an.',
+          )
+          setModus('login')
+        }
+      }
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="min-h-full bg-ifm-lightblue flex items-center justify-center p-6">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8">
+        <div className="flex items-baseline gap-1 text-sm font-bold mb-6">
+          <span className="text-ifm-blue">Qualifizierung</span>
+          <span className="text-ifm-red">|</span>
+          <span className="text-ifm-blue">Coaching</span>
+          <span className="text-ifm-red">|</span>
+          <span className="text-ifm-blue">Consulting</span>
+        </div>
+
+        <h1 className="text-2xl font-bold text-ifm-blue">
+          {modus === 'login' ? 'Anmelden' : 'Konto erstellen'}
+        </h1>
+        <p className="mt-1 text-sm text-ifm-gray">IFM-Prüfungstool · Trainer-Bereich</p>
+
+        {!isSupabaseConfigured && (
+          <p className="mt-4 rounded-lg bg-ifm-yellow/20 text-ifm-blue text-sm p-3">
+            Supabase ist nicht konfiguriert. Bitte <code>.env</code> ausfüllen.
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          {modus === 'register' && (
+            <Field
+              label="Name"
+              type="text"
+              value={name}
+              onChange={setName}
+              autoComplete="name"
+              required
+            />
+          )}
+          <Field
+            label="E-Mail"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            autoComplete="email"
+            required
+          />
+          <Field
+            label="Passwort"
+            type="password"
+            value={passwort}
+            onChange={setPasswort}
+            autoComplete={modus === 'login' ? 'current-password' : 'new-password'}
+            required
+            minLength={6}
+          />
+
+          {fehler && <p className="text-sm text-ifm-red">{fehler}</p>}
+          {hinweis && (
+            <p className="text-sm text-ifm-green rounded-lg bg-ifm-green/10 p-3">{hinweis}</p>
+          )}
+
+          <button
+            type="submit"
+            disabled={busy || !isSupabaseConfigured}
+            className="w-full rounded-lg bg-ifm-blue text-white font-medium py-2.5 hover:bg-ifm-blue/90 disabled:opacity-50 transition-colors"
+          >
+            {busy
+              ? 'Bitte warten …'
+              : modus === 'login'
+                ? 'Anmelden'
+                : 'Konto erstellen'}
+          </button>
+        </form>
+
+        <div className="mt-6 text-sm text-ifm-gray text-center">
+          {modus === 'login' ? (
+            <>
+              Noch kein Konto?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setModus('register')
+                  setFehler(null)
+                  setHinweis(null)
+                }}
+                className="text-ifm-blue font-medium hover:underline"
+              >
+                Jetzt registrieren
+              </button>
+            </>
+          ) : (
+            <>
+              Schon ein Konto?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setModus('login')
+                  setFehler(null)
+                  setHinweis(null)
+                }}
+                className="text-ifm-blue font-medium hover:underline"
+              >
+                Anmelden
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Field({
+  label,
+  type,
+  value,
+  onChange,
+  autoComplete,
+  required,
+  minLength,
+}: {
+  label: string
+  type: string
+  value: string
+  onChange: (v: string) => void
+  autoComplete?: string
+  required?: boolean
+  minLength?: number
+}) {
+  return (
+    <label className="block">
+      <span className="block text-sm font-medium text-ifm-blue mb-1">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
+        required={required}
+        minLength={minLength}
+        className="w-full rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue focus:ring-2 focus:ring-ifm-blue/20"
+      />
+    </label>
+  )
+}
+
+/** Häufige Supabase-Auth-Fehlermeldungen ins Deutsche übersetzen. */
+function uebersetzeFehler(msg: string): string {
+  if (/invalid login credentials/i.test(msg)) return 'E-Mail oder Passwort ist falsch.'
+  if (/email not confirmed/i.test(msg))
+    return 'Bitte bestätige zuerst deine E-Mail-Adresse.'
+  if (/user already registered/i.test(msg))
+    return 'Für diese E-Mail existiert bereits ein Konto.'
+  if (/password should be at least/i.test(msg))
+    return 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+  return msg
+}
