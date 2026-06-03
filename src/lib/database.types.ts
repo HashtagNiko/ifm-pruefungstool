@@ -1,0 +1,617 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
+  public: {
+    Tables: {
+      antwort: {
+        Row: {
+          ausgewaehlte_optionen: string[]
+          id: string
+          pruefung_frage_id: string
+          teilnehmer_id: string
+          unsicher_markiert: boolean
+          zuletzt_geaendert: string
+        }
+        Insert: {
+          ausgewaehlte_optionen?: string[]
+          id?: string
+          pruefung_frage_id: string
+          teilnehmer_id: string
+          unsicher_markiert?: boolean
+          zuletzt_geaendert?: string
+        }
+        Update: {
+          ausgewaehlte_optionen?: string[]
+          id?: string
+          pruefung_frage_id?: string
+          teilnehmer_id?: string
+          unsicher_markiert?: boolean
+          zuletzt_geaendert?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "antwort_pruefung_frage_id_fkey"
+            columns: ["pruefung_frage_id"]
+            isOneToOne: false
+            referencedRelation: "pruefung_frage"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "antwort_teilnehmer_id_fkey"
+            columns: ["teilnehmer_id"]
+            isOneToOne: false
+            referencedRelation: "teilnehmer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      antwortoption: {
+        Row: {
+          frage_id: string
+          id: string
+          ist_richtig: boolean
+          sortierung: number
+          text: string
+        }
+        Insert: {
+          frage_id: string
+          id?: string
+          ist_richtig?: boolean
+          sortierung?: number
+          text: string
+        }
+        Update: {
+          frage_id?: string
+          id?: string
+          ist_richtig?: boolean
+          sortierung?: number
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "antwortoption_frage_id_fkey"
+            columns: ["frage_id"]
+            isOneToOne: false
+            referencedRelation: "frage"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feedback: {
+        Row: {
+          bezug_id: string | null
+          created_at: string
+          ebene: string
+          id: string
+          teilnehmer_id: string
+          text: string
+        }
+        Insert: {
+          bezug_id?: string | null
+          created_at?: string
+          ebene: string
+          id?: string
+          teilnehmer_id: string
+          text: string
+        }
+        Update: {
+          bezug_id?: string | null
+          created_at?: string
+          ebene?: string
+          id?: string
+          teilnehmer_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_teilnehmer_id_fkey"
+            columns: ["teilnehmer_id"]
+            isOneToOne: false
+            referencedRelation: "teilnehmer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      frage: {
+        Row: {
+          erstellt_am: string
+          id: string
+          kurs_id: string
+          text: string
+          themengebiet_id: string | null
+          typ: string
+        }
+        Insert: {
+          erstellt_am?: string
+          id?: string
+          kurs_id: string
+          text: string
+          themengebiet_id?: string | null
+          typ: string
+        }
+        Update: {
+          erstellt_am?: string
+          id?: string
+          kurs_id?: string
+          text?: string
+          themengebiet_id?: string | null
+          typ?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "frage_kurs_id_fkey"
+            columns: ["kurs_id"]
+            isOneToOne: false
+            referencedRelation: "kurs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "frage_themengebiet_id_fkey"
+            columns: ["themengebiet_id"]
+            isOneToOne: false
+            referencedRelation: "themengebiet"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kurs: {
+        Row: {
+          beschreibung: string | null
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+        }
+        Insert: {
+          beschreibung?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+        }
+        Update: {
+          beschreibung?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kurs_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pruefung: {
+        Row: {
+          created_at: string
+          datum: string | null
+          end_zeit: string | null
+          id: string
+          late_join_modus: string
+          owner_id: string
+          start_zeit: string | null
+          status: string
+          vorlage_id: string
+          zugangscode: string
+        }
+        Insert: {
+          created_at?: string
+          datum?: string | null
+          end_zeit?: string | null
+          id?: string
+          late_join_modus?: string
+          owner_id: string
+          start_zeit?: string | null
+          status?: string
+          vorlage_id: string
+          zugangscode?: string
+        }
+        Update: {
+          created_at?: string
+          datum?: string | null
+          end_zeit?: string | null
+          id?: string
+          late_join_modus?: string
+          owner_id?: string
+          start_zeit?: string | null
+          status?: string
+          vorlage_id?: string
+          zugangscode?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pruefung_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_vorlage_id_fkey"
+            columns: ["vorlage_id"]
+            isOneToOne: false
+            referencedRelation: "pruefungsvorlage"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pruefung_frage: {
+        Row: {
+          frage_id: string
+          id: string
+          pruefung_id: string
+          sortierung: number
+          themengebiet_id: string | null
+        }
+        Insert: {
+          frage_id: string
+          id?: string
+          pruefung_id: string
+          sortierung?: number
+          themengebiet_id?: string | null
+        }
+        Update: {
+          frage_id?: string
+          id?: string
+          pruefung_id?: string
+          sortierung?: number
+          themengebiet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pruefung_frage_frage_id_fkey"
+            columns: ["frage_id"]
+            isOneToOne: false
+            referencedRelation: "frage"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_frage_pruefung_id_fkey"
+            columns: ["pruefung_id"]
+            isOneToOne: false
+            referencedRelation: "pruefung"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_frage_themengebiet_id_fkey"
+            columns: ["themengebiet_id"]
+            isOneToOne: false
+            referencedRelation: "themengebiet"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pruefungsvorlage: {
+        Row: {
+          bestehensschwelle_pro_themengebiet_prozent: number | null
+          bestehensschwelle_prozent: number
+          created_at: string
+          dauer_minuten: number
+          id: string
+          kurs_id: string
+          name: string
+        }
+        Insert: {
+          bestehensschwelle_pro_themengebiet_prozent?: number | null
+          bestehensschwelle_prozent?: number
+          created_at?: string
+          dauer_minuten: number
+          id?: string
+          kurs_id: string
+          name: string
+        }
+        Update: {
+          bestehensschwelle_pro_themengebiet_prozent?: number | null
+          bestehensschwelle_prozent?: number
+          created_at?: string
+          dauer_minuten?: number
+          id?: string
+          kurs_id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pruefungsvorlage_kurs_id_fkey"
+            columns: ["kurs_id"]
+            isOneToOne: false
+            referencedRelation: "kurs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teilnehmer: {
+        Row: {
+          abgegeben_am: string | null
+          anonymisiert_am: string | null
+          auth_user_id: string | null
+          created_at: string
+          gestartet_am: string | null
+          id: string
+          name: string
+          prozent: number | null
+          pruefung_id: string
+          punkte_gesamt: number | null
+          punkte_max: number | null
+        }
+        Insert: {
+          abgegeben_am?: string | null
+          anonymisiert_am?: string | null
+          auth_user_id?: string | null
+          created_at?: string
+          gestartet_am?: string | null
+          id?: string
+          name: string
+          prozent?: number | null
+          pruefung_id: string
+          punkte_gesamt?: number | null
+          punkte_max?: number | null
+        }
+        Update: {
+          abgegeben_am?: string | null
+          anonymisiert_am?: string | null
+          auth_user_id?: string | null
+          created_at?: string
+          gestartet_am?: string | null
+          id?: string
+          name?: string
+          prozent?: number | null
+          pruefung_id?: string
+          punkte_gesamt?: number | null
+          punkte_max?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teilnehmer_pruefung_id_fkey"
+            columns: ["pruefung_id"]
+            isOneToOne: false
+            referencedRelation: "pruefung"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      themengebiet: {
+        Row: {
+          created_at: string
+          id: string
+          kurs_id: string
+          name: string
+          sortierung: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kurs_id: string
+          name: string
+          sortierung?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kurs_id?: string
+          name?: string
+          sortierung?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "themengebiet_kurs_id_fkey"
+            columns: ["kurs_id"]
+            isOneToOne: false
+            referencedRelation: "kurs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trainer: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+        }
+        Relationships: []
+      }
+      vorlage_themengebiet: {
+        Row: {
+          anzahl_fragen: number
+          id: string
+          punkte_gesamt: number
+          themengebiet_id: string
+          vorlage_id: string
+        }
+        Insert: {
+          anzahl_fragen: number
+          id?: string
+          punkte_gesamt: number
+          themengebiet_id: string
+          vorlage_id: string
+        }
+        Update: {
+          anzahl_fragen?: number
+          id?: string
+          punkte_gesamt?: number
+          themengebiet_id?: string
+          vorlage_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vorlage_themengebiet_themengebiet_id_fkey"
+            columns: ["themengebiet_id"]
+            isOneToOne: false
+            referencedRelation: "themengebiet"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vorlage_themengebiet_vorlage_id_fkey"
+            columns: ["vorlage_id"]
+            isOneToOne: false
+            referencedRelation: "pruefungsvorlage"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

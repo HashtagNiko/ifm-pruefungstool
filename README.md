@@ -49,6 +49,17 @@ Die App startet auch ohne Supabase-Keys (Gerüst-Modus); für Backend-Funktionen
 | `npm run build` | Production-Build nach `dist/` |
 | `npm run preview` | Build lokal vorschauen |
 
+## Datenbank
+
+Das Schema (Tabellen, RLS-Policies, Auth-Trigger) liegt versioniert in
+[supabase/migrations/](./supabase/migrations/) und ist auf dem Supabase-Projekt
+(Region Frankfurt) angewandt. TypeScript-Typen: [src/lib/database.types.ts](./src/lib/database.types.ts)
+(neu generieren via Supabase nach Schema-Änderungen).
+
+**Row-Level Security:** Auf allen Tabellen aktiv. Trainer sehen ausschließlich eigene
+Daten (Kurse, Fragen, Vorlagen, Prüfungen). Teilnehmer-Schreibzugriff (Lobby/Prüfungslauf)
+wird mit dem entsprechenden Feature ergänzt. Sharing (Konzept Abschnitt 9) folgt später.
+
 ## Status
 
 Grundgerüst (Schritt 3 aus „Nächste Schritte" im Konzept). Implementierung iterativ:

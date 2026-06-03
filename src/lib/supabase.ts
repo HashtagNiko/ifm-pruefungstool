@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from './database.types'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
@@ -16,7 +17,7 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
  * Grundgerüst auch ohne Keys startet.
  */
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  ? createClient<Database>(supabaseUrl!, supabaseAnonKey!)
   : (new Proxy(
       {},
       {
@@ -27,4 +28,4 @@ export const supabase = isSupabaseConfigured
           )
         },
       },
-    ) as ReturnType<typeof createClient>)
+    ) as ReturnType<typeof createClient<Database>>)
