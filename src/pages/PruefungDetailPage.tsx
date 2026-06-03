@@ -50,14 +50,22 @@ export default function PruefungDetailPage() {
   const [loeschOffen, setLoeschOffen] = useState(false)
   const [wuerfelnOffen, setWuerfelnOffen] = useState(false)
   const [teilnehmer, setTeilnehmer] = useState<
-    { id: string; name: string; gestartet_am: string | null; abgegeben_am: string | null }[]
+    {
+      id: string
+      name: string
+      gestartet_am: string | null
+      abgegeben_am: string | null
+      punkte_gesamt: number | null
+      punkte_max: number | null
+      prozent: number | null
+    }[]
   >([])
 
   const ladeTeilnehmer = useCallback(async () => {
     if (!id) return
     const { data, error } = await supabase
       .from('teilnehmer')
-      .select('id, name, gestartet_am, abgegeben_am')
+      .select('id, name, gestartet_am, abgegeben_am, punkte_gesamt, punkte_max, prozent')
       .eq('pruefung_id', id)
       .order('created_at', { ascending: true })
     if (!error && data) setTeilnehmer(data)
@@ -349,10 +357,31 @@ export default function PruefungDetailPage() {
                   : t.gestartet_am
                     ? { label: 'schreibt', cls: 'text-ifm-blue' }
                     : { label: 'wartet', cls: 'text-ifm-gray' }
-                return (
-                  <li key={t.id} className="flex items-center justify-between py-2 text-sm">
+                const inhalt = (
+                  <>
                     <span className="text-ifm-blue">{t.name}</span>
-                    <span className={`font-medium ${zustand.cls}`}>{zustand.label}</span>
+                    <span className="flex items-center gap-3">
+                      {t.abgegeben_am && t.punkte_max != null && (
+                        <span className="text-ifm-gray">
+                          {t.punkte_gesamt}/{t.punkte_max} · {t.prozent} %
+                        </span>
+                      )}
+                      <span className={`font-medium ${zustand.cls}`}>{zustand.label}</span>
+                    </span>
+                  </>
+                )
+                return (
+                  <li key={t.id} className="text-sm">
+                    {t.abgegeben_am ? (
+                      <Link
+                        to={`/pruefungen/${pruefung.id}/teilnehmer/${t.id}`}
+                        className="flex items-center justify-between py-2 hover:bg-ifm-lightblue/40 rounded px-1 -mx-1"
+                      >
+                        {inhalt}
+                      </Link>
+                    ) : (
+                      <div className="flex items-center justify-between py-2">{inhalt}</div>
+                    )}
                   </li>
                 )
               })}

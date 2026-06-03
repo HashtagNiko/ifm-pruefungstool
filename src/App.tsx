@@ -9,6 +9,7 @@ import FragenpoolPage from './pages/FragenpoolPage'
 import VorlagenPage from './pages/VorlagenPage'
 import PruefungenPage from './pages/PruefungenPage'
 import PruefungDetailPage from './pages/PruefungDetailPage'
+import AuswertungPage from './pages/AuswertungPage'
 import TeilnehmerPage from './pages/teilnehmer/TeilnehmerPage'
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="vorlagen" element={<VorlagenPage />} />
           <Route path="pruefungen" element={<PruefungenPage />} />
           <Route path="pruefungen/:id" element={<PruefungDetailPage />} />
+          <Route path="pruefungen/:id/teilnehmer/:teilnehmerId" element={<AuswertungPage />} />
           <Route
             path="geteilt"
             element={
