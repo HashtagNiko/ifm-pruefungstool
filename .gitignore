@@ -15,6 +15,9 @@ dist-ssr
 # Claude Code local settings
 .claude/settings.local.json
 
+# MCP config enthält Secrets (Supabase Access Token) -> niemals committen
+.mcp.json
+
 # Environment / Secrets
 .env
 .env.*
