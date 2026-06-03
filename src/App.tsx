@@ -3,6 +3,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './components/DashboardLayout'
 import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
+import KursePage from './pages/KursePage'
+import KursDetailPage from './pages/KursDetailPage'
 
 export default function App() {
   return (
@@ -13,15 +15,8 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route index element={<Navigate to="/kurse" replace />} />
-          <Route
-            path="kurse"
-            element={
-              <PlaceholderPage
-                title="Kurse"
-                description="Lege deine Kurse an (z. B. Zertifizierter WEG-Verwalter) und definiere ihre Themengebiete."
-              />
-            }
-          />
+          <Route path="kurse" element={<KursePage />} />
+          <Route path="kurse/:id" element={<KursDetailPage />} />
           <Route
             path="fragenpool"
             element={
