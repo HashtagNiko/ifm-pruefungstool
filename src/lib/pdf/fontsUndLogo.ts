@@ -25,7 +25,7 @@ async function ladeDatei(url: string): Promise<string> {
 
 export async function ensureFonts(): Promise<void> {
   if (fontsGeladen) return
-  const basis = 'https://cdn.jsdelivr.net/gh/google/fonts/ufl/ubuntu/'
+  const basis = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ufl/ubuntu/'
   const [regular, bold] = await Promise.all([
     ladeDatei(`${basis}Ubuntu-Regular.ttf`),
     ladeDatei(`${basis}Ubuntu-Bold.ttf`),
