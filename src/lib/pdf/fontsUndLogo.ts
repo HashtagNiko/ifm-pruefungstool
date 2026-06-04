@@ -5,7 +5,12 @@ import logoUrl from '../../../logo.png'
  * Lädt Ubuntu-Fonts zur Laufzeit (Google Fonts via CDN) und registriert sie bei pdfmake.
  * Vermeidet, große Font-Binaries ins Repo/Bundle zu legen. Wird einmal gecacht.
  */
-let fontsGeladen = false
+export interface FontKonfig {
+  vfs: Record<string, string>
+  fonts: Record<string, { normal: string; bold: string; italics: string; bolditalics: string }>
+}
+
+let fontCache: FontKonfig | null = null
 
 function arrayBufferZuBase64(buffer: ArrayBuffer): string {
   let binary = ''
@@ -23,29 +28,32 @@ async function ladeDatei(url: string): Promise<string> {
   return arrayBufferZuBase64(await res.arrayBuffer())
 }
 
-export async function ensureFonts(): Promise<void> {
-  if (fontsGeladen) return
+export async function ensureFonts(): Promise<FontKonfig> {
+  if (fontCache) return fontCache
   const basis = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ufl/ubuntu/'
   const [regular, bold] = await Promise.all([
     ladeDatei(`${basis}Ubuntu-Regular.ttf`),
     ladeDatei(`${basis}Ubuntu-Bold.ttf`),
   ])
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pm = pdfMake as any
-  pm.vfs = {
-    ...(pm.vfs ?? {}),
-    'Ubuntu-Regular.ttf': regular,
-    'Ubuntu-Bold.ttf': bold,
-  }
-  pm.fonts = {
-    Ubuntu: {
-      normal: 'Ubuntu-Regular.ttf',
-      bold: 'Ubuntu-Bold.ttf',
-      italics: 'Ubuntu-Regular.ttf',
-      bolditalics: 'Ubuntu-Bold.ttf',
+  fontCache = {
+    vfs: {
+      'Ubuntu-Regular.ttf': regular,
+      'Ubuntu-Bold.ttf': bold,
+    },
+    fonts: {
+      Ubuntu: {
+        normal: 'Ubuntu-Regular.ttf',
+        bold: 'Ubuntu-Bold.ttf',
+        italics: 'Ubuntu-Regular.ttf',
+        bolditalics: 'Ubuntu-Bold.ttf',
+      },
     },
   }
-  fontsGeladen = true
+  // global ebenfalls setzen (für API-Varianten, die das lesen)
+  const pm = pdfMake as unknown as { vfs?: unknown; fonts?: unknown }
+  pm.vfs = fontCache.vfs
+  pm.fonts = fontCache.fonts
+  return fontCache
 }
 
 let logoCache: string | null = null

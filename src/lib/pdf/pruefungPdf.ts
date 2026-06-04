@@ -223,11 +223,12 @@ export function dateiname(daten: AuswertungsDaten): string {
 }
 
 async function baueBlob(daten: AuswertungsDaten): Promise<Blob> {
-  await ensureFonts()
+  const { vfs, fonts } = await ensureFonts()
   const logo = await ladeLogoDataUrl()
   const doc = baueDocDefinition(daten, logo)
-  // pdfmake 0.3: getBlob() ist Promise-basiert (kein Callback)
-  const created = pdfMake.createPdf(doc) as any
+  // pdfmake 0.3: vfs/fonts müssen an createPdf übergeben werden; getBlob() ist Promise-basiert
+  const pm = pdfMake as any
+  const created = pm.createPdf(doc, null, fonts, vfs)
   const ergebnis = created.getBlob()
   if (ergebnis && typeof ergebnis.then === 'function') return await ergebnis
   // Fallback für ältere Callback-API
