@@ -5,12 +5,7 @@ import logoUrl from '../../../logo.png'
  * Lädt Ubuntu-Fonts zur Laufzeit (Google Fonts via CDN) und registriert sie bei pdfmake.
  * Vermeidet, große Font-Binaries ins Repo/Bundle zu legen. Wird einmal gecacht.
  */
-export interface FontKonfig {
-  vfs: Record<string, string>
-  fonts: Record<string, { normal: string; bold: string; italics: string; bolditalics: string }>
-}
-
-let fontCache: FontKonfig | null = null
+let fontsRegistriert = false
 
 function arrayBufferZuBase64(buffer: ArrayBuffer): string {
   let binary = ''
@@ -28,14 +23,15 @@ async function ladeDatei(url: string): Promise<string> {
   return arrayBufferZuBase64(await res.arrayBuffer())
 }
 
-export async function ensureFonts(): Promise<FontKonfig> {
-  if (fontCache) return fontCache
+export async function ensureFonts(): Promise<void> {
+  if (fontsRegistriert) return
   const basis = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ufl/ubuntu/'
   const [regular, bold] = await Promise.all([
     ladeDatei(`${basis}Ubuntu-Regular.ttf`),
     ladeDatei(`${basis}Ubuntu-Bold.ttf`),
   ])
-  fontCache = {
+  // pdfmake 0.3: vfs + Fonts über addFontContainer registrieren
+  pdfMake.addFontContainer({
     vfs: {
       'Ubuntu-Regular.ttf': regular,
       'Ubuntu-Bold.ttf': bold,
@@ -48,12 +44,8 @@ export async function ensureFonts(): Promise<FontKonfig> {
         bolditalics: 'Ubuntu-Bold.ttf',
       },
     },
-  }
-  // global ebenfalls setzen (für API-Varianten, die das lesen)
-  const pm = pdfMake as unknown as { vfs?: unknown; fonts?: unknown }
-  pm.vfs = fontCache.vfs
-  pm.fonts = fontCache.fonts
-  return fontCache
+  })
+  fontsRegistriert = true
 }
 
 let logoCache: string | null = null

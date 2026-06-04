@@ -223,16 +223,15 @@ export function dateiname(daten: AuswertungsDaten): string {
 }
 
 async function baueBlob(daten: AuswertungsDaten): Promise<Blob> {
-  const { vfs, fonts } = await ensureFonts()
+  await ensureFonts() // registriert vfs + Ubuntu-Fonts bei pdfmake
   const logo = await ladeLogoDataUrl()
   const doc = baueDocDefinition(daten, logo)
-  // pdfmake 0.3: vfs/fonts müssen an createPdf übergeben werden; getBlob() ist Promise-basiert
-  const pm = pdfMake as any
-  const created = pm.createPdf(doc, { fonts, vfs })
-  const ergebnis = created.getBlob()
+  // pdfmake 0.3: getBlob() ist Promise-basiert (kein Callback)
+  const created = pdfMake.createPdf(doc)
+  const ergebnis = (created as any).getBlob()
   if (ergebnis && typeof ergebnis.then === 'function') return await ergebnis
   // Fallback für ältere Callback-API
-  return await new Promise<Blob>((resolve) => created.getBlob((b: Blob) => resolve(b)))
+  return await new Promise<Blob>((resolve) => (created as any).getBlob((b: Blob) => resolve(b)))
 }
 
 function speichereBlob(blob: Blob, name: string) {
