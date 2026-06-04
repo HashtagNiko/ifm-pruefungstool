@@ -171,6 +171,24 @@ export default function PruefungDetailPage() {
     setBusy(false)
   }
 
+  const [zipBusy, setZipBusy] = useState(false)
+  async function zipExport() {
+    if (!pruefung) return
+    const abgegebene = teilnehmer.filter((t) => t.abgegeben_am).map((t) => ({ id: t.id, name: t.name }))
+    if (abgegebene.length === 0) return
+    setZipBusy(true)
+    setFehler(null)
+    try {
+      const name = `Auswertungen_${pruefung.pruefungsvorlage?.name ?? 'Pruefung'}.zip`
+      const { erzeugeZip } = await import('../lib/pdf/pruefungPdf')
+      await erzeugeZip(pruefung.id, abgegebene, name)
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'ZIP-Export fehlgeschlagen.')
+    } finally {
+      setZipBusy(false)
+    }
+  }
+
   function pruefungStarten() {
     const dauer = pruefung?.pruefungsvorlage?.dauer_minuten ?? 0
     const start = new Date()
@@ -341,8 +359,15 @@ export default function PruefungDetailPage() {
             <div className="text-sm font-medium text-ifm-blue">
               Teilnehmer ({teilnehmer.length})
             </div>
-            <div className="text-xs text-ifm-gray">
-              {teilnehmer.filter((t) => t.abgegeben_am).length} abgegeben
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-ifm-gray">
+                {teilnehmer.filter((t) => t.abgegeben_am).length} abgegeben
+              </span>
+              {teilnehmer.some((t) => t.abgegeben_am) && (
+                <Button variant="secondary" onClick={zipExport} disabled={zipBusy}>
+                  {zipBusy ? 'ZIP wird erstellt …' : 'ZIP-Export (PDFs)'}
+                </Button>
+              )}
             </div>
           </div>
           {teilnehmer.length === 0 ? (

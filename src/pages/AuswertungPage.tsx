@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { Tables } from '../lib/database.types'
-import { Card, ErrorBanner, Textarea } from '../components/ui'
+import { Button, Card, ErrorBanner, Textarea } from '../components/ui'
 import {
   werteAus,
   type FrageDaten,
@@ -30,6 +30,21 @@ export default function AuswertungPage() {
   const [feedback, setFeedback] = useState<Record<string, FeedbackEintrag>>({})
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
+  const [pdfBusy, setPdfBusy] = useState(false)
+
+  async function pdfErzeugen() {
+    if (!pruefungId || !teilnehmerId) return
+    setPdfBusy(true)
+    setFehler(null)
+    try {
+      const { ladeUndErzeugePdf } = await import('../lib/pdf/pruefungPdf')
+      await ladeUndErzeugePdf(pruefungId, teilnehmerId)
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'PDF-Erstellung fehlgeschlagen.')
+    } finally {
+      setPdfBusy(false)
+    }
+  }
 
   useEffect(() => {
     if (!pruefungId || !teilnehmerId) return
@@ -237,6 +252,12 @@ export default function AuswertungPage() {
             {auswertung.bestanden ? 'Bestanden' : 'Nicht bestanden'}
           </span>
         ) : null}
+      </div>
+
+      <div className="mt-4">
+        <Button onClick={pdfErzeugen} disabled={pdfBusy || teilnehmer?.abgegeben_am == null}>
+          {pdfBusy ? 'PDF wird erstellt …' : 'PDF generieren'}
+        </Button>
       </div>
 
       {fehler && (

@@ -20,6 +20,9 @@ export interface FrageDaten {
   text: string
   typ: 'single' | 'multi'
   optionen: OptionDaten[]
+  /** Optional für PDF-Reihenfolge (ursprüngliche Anlegereihenfolge) */
+  erstellt_am?: string
+  themengebiet_sortierung?: number
 }
 
 export interface FrageAuswertung {
