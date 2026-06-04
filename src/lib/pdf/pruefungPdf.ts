@@ -226,9 +226,12 @@ async function baueBlob(daten: AuswertungsDaten): Promise<Blob> {
   await ensureFonts()
   const logo = await ladeLogoDataUrl()
   const doc = baueDocDefinition(daten, logo)
-  return new Promise<Blob>((resolve) => {
-    ;(pdfMake.createPdf(doc) as any).getBlob((blob: Blob) => resolve(blob))
-  })
+  // pdfmake 0.3: getBlob() ist Promise-basiert (kein Callback)
+  const created = pdfMake.createPdf(doc) as any
+  const ergebnis = created.getBlob()
+  if (ergebnis && typeof ergebnis.then === 'function') return await ergebnis
+  // Fallback für ältere Callback-API
+  return await new Promise<Blob>((resolve) => created.getBlob((b: Blob) => resolve(b)))
 }
 
 function speichereBlob(blob: Blob, name: string) {
