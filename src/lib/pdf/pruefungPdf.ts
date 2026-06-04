@@ -228,7 +228,7 @@ async function baueBlob(daten: AuswertungsDaten): Promise<Blob> {
   const doc = baueDocDefinition(daten, logo)
   // pdfmake 0.3: vfs/fonts müssen an createPdf übergeben werden; getBlob() ist Promise-basiert
   const pm = pdfMake as any
-  const created = pm.createPdf(doc, null, fonts, vfs)
+  const created = pm.createPdf(doc, { fonts, vfs })
   const ergebnis = created.getBlob()
   if (ergebnis && typeof ergebnis.then === 'function') return await ergebnis
   // Fallback für ältere Callback-API
