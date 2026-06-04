@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { Button, ErrorBanner, Modal, TextInput } from './ui'
 
 const MENU = [
   { to: '/kurse', label: 'Kurse' },
@@ -14,6 +15,7 @@ export default function DashboardLayout() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [menuOffen, setMenuOffen] = useState(false)
+  const [pwModal, setPwModal] = useState(false)
 
   async function handleLogout() {
     await signOut()
@@ -64,6 +66,13 @@ export default function DashboardLayout() {
           </div>
           <button
             type="button"
+            onClick={() => setPwModal(true)}
+            className="w-full rounded-lg bg-white/10 hover:bg-white/20 py-2 mb-2 transition-colors"
+          >
+            Passwort ändern
+          </button>
+          <button
+            type="button"
             onClick={handleLogout}
             className="w-full rounded-lg bg-white/10 hover:bg-white/20 py-2 transition-colors"
           >
@@ -76,6 +85,76 @@ export default function DashboardLayout() {
       <main className="flex-1 bg-ifm-lightblue/40 p-6 md:p-10">
         <Outlet />
       </main>
+
+      {pwModal && <PasswortAendernModal onClose={() => setPwModal(false)} />}
     </div>
+  )
+}
+
+function PasswortAendernModal({ onClose }: { onClose: () => void }) {
+  const { updatePassword } = useAuth()
+  const [pw, setPw] = useState('')
+  const [pw2, setPw2] = useState('')
+  const [fehler, setFehler] = useState<string | null>(null)
+  const [hinweis, setHinweis] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  async function speichern(e: FormEvent) {
+    e.preventDefault()
+    setFehler(null)
+    if (pw.length < 6) {
+      setFehler('Das Passwort muss mindestens 6 Zeichen lang sein.')
+      return
+    }
+    if (pw !== pw2) {
+      setFehler('Die Passwörter stimmen nicht überein.')
+      return
+    }
+    setBusy(true)
+    const { error } = await updatePassword(pw)
+    setBusy(false)
+    if (error) {
+      setFehler(error)
+      return
+    }
+    setHinweis('Passwort geändert.')
+    setPw('')
+    setPw2('')
+  }
+
+  return (
+    <Modal open onClose={onClose} title="Passwort ändern">
+      <form onSubmit={speichern} className="space-y-4">
+        <TextInput
+          label="Neues Passwort"
+          type="password"
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+          autoComplete="new-password"
+          required
+          autoFocus
+        />
+        <TextInput
+          label="Passwort wiederholen"
+          type="password"
+          value={pw2}
+          onChange={(e) => setPw2(e.target.value)}
+          autoComplete="new-password"
+          required
+        />
+        {fehler && <ErrorBanner message={fehler} />}
+        {hinweis && (
+          <p className="text-sm text-ifm-green rounded-lg bg-ifm-green/10 p-3">{hinweis}</p>
+        )}
+        <div className="flex justify-end gap-2 pt-2">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Schließen
+          </Button>
+          <Button type="submit" disabled={busy}>
+            {busy ? 'Speichern …' : 'Speichern'}
+          </Button>
+        </div>
+      </form>
+    </Modal>
   )
 }

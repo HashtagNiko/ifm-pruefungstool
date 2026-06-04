@@ -3,19 +3,17 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { isSupabaseConfigured } from '../lib/supabase'
 
-type Modus = 'login' | 'register'
+type Modus = 'login' | 'reset'
 
 export default function LoginPage() {
-  const { session, loading, signIn, signUp } = useAuth()
+  const { session, loading, signIn, resetPassword } = useAuth()
   const [modus, setModus] = useState<Modus>('login')
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [passwort, setPasswort] = useState('')
   const [fehler, setFehler] = useState<string | null>(null)
   const [hinweis, setHinweis] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  // Bereits eingeloggt -> ins Dashboard
   if (!loading && session) return <Navigate to="/" replace />
 
   async function handleSubmit(e: FormEvent) {
@@ -28,16 +26,13 @@ export default function LoginPage() {
         const { error } = await signIn(email, passwort)
         if (error) setFehler(uebersetzeFehler(error))
       } else {
-        const { error, needsConfirmation } = await signUp(email, passwort, name)
-        if (error) {
-          setFehler(uebersetzeFehler(error))
-        } else if (needsConfirmation) {
+        const { error } = await resetPassword(email)
+        if (error) setFehler(uebersetzeFehler(error))
+        else
           setHinweis(
-            'Fast geschafft! Wir haben dir eine Bestätigungs-E-Mail geschickt. ' +
-              'Bitte bestätige deine Adresse und melde dich dann an.',
+            'Falls für diese Adresse ein Konto existiert, haben wir dir eine E-Mail zum ' +
+              'Zurücksetzen des Passworts geschickt.',
           )
-          setModus('login')
-        }
       }
     } finally {
       setBusy(false)
@@ -56,7 +51,7 @@ export default function LoginPage() {
         </div>
 
         <h1 className="text-2xl font-bold text-ifm-blue">
-          {modus === 'login' ? 'Anmelden' : 'Konto erstellen'}
+          {modus === 'login' ? 'Anmelden' : 'Passwort zurücksetzen'}
         </h1>
         <p className="mt-1 text-sm text-ifm-gray">IFM-Prüfungstool · Trainer-Bereich</p>
 
@@ -67,16 +62,6 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {modus === 'register' && (
-            <Field
-              label="Name"
-              type="text"
-              value={name}
-              onChange={setName}
-              autoComplete="name"
-              required
-            />
-          )}
           <Field
             label="E-Mail"
             type="email"
@@ -85,15 +70,16 @@ export default function LoginPage() {
             autoComplete="email"
             required
           />
-          <Field
-            label="Passwort"
-            type="password"
-            value={passwort}
-            onChange={setPasswort}
-            autoComplete={modus === 'login' ? 'current-password' : 'new-password'}
-            required
-            minLength={6}
-          />
+          {modus === 'login' && (
+            <Field
+              label="Passwort"
+              type="password"
+              value={passwort}
+              onChange={setPasswort}
+              autoComplete="current-password"
+              required
+            />
+          )}
 
           {fehler && <p className="text-sm text-ifm-red">{fehler}</p>}
           {hinweis && (
@@ -109,43 +95,42 @@ export default function LoginPage() {
               ? 'Bitte warten …'
               : modus === 'login'
                 ? 'Anmelden'
-                : 'Konto erstellen'}
+                : 'Reset-Link senden'}
           </button>
         </form>
 
         <div className="mt-6 text-sm text-ifm-gray text-center">
           {modus === 'login' ? (
-            <>
-              Noch kein Konto?{' '}
-              <button
-                type="button"
-                onClick={() => {
-                  setModus('register')
-                  setFehler(null)
-                  setHinweis(null)
-                }}
-                className="text-ifm-blue font-medium hover:underline"
-              >
-                Jetzt registrieren
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => {
+                setModus('reset')
+                setFehler(null)
+                setHinweis(null)
+              }}
+              className="text-ifm-blue font-medium hover:underline"
+            >
+              Passwort vergessen?
+            </button>
           ) : (
-            <>
-              Schon ein Konto?{' '}
-              <button
-                type="button"
-                onClick={() => {
-                  setModus('login')
-                  setFehler(null)
-                  setHinweis(null)
-                }}
-                className="text-ifm-blue font-medium hover:underline"
-              >
-                Anmelden
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => {
+                setModus('login')
+                setFehler(null)
+                setHinweis(null)
+              }}
+              className="text-ifm-blue font-medium hover:underline"
+            >
+              Zurück zur Anmeldung
+            </button>
           )}
         </div>
+
+        <p className="mt-6 text-xs text-ifm-gray text-center">
+          Konten werden vom Administrator angelegt. Wende dich an deinen Administrator, wenn du
+          Zugang brauchst.
+        </p>
       </div>
     </div>
   )
@@ -158,7 +143,6 @@ function Field({
   onChange,
   autoComplete,
   required,
-  minLength,
 }: {
   label: string
   type: string
@@ -166,7 +150,6 @@ function Field({
   onChange: (v: string) => void
   autoComplete?: string
   required?: boolean
-  minLength?: number
 }) {
   return (
     <label className="block">
@@ -177,21 +160,15 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
         required={required}
-        minLength={minLength}
         className="w-full rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue focus:ring-2 focus:ring-ifm-blue/20"
       />
     </label>
   )
 }
 
-/** Häufige Supabase-Auth-Fehlermeldungen ins Deutsche übersetzen. */
 function uebersetzeFehler(msg: string): string {
   if (/invalid login credentials/i.test(msg)) return 'E-Mail oder Passwort ist falsch.'
-  if (/email not confirmed/i.test(msg))
-    return 'Bitte bestätige zuerst deine E-Mail-Adresse.'
-  if (/user already registered/i.test(msg))
-    return 'Für diese E-Mail existiert bereits ein Konto.'
-  if (/password should be at least/i.test(msg))
-    return 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+  if (/email not confirmed/i.test(msg)) return 'Bitte bestätige zuerst deine E-Mail-Adresse.'
+  if (/rate limit|too many/i.test(msg)) return 'Zu viele Versuche. Bitte später erneut.'
   return msg
 }

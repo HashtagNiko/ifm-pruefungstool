@@ -1,4 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './lib/AuthContext'
+import NeuesPasswortSeite from './pages/NeuesPasswortSeite'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './components/DashboardLayout'
 import LoginPage from './pages/LoginPage'
@@ -13,6 +15,11 @@ import AuswertungPage from './pages/AuswertungPage'
 import TeilnehmerPage from './pages/teilnehmer/TeilnehmerPage'
 
 export default function App() {
+  const { recovery } = useAuth()
+
+  // Reset-/Einladungslink: zuerst neues Passwort setzen lassen
+  if (recovery) return <NeuesPasswortSeite />
+
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />

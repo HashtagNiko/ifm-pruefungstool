@@ -13,13 +13,15 @@ interface AuthContextValue {
   user: User | null
   /** true, solange die initiale Session noch geladen wird */
   loading: boolean
+  /** true, wenn der Nutzer über einen Passwort-Reset-/Einladungslink kam */
+  recovery: boolean
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
-  signUp: (
-    email: string,
-    password: string,
-    name: string,
-  ) => Promise<{ error: string | null; needsConfirmation: boolean }>
   signOut: () => Promise<void>
+  /** Reset-Mail anfordern (Passwort vergessen) */
+  resetPassword: (email: string) => Promise<{ error: string | null }>
+  /** neues Passwort setzen (eingeloggt oder im Recovery-Modus) */
+  updatePassword: (password: string) => Promise<{ error: string | null }>
+  clearRecovery: () => void
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -27,6 +29,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [recovery, setRecovery] = useState(false)
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -41,8 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession)
+      if (event === 'PASSWORD_RECOVERY') setRecovery(true)
     })
 
     return () => subscription.unsubscribe()
@@ -53,30 +57,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error?.message ?? null }
   }
 
-  async function signUp(email: string, password: string, name: string) {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      // name landet in raw_user_meta_data und wird vom Trigger in trainer.name übernommen
-      options: { data: { name } },
-    })
-    if (error) return { error: error.message, needsConfirmation: false }
-    // Wenn keine Session zurückkommt, ist E-Mail-Bestätigung nötig
-    const needsConfirmation = !data.session
-    return { error: null, needsConfirmation }
-  }
-
   async function signOut() {
     await supabase.auth.signOut()
+  }
+
+  async function resetPassword(email: string) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    })
+    return { error: error?.message ?? null }
+  }
+
+  async function updatePassword(password: string) {
+    const { error } = await supabase.auth.updateUser({ password })
+    return { error: error?.message ?? null }
   }
 
   const value: AuthContextValue = {
     session,
     user: session?.user ?? null,
     loading,
+    recovery,
     signIn,
-    signUp,
     signOut,
+    resetPassword,
+    updatePassword,
+    clearRecovery: () => setRecovery(false),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
