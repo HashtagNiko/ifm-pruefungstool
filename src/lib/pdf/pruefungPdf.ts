@@ -19,6 +19,26 @@ const FARBE = {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// Schriftunabhängige Icons als SVG (Ubuntu hat keine ✓/✗-Glyphen)
+function boxSvg(typ: 'leer' | 'check' | 'kreuz'): string {
+  const rahmen =
+    typ === 'check' ? FARBE.gruen : typ === 'kreuz' ? FARBE.rot : FARBE.grau
+  const rect = `<rect x="1" y="1" width="12" height="12" rx="2.5" fill="none" stroke="${rahmen}" stroke-width="1.4"/>`
+  const mark =
+    typ === 'check'
+      ? `<path d="M3.5 7.3 L6 9.7 L10.5 4.3" fill="none" stroke="${FARBE.gruen}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`
+      : typ === 'kreuz'
+        ? `<path d="M4 4 L10 10 M10 4 L4 10" stroke="${FARBE.rot}" stroke-width="1.8" stroke-linecap="round"/>`
+        : ''
+  return `<svg width="14" height="14" viewBox="0 0 14 14">${rect}${mark}</svg>`
+}
+
+function statusSvg(bestanden: boolean): string {
+  return bestanden
+    ? `<svg width="13" height="13" viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3.5" fill="none" stroke="${FARBE.gruen}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    : `<svg width="13" height="13" viewBox="0 0 14 14"><path d="M3 3 L11 11 M11 3 L3 11" stroke="${FARBE.rot}" stroke-width="2" stroke-linecap="round"/></svg>`
+}
+
 function feedbackBox(text: string | undefined): any[] {
   if (!text || !text.trim()) return []
   return [
@@ -37,17 +57,16 @@ function feedbackBox(text: string | undefined): any[] {
 
 function optionZeile(opt: { id: string; text: string; ist_richtig: boolean }, gewaehlt: boolean) {
   const falschGewaehlt = gewaehlt && !opt.ist_richtig
-  const symbol = opt.ist_richtig ? '✓' : falschGewaehlt ? '✗' : '○'
-  const farbe = opt.ist_richtig ? FARBE.gruen : falschGewaehlt ? FARBE.rot : FARBE.grau
+  const boxTyp = gewaehlt && opt.ist_richtig ? 'check' : falschGewaehlt ? 'kreuz' : 'leer'
+  // Richtige Antwort immer grün; falsch gewählte rot; sonst neutral
+  const textFarbe = opt.ist_richtig ? FARBE.gruen : falschGewaehlt ? FARBE.rot : FARBE.blau
   return {
     columns: [
-      { text: symbol, width: 14, color: farbe, bold: true },
-      {
-        text: opt.text + (gewaehlt ? '   (gewählt)' : ''),
-        color: opt.ist_richtig ? FARBE.gruen : falschGewaehlt ? FARBE.rot : FARBE.blau,
-      },
+      { svg: boxSvg(boxTyp), width: 16 },
+      { text: opt.text, color: textFarbe },
     ],
-    margin: [0, 1, 0, 1],
+    columnGap: 8,
+    margin: [0, 1.5, 0, 1.5],
   }
 }
 
@@ -93,6 +112,7 @@ function detailInhalt(daten: AuswertungsDaten): any[] {
     inhalt.push({
       text: `Punkte: ${fa.punkte} / ${fa.max}`,
       bold: true,
+      alignment: 'right',
       color: fa.punkte === fa.max ? FARBE.gruen : fa.punkte === 0 ? FARBE.rot : FARBE.blau,
       margin: [0, 3, 0, 4],
     })
@@ -129,13 +149,18 @@ function baueDocDefinition(daten: AuswertungsDaten, logoDataUrl: string): TDocum
           { text: String(t.punkte), alignment: 'right', color: FARBE.blau },
           { text: String(t.max), alignment: 'right', color: FARBE.grau },
           { text: `${t.prozent} %`, alignment: 'right', color: FARBE.blau },
-          {
-            text: daten.schwelleProThema == null ? '–' : t.bestanden ? '✓' : '✗',
-            alignment: 'center',
-            bold: true,
-            color: daten.schwelleProThema == null ? FARBE.grau : t.bestanden ? FARBE.gruen : FARBE.rot,
-          },
+          daten.schwelleProThema == null
+            ? { text: '–', alignment: 'center', color: FARBE.grau }
+            : { svg: statusSvg(t.bestanden), alignment: 'center' },
         ]),
+        // Gesamt-Summenzeile (spaltenbündig)
+        [
+          { text: 'Gesamt', bold: true, color: FARBE.blau, fillColor: FARBE.hellblau },
+          { text: String(a.punkteGesamt), bold: true, alignment: 'right', color: FARBE.blau, fillColor: FARBE.hellblau },
+          { text: String(a.punkteMax), bold: true, alignment: 'right', color: FARBE.blau, fillColor: FARBE.hellblau },
+          { text: `${a.prozentGesamt} %`, bold: true, alignment: 'right', color: FARBE.blau, fillColor: FARBE.hellblau },
+          { svg: statusSvg(a.bestanden), alignment: 'center', fillColor: FARBE.hellblau },
+        ],
       ],
     },
     layout: {
@@ -191,21 +216,11 @@ function baueDocDefinition(daten: AuswertungsDaten, logoDataUrl: string): TDocum
       { text: daten.teilnehmerName, margin: [0, 0, 0, 4] },
       themengebietTabelle,
       {
-        columns: [
-          {
-            text: a.bestanden ? 'Gesamtergebnis: bestanden' : 'Gesamtergebnis: nicht bestanden',
-            fontSize: 16,
-            bold: true,
-            color: a.bestanden ? FARBE.gruen : FARBE.rot,
-          },
-          {
-            text: `${a.punkteGesamt} / ${a.punkteMax}  ·  ${a.prozentGesamt} %`,
-            alignment: 'right',
-            bold: true,
-            color: FARBE.blau,
-          },
-        ],
-        margin: [0, 4, 0, 8],
+        text: a.bestanden ? 'Gesamtergebnis: bestanden' : 'Gesamtergebnis: nicht bestanden',
+        fontSize: 16,
+        bold: true,
+        color: a.bestanden ? FARBE.gruen : FARBE.rot,
+        margin: [0, 6, 0, 8],
       },
       ...feedbackBox(daten.feedback[feedbackKey('gesamt', null)]),
       { text: 'Fragen', fontSize: 16, bold: true, color: FARBE.blau, pageBreak: 'before', margin: [0, 0, 0, 4] },
