@@ -14,7 +14,9 @@ import {
   TextInput,
   Textarea,
 } from '../components/ui'
-import { PencilIcon, PlusIcon, TrashIcon } from '../components/icons'
+import { PencilIcon, PlusIcon, ShareIcon, TrashIcon } from '../components/icons'
+import TeilenModal from '../components/TeilenModal'
+import { meineFreigegebenenKurse, MODUS_LABEL, type FreigabeModus } from '../lib/sharing'
 
 type Kurs = Tables<'kurs'>
 
@@ -29,6 +31,9 @@ export default function KursePage() {
   // Lösch-Dialog
   const [loeschKandidat, setLoeschKandidat] = useState<Kurs | null>(null)
   const [loeschBusy, setLoeschBusy] = useState(false)
+  // Sharing
+  const [freigabeMap, setFreigabeMap] = useState<Record<string, FreigabeModus>>({})
+  const [teilenKurs, setTeilenKurs] = useState<Kurs | null>(null)
 
   async function laden_() {
     setLaden(true)
@@ -38,12 +43,14 @@ export default function KursePage() {
       .order('created_at', { ascending: true })
     if (error) setFehler(error.message)
     else setKurse(data)
+    if (user) setFreigabeMap(await meineFreigegebenenKurse(user.id))
     setLaden(false)
   }
 
   useEffect(() => {
     laden_()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   async function loeschenBestaetigt() {
     if (!loeschKandidat) return
@@ -84,31 +91,50 @@ export default function KursePage() {
         <EmptyState>Noch keine Kurse. Lege deinen ersten Kurs an.</EmptyState>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {kurse.map((kurs) => (
-            <Card key={kurs.id} className="flex flex-col">
-              <Link
-                to={`/kurse/${kurs.id}`}
-                className="text-lg font-semibold text-ifm-blue hover:underline"
-              >
-                {kurs.name}
-              </Link>
-              {kurs.beschreibung && (
-                <p className="mt-1 text-sm text-ifm-gray line-clamp-3">{kurs.beschreibung}</p>
-              )}
-              <div className="mt-4 pt-3 border-t border-ifm-lightblue flex justify-end gap-1">
-                <IconButton label="Bearbeiten" onClick={() => setBearbeite(kurs)}>
-                  <PencilIcon />
-                </IconButton>
-                <IconButton
-                  variant="danger"
-                  label="Löschen"
-                  onClick={() => setLoeschKandidat(kurs)}
+          {kurse.map((kurs) => {
+            const istBesitzer = kurs.owner_id === user?.id
+            const modus = freigabeMap[kurs.id]
+            const darfBearbeiten = istBesitzer || modus === 'gemeinsam'
+            return (
+              <Card key={kurs.id} className="flex flex-col">
+                <Link
+                  to={`/kurse/${kurs.id}`}
+                  className="text-lg font-semibold text-ifm-blue hover:underline"
                 >
-                  <TrashIcon />
-                </IconButton>
-              </div>
-            </Card>
-          ))}
+                  {kurs.name}
+                </Link>
+                {!istBesitzer && modus && (
+                  <span className="mt-1 inline-block w-fit rounded-full bg-ifm-yellow/25 px-2 py-0.5 text-xs text-ifm-blue">
+                    geteilt · {MODUS_LABEL[modus]}
+                  </span>
+                )}
+                {kurs.beschreibung && (
+                  <p className="mt-1 text-sm text-ifm-gray line-clamp-3">{kurs.beschreibung}</p>
+                )}
+                <div className="mt-4 pt-3 border-t border-ifm-lightblue flex justify-end gap-1">
+                  {istBesitzer && (
+                    <IconButton label="Teilen" onClick={() => setTeilenKurs(kurs)}>
+                      <ShareIcon />
+                    </IconButton>
+                  )}
+                  {darfBearbeiten && (
+                    <IconButton label="Bearbeiten" onClick={() => setBearbeite(kurs)}>
+                      <PencilIcon />
+                    </IconButton>
+                  )}
+                  {istBesitzer && (
+                    <IconButton
+                      variant="danger"
+                      label="Löschen"
+                      onClick={() => setLoeschKandidat(kurs)}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  )}
+                </div>
+              </Card>
+            )
+          })}
         </div>
       )}
 
@@ -142,6 +168,14 @@ export default function KursePage() {
         onConfirm={loeschenBestaetigt}
         onClose={() => setLoeschKandidat(null)}
       />
+
+      {teilenKurs && (
+        <TeilenModal
+          kursId={teilenKurs.id}
+          kursName={teilenKurs.name}
+          onClose={() => setTeilenKurs(null)}
+        />
+      )}
     </div>
   )
 }

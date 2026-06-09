@@ -88,6 +88,21 @@ export type Database = {
           },
         ]
       }
+      eingeladene_trainer: {
+        Row: {
+          eingeladen_am: string
+          email: string
+        }
+        Insert: {
+          eingeladen_am?: string
+          email: string
+        }
+        Update: {
+          eingeladen_am?: string
+          email?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           bezug_id: string | null
@@ -193,6 +208,67 @@ export type Database = {
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kurs_freigabe: {
+        Row: {
+          besitzer_email: string | null
+          besitzer_id: string
+          created_at: string
+          empfaenger_email: string
+          empfaenger_id: string | null
+          id: string
+          kurs_id: string
+          kurs_name: string
+          modus: string
+          status: string
+        }
+        Insert: {
+          besitzer_email?: string | null
+          besitzer_id: string
+          created_at?: string
+          empfaenger_email: string
+          empfaenger_id?: string | null
+          id?: string
+          kurs_id: string
+          kurs_name: string
+          modus: string
+          status?: string
+        }
+        Update: {
+          besitzer_email?: string | null
+          besitzer_id?: string
+          created_at?: string
+          empfaenger_email?: string
+          empfaenger_id?: string | null
+          id?: string
+          kurs_id?: string
+          kurs_name?: string
+          modus?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kurs_freigabe_besitzer_id_fkey"
+            columns: ["besitzer_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kurs_freigabe_empfaenger_id_fkey"
+            columns: ["empfaenger_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kurs_freigabe_kurs_id_fkey"
+            columns: ["kurs_id"]
+            isOneToOne: false
+            referencedRelation: "kurs"
             referencedColumns: ["id"]
           },
         ]
@@ -489,6 +565,15 @@ export type Database = {
           p_teilnehmer_id: string
           p_unsicher: boolean
         }
+        Returns: undefined
+      }
+      darf_kurs_bearbeiten: { Args: { p_kurs_id: string }; Returns: boolean }
+      darf_kurs_lesen: { Args: { p_kurs_id: string }; Returns: boolean }
+      freigabe_ablehnen: { Args: { p_freigabe_id: string }; Returns: undefined }
+      freigabe_annehmen: { Args: { p_freigabe_id: string }; Returns: undefined }
+      kurs_klonen: { Args: { p_kurs_id: string }; Returns: string }
+      kurs_teilen: {
+        Args: { p_email: string; p_kurs_id: string; p_modus: string }
         Returns: undefined
       }
       pruefung_abgeben: { Args: { p_teilnehmer_id: string }; Returns: Json }

@@ -4,7 +4,6 @@ import NeuesPasswortSeite from './pages/NeuesPasswortSeite'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './components/DashboardLayout'
 import LoginPage from './pages/LoginPage'
-import PlaceholderPage from './pages/PlaceholderPage'
 import KursePage from './pages/KursePage'
 import KursDetailPage from './pages/KursDetailPage'
 import FragenpoolPage from './pages/FragenpoolPage'
@@ -13,6 +12,7 @@ import PruefungenPage from './pages/PruefungenPage'
 import PruefungDetailPage from './pages/PruefungDetailPage'
 import AuswertungPage from './pages/AuswertungPage'
 import TeilnehmerPage from './pages/teilnehmer/TeilnehmerPage'
+import GeteiltMitMirPage from './pages/GeteiltMitMirPage'
 
 export default function App() {
   const { recovery } = useAuth()
@@ -38,15 +38,7 @@ export default function App() {
           <Route path="pruefungen" element={<PruefungenPage />} />
           <Route path="pruefungen/:id" element={<PruefungDetailPage />} />
           <Route path="pruefungen/:id/teilnehmer/:teilnehmerId" element={<AuswertungPage />} />
-          <Route
-            path="geteilt"
-            element={
-              <PlaceholderPage
-                title="Geteilt mit mir"
-                description="Hier erscheinen Inhalte und Prüfungen, die Co-Trainer mit dir geteilt haben."
-              />
-            }
-          />
+          <Route path="geteilt" element={<GeteiltMitMirPage />} />
         </Route>
       </Route>
 
