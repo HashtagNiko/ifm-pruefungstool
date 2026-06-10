@@ -577,6 +577,7 @@ export type Database = {
         Returns: undefined
       }
       pruefung_abgeben: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_anonymisieren: { Args: { p_pruefung_id: string }; Returns: number }
       pruefung_beitreten: {
         Args: { p_code: string; p_name: string }
         Returns: Json

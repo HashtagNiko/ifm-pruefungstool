@@ -58,6 +58,7 @@ export default function PruefungDetailPage() {
       punkte_gesamt: number | null
       punkte_max: number | null
       prozent: number | null
+      anonymisiert_am: string | null
     }[]
   >([])
 
@@ -65,7 +66,7 @@ export default function PruefungDetailPage() {
     if (!id) return
     const { data, error } = await supabase
       .from('teilnehmer')
-      .select('id, name, gestartet_am, abgegeben_am, punkte_gesamt, punkte_max, prozent')
+      .select('id, name, gestartet_am, abgegeben_am, punkte_gesamt, punkte_max, prozent, anonymisiert_am')
       .eq('pruefung_id', id)
       .order('created_at', { ascending: true })
     if (!error && data) setTeilnehmer(data)
@@ -187,6 +188,22 @@ export default function PruefungDetailPage() {
     } finally {
       setZipBusy(false)
     }
+  }
+
+  const [anonOffen, setAnonOffen] = useState(false)
+  const [anonBusy, setAnonBusy] = useState(false)
+  async function anonymisieren() {
+    if (!pruefung) return
+    setAnonBusy(true)
+    setFehler(null)
+    const { error } = await supabase.rpc('pruefung_anonymisieren', { p_pruefung_id: pruefung.id })
+    if (error) setFehler(error.message)
+    else {
+      setAnonOffen(false)
+      setHinweis('Teilnehmernamen wurden anonymisiert.')
+      await ladeTeilnehmer()
+    }
+    setAnonBusy(false)
   }
 
   function pruefungStarten() {
@@ -368,8 +385,17 @@ export default function PruefungDetailPage() {
                   {zipBusy ? 'ZIP wird erstellt …' : 'ZIP-Export (PDFs)'}
                 </Button>
               )}
+              {teilnehmer.some((t) => !t.anonymisiert_am) && (
+                <Button variant="ghost" onClick={() => setAnonOffen(true)}>
+                  Namen anonymisieren
+                </Button>
+              )}
             </div>
           </div>
+          <p className="-mt-1 mb-3 text-xs text-ifm-gray">
+            Datenschutz: Teilnehmernamen werden 7 Tage nach Abgabe automatisch anonymisiert.
+            PDFs/ZIP also vorher herunterladen.
+          </p>
           {teilnehmer.length === 0 ? (
             <p className="text-sm text-ifm-gray">
               Noch niemand beigetreten. Teilnehmer erscheinen hier live.
@@ -486,6 +512,21 @@ export default function PruefungDetailPage() {
         busy={busy}
         onConfirm={pruefungLoeschen}
         onClose={() => setLoeschOffen(false)}
+      />
+
+      <ConfirmDialog
+        open={anonOffen}
+        title="Namen anonymisieren"
+        message={
+          <>
+            Alle Teilnehmernamen dieser Prüfung werden zu „Anonymisiert" geändert. Antworten und
+            Punkte bleiben erhalten. Das lässt sich nicht rückgängig machen.
+          </>
+        }
+        confirmLabel="Anonymisieren"
+        busy={anonBusy}
+        onConfirm={anonymisieren}
+        onClose={() => setAnonOffen(false)}
       />
 
       <ConfirmDialog
