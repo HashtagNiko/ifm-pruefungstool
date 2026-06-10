@@ -58,7 +58,10 @@ export default function DashboardLayout() {
           </button>
         </div>
 
-        <nav className={`${menuOffen ? 'block' : 'hidden'} md:block px-3 pb-4 flex-1`}>
+        <nav
+          data-tour="menu"
+          className={`${menuOffen ? 'block' : 'hidden'} md:block px-3 pb-4 flex-1`}
+        >
           {MENU.map((item) => (
             <NavLink
               key={item.to}
@@ -106,7 +109,7 @@ export default function DashboardLayout() {
         onClick={tourStarten}
         title="Tour starten"
         aria-label="Tour starten"
-        className="fixed top-3 right-3 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-ifm-blue shadow-md hover:bg-ifm-lightblue/60"
+        className="fixed bottom-6 right-6 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full bg-ifm-blue text-white shadow-lg hover:bg-ifm-blue/90"
       >
         <HelpIcon />
       </button>

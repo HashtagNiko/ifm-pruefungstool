@@ -119,16 +119,19 @@ export default function FragenpoolPage() {
           <p className="mt-1 text-ifm-gray">Fragen je Kurs verwalten und importieren.</p>
         </div>
         <div className="flex items-center gap-2">
-          <IconButton
-            variant="primary"
-            label="Neue Frage"
-            onClick={() => setBearbeite(null)}
-            disabled={themen.length === 0}
-          >
-            <PlusIcon />
-          </IconButton>
+          <span data-tour="fp-neue-frage">
+            <IconButton
+              variant="primary"
+              label="Neue Frage"
+              onClick={() => setBearbeite(null)}
+              disabled={themen.length === 0}
+            >
+              <PlusIcon />
+            </IconButton>
+          </span>
           <button
             type="button"
+            data-tour="fp-import"
             onClick={() => setImportOffen(true)}
             className="rounded-lg border border-ifm-gray/40 bg-white px-4 py-2 text-sm font-medium text-ifm-blue hover:bg-ifm-lightblue/50"
           >
@@ -142,6 +145,7 @@ export default function FragenpoolPage() {
         <label className="block">
           <span className="block text-xs font-medium text-ifm-gray mb-1">Kurs</span>
           <select
+            data-tour="fp-kurs"
             value={kursId}
             onChange={(e) => setKursId(e.target.value)}
             className="rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue"
@@ -156,6 +160,7 @@ export default function FragenpoolPage() {
         <label className="block">
           <span className="block text-xs font-medium text-ifm-gray mb-1">Themengebiet</span>
           <select
+            data-tour="fp-filter"
             value={filterThema}
             onChange={(e) => setFilterThema(e.target.value)}
             className="rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue"

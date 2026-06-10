@@ -61,14 +61,16 @@ export default function PruefungenPage() {
             Konkrete Prüfungssitzungen aus deinen Vorlagen.
           </p>
         </div>
-        <IconButton
-          variant="primary"
-          label="Neue Prüfung"
-          onClick={() => setModalOffen(true)}
-          disabled={vorlagen.length === 0}
-        >
-          <PlusIcon />
-        </IconButton>
+        <span data-tour="pr-neue">
+          <IconButton
+            variant="primary"
+            label="Neue Prüfung"
+            onClick={() => setModalOffen(true)}
+            disabled={vorlagen.length === 0}
+          >
+            <PlusIcon />
+          </IconButton>
+        </span>
       </div>
 
       {fehler && (

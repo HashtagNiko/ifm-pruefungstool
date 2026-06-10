@@ -116,19 +116,22 @@ export default function VorlagenPage() {
             Bauplan für Prüfungen: Dauer, Bestehensschwellen und Fragen je Themengebiet.
           </p>
         </div>
-        <IconButton
-          variant="primary"
-          label="Neue Vorlage"
-          onClick={() => setBearbeite(null)}
-          disabled={themen.length === 0}
-        >
-          <PlusIcon />
-        </IconButton>
+        <span data-tour="vl-neue">
+          <IconButton
+            variant="primary"
+            label="Neue Vorlage"
+            onClick={() => setBearbeite(null)}
+            disabled={themen.length === 0}
+          >
+            <PlusIcon />
+          </IconButton>
+        </span>
       </div>
 
       <label className="block mb-5">
         <span className="block text-xs font-medium text-ifm-gray mb-1">Kurs</span>
         <select
+          data-tour="vl-kurs"
           value={kursId}
           onChange={(e) => setKursId(e.target.value)}
           className="rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue"
