@@ -71,6 +71,16 @@ export function XIcon(props: IconProps) {
   )
 }
 
+export function HelpIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4" />
+      <path d="M12 17.5h.01" />
+    </svg>
+  )
+}
+
 export function ShareIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

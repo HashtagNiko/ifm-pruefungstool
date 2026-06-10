@@ -74,9 +74,11 @@ export default function KursePage() {
             Deine Kurse und ihre Themengebiete.
           </p>
         </div>
-        <IconButton variant="primary" label="Neuer Kurs" onClick={() => setBearbeite({})}>
-          <PlusIcon />
-        </IconButton>
+        <span data-tour="neuer-kurs">
+          <IconButton variant="primary" label="Neuer Kurs" onClick={() => setBearbeite({})}>
+            <PlusIcon />
+          </IconButton>
+        </span>
       </div>
 
       {fehler && (

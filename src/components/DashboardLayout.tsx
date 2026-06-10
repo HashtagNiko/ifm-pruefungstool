@@ -1,14 +1,16 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { Button, ErrorBanner, Modal, TextInput } from './ui'
+import { HelpIcon } from './icons'
+import { starteTour } from '../lib/tour'
 
 const MENU = [
-  { to: '/kurse', label: 'Kurse' },
-  { to: '/fragenpool', label: 'Fragenpool' },
-  { to: '/vorlagen', label: 'Vorlagen' },
-  { to: '/pruefungen', label: 'Prüfungen' },
-  { to: '/geteilt', label: 'Geteilt mit mir' },
+  { to: '/kurse', label: 'Kurse', tour: 'menu-kurse' },
+  { to: '/fragenpool', label: 'Fragenpool', tour: 'menu-fragenpool' },
+  { to: '/vorlagen', label: 'Vorlagen', tour: 'menu-vorlagen' },
+  { to: '/pruefungen', label: 'Prüfungen', tour: 'menu-pruefungen' },
+  { to: '/geteilt', label: 'Geteilt mit mir', tour: 'menu-geteilt' },
 ]
 
 export default function DashboardLayout() {
@@ -16,6 +18,21 @@ export default function DashboardLayout() {
   const navigate = useNavigate()
   const [menuOffen, setMenuOffen] = useState(false)
   const [pwModal, setPwModal] = useState(false)
+
+  function tourStarten() {
+    setMenuOffen(true) // Menü öffnen, damit die Anker (mobil) sichtbar sind
+    starteTour(navigate)
+  }
+
+  // Tour beim ersten Login automatisch zeigen (einmal pro Gerät/Konto)
+  useEffect(() => {
+    if (!user) return
+    const key = `tour-gesehen-${user.id}`
+    if (localStorage.getItem(key)) return
+    localStorage.setItem(key, '1')
+    tourStarten()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   async function handleLogout() {
     await signOut()
@@ -46,6 +63,7 @@ export default function DashboardLayout() {
             <NavLink
               key={item.to}
               to={item.to}
+              data-tour={item.tour}
               onClick={() => setMenuOffen(false)}
               className={({ isActive }) =>
                 `block rounded-lg px-3 py-2 mb-1 text-sm font-medium transition-colors ${
@@ -80,6 +98,18 @@ export default function DashboardLayout() {
           </button>
         </div>
       </aside>
+
+      {/* Hilfe / Tour – auf jeder Seite oben rechts */}
+      <button
+        type="button"
+        data-tour="tour-hilfe"
+        onClick={tourStarten}
+        title="Tour starten"
+        aria-label="Tour starten"
+        className="fixed top-3 right-3 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-ifm-blue shadow-md hover:bg-ifm-lightblue/60"
+      >
+        <HelpIcon />
+      </button>
 
       {/* Hauptbereich */}
       <main className="flex-1 bg-ifm-lightblue/40 p-6 md:p-10">
