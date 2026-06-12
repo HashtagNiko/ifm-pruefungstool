@@ -30,6 +30,7 @@ export default function NeuePruefungModal({
   const [datum, setDatum] = useState('')
   const [lateJoin, setLateJoin] =
     useState<(typeof LATE_JOIN_OPTIONEN)[number]['wert']>('zeit_reduziert')
+  const [uebungsmodus, setUebungsmodus] = useState(false)
   const [fehler, setFehler] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -49,6 +50,7 @@ export default function NeuePruefungModal({
         ownerId,
         datum: datum || null,
         lateJoinModus: lateJoin,
+        uebungsmodus,
       })
       onCreated(pruefung.id)
     } catch (err) {
@@ -89,27 +91,49 @@ export default function NeuePruefungModal({
           />
         </label>
 
-        <label className="block">
-          <span className="block text-sm font-medium text-ifm-blue mb-1">
-            Späteinsteiger-Modus
+        {!uebungsmodus && (
+          <label className="block">
+            <span className="block text-sm font-medium text-ifm-blue mb-1">
+              Späteinsteiger-Modus
+            </span>
+            <select
+              value={lateJoin}
+              onChange={(e) => setLateJoin(e.target.value as typeof lateJoin)}
+              className="w-full rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue"
+            >
+              {LATE_JOIN_OPTIONEN.map((o) => (
+                <option key={o.wert} value={o.wert}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+
+        <label className="flex gap-2 rounded-lg border border-ifm-gray/30 p-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={uebungsmodus}
+            onChange={(e) => setUebungsmodus(e.target.checked)}
+            className="mt-1 accent-ifm-blue"
+          />
+          <span>
+            <span className="block font-medium text-ifm-blue">
+              Als Übungs-/Demo-Prüfung
+            </span>
+            <span className="block text-xs text-ifm-gray">
+              Dauerhaft offen, ohne Trainer-Start. Teilnehmer geben ihren Namen ein, warten kurz
+              und können die Prüfung beliebig oft wiederholen (Timer läuft je Versuch). Ideal zum
+              Testen.
+            </span>
           </span>
-          <select
-            value={lateJoin}
-            onChange={(e) => setLateJoin(e.target.value as typeof lateJoin)}
-            className="w-full rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue"
-          >
-            {LATE_JOIN_OPTIONEN.map((o) => (
-              <option key={o.wert} value={o.wert}>
-                {o.label}
-              </option>
-            ))}
-          </select>
         </label>
 
         <p className="text-sm text-ifm-gray">
           Beim Anlegen werden die Fragen zufällig aus dem Pool gezogen und als Snapshot
-          eingefroren. Im Entwurf kannst du danach noch einzelne Fragen tauschen oder neu
-          würfeln.
+          eingefroren.
+          {!uebungsmodus &&
+            ' Im Entwurf kannst du danach noch einzelne Fragen tauschen oder neu würfeln.'}
         </p>
 
         {fehler && <ErrorBanner message={fehler} />}

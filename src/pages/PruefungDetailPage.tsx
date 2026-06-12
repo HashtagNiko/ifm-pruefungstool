@@ -270,7 +270,13 @@ export default function PruefungDetailPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <StatusBadge status={pruefung.status} />
+          {pruefung.uebungsmodus ? (
+            <span className="shrink-0 rounded-full bg-ifm-yellow/25 px-3 py-1 text-xs font-medium text-ifm-blue">
+              Übungsmodus
+            </span>
+          ) : (
+            <StatusBadge status={pruefung.status} />
+          )}
           <IconButton variant="danger" label="Prüfung löschen" onClick={() => setLoeschOffen(true)}>
             <TrashIcon />
           </IconButton>
@@ -328,14 +334,21 @@ export default function PruefungDetailPage() {
           </Button>
         </div>
         <p className="mt-2 text-xs text-ifm-gray">
-          Teilnehmer öffnen diesen Link, geben ihren Namen ein und warten in der Lobby, bis du
-          startest.
+          {pruefung.uebungsmodus
+            ? 'Teilnehmer öffnen diesen Link, geben ihren Namen ein und können sofort (nach kurzer Lobby) üben – beliebig oft.'
+            : 'Teilnehmer öffnen diesen Link, geben ihren Namen ein und warten in der Lobby, bis du startest.'}
         </p>
       </Card>
 
       {/* Steuerung */}
       <Card className="mt-4">
         <div className="text-sm font-medium text-ifm-blue mb-3">Steuerung</div>
+        {pruefung.uebungsmodus ? (
+          <p className="text-sm text-ifm-gray">
+            Übungsmodus: Diese Prüfung ist dauerhaft offen. Teilnehmer brauchen keinen Start –
+            sie öffnen den Link, geben ihren Namen ein, warten kurz und können beliebig oft üben.
+          </p>
+        ) : (
         <div className="flex flex-wrap items-center gap-2">
           {pruefung.status === 'entwurf' && (
             <Button onClick={() => setzeStatus('lobby')} disabled={busy || snapshot.length === 0}>
@@ -367,6 +380,7 @@ export default function PruefungDetailPage() {
             </span>
           )}
         </div>
+        )}
       </Card>
 
       {/* Teilnehmer (ab Lobby) */}

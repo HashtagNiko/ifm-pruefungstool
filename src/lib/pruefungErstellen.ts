@@ -97,18 +97,30 @@ export async function erstellePruefung(opts: {
   ownerId: string
   datum: string | null
   lateJoinModus: 'zeit_reduziert' | 'volle_zeit' | 'gesperrt'
+  uebungsmodus?: boolean
 }): Promise<Pruefung> {
   const auswahl = await zieheAuswahl(opts.kursId, opts.vorlageId)
 
+  // Übungsmodus: dauerhaft offen -> direkt als "läuft" markieren (kein Trainer-Start nötig)
+  const basis = {
+    vorlage_id: opts.vorlageId,
+    owner_id: opts.ownerId,
+    datum: opts.datum,
+    late_join_modus: opts.lateJoinModus,
+  }
+  const insertDaten = opts.uebungsmodus
+    ? {
+        ...basis,
+        uebungsmodus: true,
+        status: 'laeuft',
+        start_zeit: new Date().toISOString(),
+        end_zeit: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000).toISOString(),
+      }
+    : { ...basis, status: 'entwurf' }
+
   const { data: pruefung, error } = await supabase
     .from('pruefung')
-    .insert({
-      vorlage_id: opts.vorlageId,
-      owner_id: opts.ownerId,
-      datum: opts.datum,
-      late_join_modus: opts.lateJoinModus,
-      status: 'entwurf',
-    })
+    .insert(insertDaten)
     .select('*')
     .single()
   if (error) throw error

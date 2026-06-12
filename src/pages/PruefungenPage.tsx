@@ -105,7 +105,13 @@ export default function PruefungenPage() {
                     {p.datum && ` · ${new Date(p.datum).toLocaleDateString('de-DE')}`}
                   </div>
                 </div>
-                <StatusBadge status={p.status} />
+                {p.uebungsmodus ? (
+                  <span className="shrink-0 rounded-full bg-ifm-yellow/25 px-3 py-1 text-xs font-medium text-ifm-blue">
+                    Übung
+                  </span>
+                ) : (
+                  <StatusBadge status={p.status} />
+                )}
               </Card>
             </Link>
           ))}
