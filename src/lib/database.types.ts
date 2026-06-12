@@ -283,6 +283,7 @@ export type Database = {
           owner_id: string
           start_zeit: string | null
           status: string
+          uebungsmodus: boolean
           vorlage_id: string
           zugangscode: string
         }
@@ -295,6 +296,7 @@ export type Database = {
           owner_id: string
           start_zeit?: string | null
           status?: string
+          uebungsmodus?: boolean
           vorlage_id: string
           zugangscode?: string
         }
@@ -307,6 +309,7 @@ export type Database = {
           owner_id?: string
           start_zeit?: string | null
           status?: string
+          uebungsmodus?: boolean
           vorlage_id?: string
           zugangscode?: string
         }

@@ -9,7 +9,7 @@ import {
 } from '../../lib/teilnehmerApi'
 import { seededShuffle } from '../../lib/seededShuffle'
 import { Button, ConfirmDialog, ErrorBanner } from '../../components/ui'
-import { ThumbsDownIcon } from '../../components/icons'
+import { ThumbsDownIcon, UebersichtIcon, XIcon } from '../../components/icons'
 
 interface AntwortState {
   optionen: string[]
@@ -35,6 +35,7 @@ export default function PruefungLauf({
   const [fehler, setFehler] = useState<string | null>(null)
   const [abgabeOffen, setAbgabeOffen] = useState(false)
   const [abgebend, setAbgebend] = useState(false)
+  const [uebersichtOffen, setUebersichtOffen] = useState(false)
 
   const ausschlussKey = `ausschluss-${teilnehmerId}`
   const saveChain = useRef<Promise<void>>(Promise.resolve())
@@ -222,7 +223,8 @@ export default function PruefungLauf({
           {restSek != null && restSek <= 300 && (
             <div className="mb-2 text-xs text-ifm-red">Noch {Math.ceil(restSek / 60)} Minuten.</div>
           )}
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          {/* py-2 + px-1: Platz für den Aktiv-Ring, damit Kreise nicht abgeschnitten werden */}
+          <div className="flex gap-2 overflow-x-auto px-1 py-2">
             {fragen.map((f, i) => {
               const beantwortet = istBeantwortet(f.pruefung_frage_id)
               const unsicher = istUnsicher(f.pruefung_frage_id)
@@ -371,6 +373,15 @@ export default function PruefungLauf({
           >
             Vorherige
           </Button>
+          <button
+            type="button"
+            onClick={() => setUebersichtOffen(true)}
+            title="Fragenübersicht"
+            aria-label="Fragenübersicht"
+            className="inline-flex items-center justify-center rounded-lg border border-ifm-gray/40 bg-white px-4 py-2 text-ifm-blue hover:bg-ifm-lightblue/50"
+          >
+            <UebersichtIcon />
+          </button>
           {aktuell < fragen.length - 1 ? (
             <Button onClick={() => setAktuell((i) => Math.min(fragen.length - 1, i + 1))}>
               Nächste
@@ -406,6 +417,81 @@ export default function PruefungLauf({
         }}
         onClose={() => setAbgabeOffen(false)}
       />
+
+      {uebersichtOffen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ifm-blue/40 p-4"
+          onClick={() => setUebersichtOffen(false)}
+        >
+          <div
+            className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-bold text-ifm-blue">Fragenübersicht</h2>
+              <button
+                type="button"
+                onClick={() => setUebersichtOffen(false)}
+                aria-label="Schließen"
+                className="text-ifm-blue p-1 rounded-lg hover:bg-ifm-lightblue/60"
+              >
+                <XIcon />
+              </button>
+            </div>
+
+            {/* Legende */}
+            <div className="mb-4 flex flex-wrap gap-4 text-xs text-ifm-gray">
+              <span className="flex items-center gap-1.5">
+                <span className="h-4 w-4 rounded-full border-2 border-ifm-blue bg-white" /> offen
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-4 w-4 rounded-full bg-ifm-green" /> beantwortet
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-ifm-red text-[9px] font-bold text-ifm-red">
+                  ?
+                </span>{' '}
+                unsicher
+              </span>
+            </div>
+
+            <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
+              {fragen.map((f, i) => {
+                const beantwortet = istBeantwortet(f.pruefung_frage_id)
+                const unsicher = istUnsicher(f.pruefung_frage_id)
+                let klasse = 'border-2 border-ifm-blue text-ifm-blue bg-white'
+                let inhalt: string = String(i + 1)
+                if (unsicher) {
+                  klasse = 'border-2 border-ifm-red text-ifm-red bg-white'
+                  inhalt = '?'
+                } else if (beantwortet) {
+                  klasse = 'bg-ifm-green text-white border-2 border-ifm-green'
+                }
+                return (
+                  <button
+                    key={f.pruefung_frage_id}
+                    type="button"
+                    onClick={() => {
+                      setAktuell(i)
+                      setUebersichtOffen(false)
+                    }}
+                    aria-label={`Zu Frage ${i + 1}`}
+                    className={`h-9 w-9 rounded-full text-sm font-semibold ${klasse} ${
+                      i === aktuell ? 'ring-2 ring-offset-2 ring-ifm-blue' : ''
+                    }`}
+                  >
+                    {inhalt}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="mt-4 text-sm text-ifm-gray">
+              {beantwortetAnzahl} beantwortet · {unsicherAnzahl} unsicher · {unbeantwortet} offen
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

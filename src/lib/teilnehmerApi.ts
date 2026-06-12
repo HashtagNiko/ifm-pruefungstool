@@ -10,6 +10,7 @@ export interface StatusInfo {
   dauer_minuten: number
   vorlage_name: string
   kurs_name: string
+  uebungsmodus: boolean
 }
 
 export interface BeitretenInfo {

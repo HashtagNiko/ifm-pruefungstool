@@ -10,6 +10,7 @@ import {
 } from '../../lib/teilnehmerApi'
 import { Button, ErrorBanner, TextInput } from '../../components/ui'
 import PruefungLauf from './PruefungLauf'
+import UebungsPruefung from './UebungsPruefung'
 
 export default function TeilnehmerPage() {
   const { code = '' } = useParams<{ code: string }>()
@@ -37,7 +38,7 @@ export default function TeilnehmerPage() {
         const s = await ladeStatus() // Status geht ohne Session (anon apikey)
         await ensureAnonSession()
         const gespeicherterName = localStorage.getItem(nameKey)
-        if (gespeicherterName && s.status !== 'entwurf') {
+        if (gespeicherterName && s.status !== 'entwurf' && !s.uebungsmodus) {
           try {
             const info = await beitreten(code, gespeicherterName)
             setTeilnehmerId(info.teilnehmer_id)
@@ -87,6 +88,9 @@ export default function TeilnehmerPage() {
         </Button>
       </Schirm>
     )
+
+  // Übungsmodus: eigener Ablauf (dauerhaft offen, neustartbar)
+  if (status?.uebungsmodus) return <UebungsPruefung code={code} status={status} />
 
   // Ergebnis hat Vorrang
   if (ergebnis) return <ErgebnisAnsicht ergebnis={ergebnis} kursName={status?.kurs_name} />
