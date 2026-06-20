@@ -456,19 +456,29 @@ export default function PruefungDetailPage() {
       )}
 
       {/* Snapshot */}
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold text-ifm-blue">
           Fragen-Snapshot ({snapshot.length})
         </h2>
-        {istEntwurf && (
-          <Button
-            variant="secondary"
-            onClick={() => setWuerfelnOffen(true)}
-            disabled={busy || snapshot.length === 0}
-          >
-            Alle neu würfeln
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {snapshot.length > 0 && (
+            <Link
+              to={`/pruefungen/${pruefung.id}/vorschau`}
+              className="rounded-lg bg-ifm-blue px-4 py-2 text-sm font-medium text-white hover:bg-ifm-blue/90"
+            >
+              Vorschau / Test-Durchlauf
+            </Link>
+          )}
+          {istEntwurf && (
+            <Button
+              variant="secondary"
+              onClick={() => setWuerfelnOffen(true)}
+              disabled={busy || snapshot.length === 0}
+            >
+              Alle neu würfeln
+            </Button>
+          )}
+        </div>
       </div>
 
       {!istEntwurf && (

@@ -11,6 +11,7 @@ import VorlagenPage from './pages/VorlagenPage'
 import PruefungenPage from './pages/PruefungenPage'
 import PruefungDetailPage from './pages/PruefungDetailPage'
 import AuswertungPage from './pages/AuswertungPage'
+import VorschauPage from './pages/VorschauPage'
 import TeilnehmerPage from './pages/teilnehmer/TeilnehmerPage'
 import GeteiltMitMirPage from './pages/GeteiltMitMirPage'
 
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="pruefungen" element={<PruefungenPage />} />
           <Route path="pruefungen/:id" element={<PruefungDetailPage />} />
           <Route path="pruefungen/:id/teilnehmer/:teilnehmerId" element={<AuswertungPage />} />
+          <Route path="pruefungen/:id/vorschau" element={<VorschauPage />} />
           <Route path="geteilt" element={<GeteiltMitMirPage />} />
         </Route>
       </Route>
