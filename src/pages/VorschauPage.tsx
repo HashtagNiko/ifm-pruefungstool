@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { Button, Card, EmptyState, ErrorBanner } from '../components/ui'
+import { tauscheFrage } from '../lib/pruefungErstellen'
 
 interface Opt {
   id: string
@@ -11,6 +12,8 @@ interface Opt {
 }
 interface VFrage {
   pruefung_frage_id: string
+  frage_id: string
+  themengebiet_id: string | null
   text: string
   typ: 'single' | 'multi'
   themengebiet: string | null
@@ -24,6 +27,8 @@ interface VFrage {
 export default function VorschauPage() {
   const { id } = useParams<{ id: string }>()
   const [titel, setTitel] = useState('Vorschau')
+  const [kursId, setKursId] = useState('')
+  const [editierbar, setEditierbar] = useState(false)
   const [fragen, setFragen] = useState<VFrage[]>([])
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
@@ -31,6 +36,7 @@ export default function VorschauPage() {
   const [aktuell, setAktuell] = useState(0)
   const [auswahl, setAuswahl] = useState<Record<string, string[]>>({})
   const [geloest, setGeloest] = useState<Set<string>>(new Set())
+  const [tauschBusy, setTauschBusy] = useState<string | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -39,15 +45,21 @@ export default function VorschauPage() {
       try {
         const { data: pr } = await supabase
           .from('pruefung')
-          .select('pruefungsvorlage(name)')
+          .select('status, uebungsmodus, pruefungsvorlage(name, kurs_id)')
           .eq('id', id)
           .single()
-          .returns<{ pruefungsvorlage: { name: string } | null }>()
+          .returns<{
+            status: string
+            uebungsmodus: boolean
+            pruefungsvorlage: { name: string; kurs_id: string } | null
+          }>()
         if (pr?.pruefungsvorlage?.name) setTitel(pr.pruefungsvorlage.name)
+        if (pr?.pruefungsvorlage?.kurs_id) setKursId(pr.pruefungsvorlage.kurs_id)
+        setEditierbar(pr?.status === 'entwurf' || pr?.uebungsmodus === true)
 
         const { data: snap, error: snapErr } = await supabase
           .from('pruefung_frage')
-          .select('id, sortierung, frage_id, frage(text, typ), themengebiet(name)')
+          .select('id, sortierung, frage_id, themengebiet_id, frage(text, typ), themengebiet(name)')
           .eq('pruefung_id', id)
           .order('sortierung', { ascending: true })
           .returns<
@@ -55,6 +67,7 @@ export default function VorschauPage() {
               id: string
               sortierung: number
               frage_id: string
+              themengebiet_id: string | null
               frage: { text: string; typ: string } | null
               themengebiet: { name: string } | null
             }[]
@@ -78,6 +91,8 @@ export default function VorschauPage() {
         setFragen(
           (snap ?? []).map((s) => ({
             pruefung_frage_id: s.id,
+            frage_id: s.frage_id,
+            themengebiet_id: s.themengebiet_id,
             text: s.frage?.text ?? '',
             typ: (s.frage?.typ as 'single' | 'multi') ?? 'single',
             themengebiet: s.themengebiet?.name ?? null,
@@ -111,6 +126,52 @@ export default function VorschauPage() {
       else neu.add(pfId)
       return neu
     })
+  }
+
+  async function frageNeuWuerfeln(index: number) {
+    const f = fragen[index]
+    if (!f.themengebiet_id || !kursId) return
+    setTauschBusy(f.pruefung_frage_id)
+    setFehler(null)
+    try {
+      const neueFrageId = await tauscheFrage(
+        f.pruefung_frage_id,
+        kursId,
+        f.themengebiet_id,
+        fragen.map((x) => x.frage_id),
+      )
+      const [{ data: nf }, { data: nopts }] = await Promise.all([
+        supabase.from('frage').select('text, typ').eq('id', neueFrageId).single(),
+        supabase
+          .from('antwortoption')
+          .select('id, text, ist_richtig, sortierung')
+          .eq('frage_id', neueFrageId),
+      ])
+      setFragen((alt) =>
+        alt.map((x, i) =>
+          i === index
+            ? {
+                ...x,
+                frage_id: neueFrageId,
+                text: nf?.text ?? '',
+                typ: (nf?.typ as 'single' | 'multi') ?? 'single',
+                optionen: (nopts ?? []).slice().sort((a, b) => a.sortierung - b.sortierung),
+              }
+            : x,
+        ),
+      )
+      // Auswahl/Lösung dieser Frage zurücksetzen
+      setAuswahl((a) => ({ ...a, [f.pruefung_frage_id]: [] }))
+      setGeloest((g) => {
+        const n = new Set(g)
+        n.delete(f.pruefung_frage_id)
+        return n
+      })
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Tauschen fehlgeschlagen.')
+    } finally {
+      setTauschBusy(null)
+    }
   }
 
   if (laden) return <p className="text-ifm-gray">Lädt …</p>
@@ -216,10 +277,19 @@ export default function VorschauPage() {
               })}
             </ul>
 
-            <div className="mt-4">
+            <div className="mt-4 flex flex-wrap gap-2">
               <Button variant="secondary" onClick={() => loesungUmschalten(frage.pruefung_frage_id)}>
                 {geloest.has(frage.pruefung_frage_id) ? 'Lösung ausblenden' : 'Lösung anzeigen'}
               </Button>
+              {editierbar && frage.themengebiet_id && (
+                <Button
+                  variant="secondary"
+                  onClick={() => frageNeuWuerfeln(aktuell)}
+                  disabled={tauschBusy === frage.pruefung_frage_id}
+                >
+                  {tauschBusy === frage.pruefung_frage_id ? 'Würfle …' : 'Frage neu würfeln'}
+                </Button>
+              )}
             </div>
           </Card>
 
