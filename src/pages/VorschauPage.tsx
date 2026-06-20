@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { Button, Card, EmptyState, ErrorBanner } from '../components/ui'
 import { tauscheFrage } from '../lib/pruefungErstellen'
+import { seededShuffle } from '../lib/seededShuffle'
 
 interface Opt {
   id: string
@@ -96,9 +97,8 @@ export default function VorschauPage() {
             text: s.frage?.text ?? '',
             typ: (s.frage?.typ as 'single' | 'multi') ?? 'single',
             themengebiet: s.themengebiet?.name ?? null,
-            optionen: (proFrage.get(s.frage_id) ?? [])
-              .slice()
-              .sort((a, b) => a.sortierung - b.sortierung),
+            // Antwortreihenfolge zufällig (stabil pro Frage), nicht „richtig zuerst"
+            optionen: seededShuffle(proFrage.get(s.frage_id) ?? [], s.id),
           })),
         )
       } catch (err) {
@@ -155,7 +155,7 @@ export default function VorschauPage() {
                 frage_id: neueFrageId,
                 text: nf?.text ?? '',
                 typ: (nf?.typ as 'single' | 'multi') ?? 'single',
-                optionen: (nopts ?? []).slice().sort((a, b) => a.sortierung - b.sortierung),
+                optionen: seededShuffle(nopts ?? [], f.pruefung_frage_id),
               }
             : x,
         ),
