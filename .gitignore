@@ -40,3 +40,9 @@ weg-fragen-export.json
 hg-fragen-gesamt.json
 *-fragen-*.json
 *fragen*.json
+
+# Pruefungs-Dokumente / Bearbeitungsboegen -> nicht ins (oeffentliche) Repo
+# (Marken-/Design-Vorlagen wie ifmera-Vorlage.docx bleiben erlaubt)
+*Bearbeitungsbogen*.docx
+*Pruefung*.docx
+*Pruefung*.pdf
