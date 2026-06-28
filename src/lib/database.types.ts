@@ -424,6 +424,7 @@ export type Database = {
           created_at: string
           empfaenger_email: string
           empfaenger_id: string | null
+          empfaenger_leitet: boolean
           id: string
           modus: string
           pruefung_id: string
@@ -437,6 +438,7 @@ export type Database = {
           created_at?: string
           empfaenger_email: string
           empfaenger_id?: string | null
+          empfaenger_leitet?: boolean
           id?: string
           modus: string
           pruefung_id: string
@@ -450,6 +452,7 @@ export type Database = {
           created_at?: string
           empfaenger_email?: string
           empfaenger_id?: string | null
+          empfaenger_leitet?: boolean
           id?: string
           modus?: string
           pruefung_id?: string
@@ -695,6 +698,10 @@ export type Database = {
         Args: { p_tg_id: string }
         Returns: boolean
       }
+      darf_pruefung_leiten: {
+        Args: { p_pruefung_id: string }
+        Returns: boolean
+      }
       darf_kurs_bearbeiten: { Args: { p_kurs_id: string }; Returns: boolean }
       darf_kurs_lesen: { Args: { p_kurs_id: string }; Returns: boolean }
       freigabe_ablehnen: { Args: { p_freigabe_id: string }; Returns: undefined }
@@ -730,6 +737,7 @@ export type Database = {
           p_modus: string
           p_pruefung_id: string
           p_themengebiete?: string[]
+          p_empfaenger_leitet?: boolean
         }
         Returns: undefined
       }

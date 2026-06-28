@@ -82,12 +82,14 @@ export async function pruefungTeilen(
   email: string,
   modus: PruefungFreigabeModus,
   themengebiete: string[],
+  empfaengerLeitet = false,
 ): Promise<void> {
   const { error } = await supabase.rpc('pruefung_teilen', {
     p_pruefung_id: pruefungId,
     p_email: email,
     p_modus: modus,
     p_themengebiete: modus === 'kopie' ? [] : themengebiete,
+    p_empfaenger_leitet: modus === 'korrektur' ? empfaengerLeitet : false,
   })
   if (error) throw new Error(error.message)
 }

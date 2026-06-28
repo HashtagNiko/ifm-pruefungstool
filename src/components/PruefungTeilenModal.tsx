@@ -25,6 +25,7 @@ export default function PruefungTeilenModal({
   const [modus, setModus] = useState<PruefungFreigabeModus>('eingeschraenkt')
   const [themengebiete, setThemengebiete] = useState<Themengebiet[]>([])
   const [freigegeben, setFreigegeben] = useState<Set<string>>(new Set())
+  const [empfaengerLeitet, setEmpfaengerLeitet] = useState(false)
   const [fehler, setFehler] = useState<string | null>(null)
   const [hinweis, setHinweis] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -67,7 +68,7 @@ export default function PruefungTeilenModal({
     setHinweis(null)
     setBusy(true)
     try {
-      await pruefungTeilen(pruefungId, email, modus, [...freigegeben])
+      await pruefungTeilen(pruefungId, email, modus, [...freigegeben], empfaengerLeitet)
       setHinweis(
         `Eingeladen: ${email.trim()}. Die Person sieht die Einladung unter „Geteilt mit mir", ` +
           'sobald sie eingeloggt ist.',
@@ -151,6 +152,30 @@ export default function PruefungTeilenModal({
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {modus === 'korrektur' && (
+          <div>
+            <span className="block text-sm font-medium text-ifm-blue mb-1">
+              Wer leitet die Prüfung?
+            </span>
+            <label className="flex items-start gap-2 rounded-lg border border-ifm-gray/30 p-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={empfaengerLeitet}
+                onChange={(e) => setEmpfaengerLeitet(e.target.checked)}
+                className="mt-0.5 accent-ifm-blue"
+              />
+              <span>
+                <span className="block text-sm text-ifm-blue">
+                  Der eingeladene Trainer leitet die Prüfung (öffnet die Lobby, startet/beendet).
+                </span>
+                <span className="block text-xs text-ifm-gray">
+                  Ohne Haken leitest du die Prüfung. Du behältst die Kontrolle in jedem Fall.
+                </span>
+              </span>
+            </label>
           </div>
         )}
 

@@ -50,6 +50,8 @@ export default function PruefungDetailPage() {
   const [korrekturProTeilnehmer, setKorrekturProTeilnehmer] = useState<
     Record<string, { themengebiet_id: string; trainer_name: string | null }[]>
   >({})
+  // Darf der eingeladene Korrektor diese (geteilte) Prüfung leiten (Lobby öffnen)?
+  const [empfaengerLeitet, setEmpfaengerLeitet] = useState(false)
   const [snapshot, setSnapshot] = useState<SnapshotRow[]>([])
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
@@ -130,6 +132,18 @@ export default function PruefungDetailPage() {
           setFreigegebeneThemen(tgs ?? [])
         }
       }
+      // Geteilt zur Korrektur (fremde Prüfung)? Leiter-Recht laden.
+      if (data && user && data.owner_id !== user.id) {
+        const { data: fr } = await supabase
+          .from('pruefung_freigabe')
+          .select('empfaenger_leitet')
+          .eq('pruefung_id', id)
+          .eq('empfaenger_id', user.id)
+          .eq('modus', 'korrektur')
+          .eq('status', 'angenommen')
+          .maybeSingle()
+        setEmpfaengerLeitet(fr?.empfaenger_leitet ?? false)
+      }
       await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
       const { data: tnIds } = await supabase.from('teilnehmer').select('id').eq('pruefung_id', id)
       const ids = (tnIds ?? []).map((t) => t.id)
@@ -149,7 +163,7 @@ export default function PruefungDetailPage() {
       }
       setLaden(false)
     })()
-  }, [id, ladeSnapshot, ladeTeilnehmer])
+  }, [id, ladeSnapshot, ladeTeilnehmer, user?.id])
 
   // Realtime: Live-Teilnehmerliste (Lobby / Abgaben)
   useEffect(() => {
@@ -170,6 +184,7 @@ export default function PruefungDetailPage() {
   const istEntwurf = pruefung?.status === 'entwurf'
   const istBesitzer = !!pruefung && pruefung.owner_id === user?.id
   const istKorrektor = !!pruefung && pruefung.owner_id !== user?.id // Zugriff via Korrektur-Freigabe
+  const darfLeiten = istBesitzer || empfaengerLeitet // Lobby öffnen/starten/beenden
   const istEmpfaenger = bearbeitbareTg !== null
   const darfWuerfeln = istBesitzer && istEntwurf && !istEmpfaenger
   function darfTauschen(themengebietId: string | null): boolean {
@@ -397,11 +412,12 @@ export default function PruefungDetailPage() {
         <div className="mt-4 rounded-lg bg-ifm-lightblue/60 text-ifm-blue text-sm p-3">
           Du korrigierst diese Prüfung mit. Öffne unten einen abgegebenen Teilnehmer und gib in
           deinen zugewiesenen Themengebieten Feedback bzw. markiere sie als korrigiert.
+          {empfaengerLeitet && ' Du leitest diese Prüfung – du kannst die Lobby öffnen und starten.'}
         </div>
       )}
 
       {/* Teilnehmer-Link */}
-      {istBesitzer && (
+      {darfLeiten && (
       <Card className="mt-4">
         <div className="text-sm font-medium text-ifm-blue mb-2">Teilnehmer-Link</div>
         <div className="flex flex-wrap items-center gap-2">
@@ -421,7 +437,7 @@ export default function PruefungDetailPage() {
       )}
 
       {/* Steuerung */}
-      {istBesitzer && (
+      {darfLeiten && (
       <Card className="mt-4">
         <div className="text-sm font-medium text-ifm-blue mb-3">Steuerung</div>
         {pruefung.uebungsmodus ? (
