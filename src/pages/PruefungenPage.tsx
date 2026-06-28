@@ -4,8 +4,9 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
 import { Card, EmptyState, ErrorBanner, IconButton } from '../components/ui'
-import { PlusIcon } from '../components/icons'
+import { PlusIcon, ShareIcon } from '../components/icons'
 import NeuePruefungModal, { type VorlageOption } from '../components/NeuePruefungModal'
+import PruefungTeilenModal from '../components/PruefungTeilenModal'
 import { StatusBadge } from '../components/pruefungStatus'
 
 type PruefungRow = Tables<'pruefung'> & {
@@ -20,6 +21,7 @@ export default function PruefungenPage() {
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
   const [modalOffen, setModalOffen] = useState(false)
+  const [teilenFuer, setTeilenFuer] = useState<{ id: string; name: string } | null>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -105,13 +107,32 @@ export default function PruefungenPage() {
                     {p.datum && ` · ${new Date(p.datum).toLocaleDateString('de-DE')}`}
                   </div>
                 </div>
-                {p.uebungsmodus ? (
-                  <span className="shrink-0 rounded-full bg-ifm-yellow/25 px-3 py-1 text-xs font-medium text-ifm-blue">
-                    Übung
-                  </span>
-                ) : (
-                  <StatusBadge status={p.status} />
-                )}
+                <div className="flex shrink-0 items-center gap-2">
+                  {p.quelle_freigabe_id && (
+                    <span className="rounded-full bg-ifm-lightblue px-2 py-0.5 text-xs font-medium text-ifm-blue">
+                      geteilt
+                    </span>
+                  )}
+                  {p.uebungsmodus ? (
+                    <span className="rounded-full bg-ifm-yellow/25 px-3 py-1 text-xs font-medium text-ifm-blue">
+                      Übung
+                    </span>
+                  ) : (
+                    <StatusBadge status={p.status} />
+                  )}
+                  {!p.quelle_freigabe_id && (
+                    <IconButton
+                      label="Prüfung teilen"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setTeilenFuer({ id: p.id, name: p.pruefungsvorlage?.name ?? 'Prüfung' })
+                      }}
+                    >
+                      <ShareIcon />
+                    </IconButton>
+                  )}
+                </div>
               </Card>
             </Link>
           ))}
@@ -124,6 +145,14 @@ export default function PruefungenPage() {
           ownerId={user.id}
           onClose={() => setModalOffen(false)}
           onCreated={(id) => navigate(`/pruefungen/${id}`)}
+        />
+      )}
+
+      {teilenFuer && (
+        <PruefungTeilenModal
+          pruefungId={teilenFuer.id}
+          pruefungName={teilenFuer.name}
+          onClose={() => setTeilenFuer(null)}
         />
       )}
     </div>

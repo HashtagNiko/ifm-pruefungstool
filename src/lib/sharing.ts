@@ -54,3 +54,50 @@ export async function meineFreigegebenenKurse(
   }
   return map
 }
+
+/* ===================== Prüfungs-Freigaben ===================== */
+
+export type PruefungFreigabeModus = 'eingeschraenkt' | 'kopie'
+
+export const PRUEFUNG_MODUS_LABEL: Record<PruefungFreigabeModus, string> = {
+  eingeschraenkt: 'Eingeschränkt nutzen',
+  kopie: 'Kopie übernehmen',
+}
+
+export const PRUEFUNG_MODUS_BESCHREIBUNG: Record<PruefungFreigabeModus, string> = {
+  eingeschraenkt:
+    'Erhält eine eigene Prüfung mit deinen Fragen. Eigene Teilnehmer möglich, ' +
+    'aber Fragen nur in den von dir freigegebenen Themengebieten austauschbar.',
+  kopie:
+    'Erhält eine vollständige eigene Kopie (Kurs, Fragenpool, Vorlage und diese Prüfung) ' +
+    'und kann danach alles selbst bearbeiten.',
+}
+
+export async function pruefungTeilen(
+  pruefungId: string,
+  email: string,
+  modus: PruefungFreigabeModus,
+  themengebiete: string[],
+): Promise<void> {
+  const { error } = await supabase.rpc('pruefung_teilen', {
+    p_pruefung_id: pruefungId,
+    p_email: email,
+    p_modus: modus,
+    p_themengebiete: modus === 'eingeschraenkt' ? themengebiete : [],
+  })
+  if (error) throw new Error(error.message)
+}
+
+export async function pruefungFreigabeAnnehmen(freigabeId: string): Promise<void> {
+  const { error } = await supabase.rpc('pruefung_freigabe_annehmen', {
+    p_freigabe_id: freigabeId,
+  })
+  if (error) throw new Error(error.message)
+}
+
+export async function pruefungFreigabeAblehnen(freigabeId: string): Promise<void> {
+  const { error } = await supabase.rpc('pruefung_freigabe_ablehnen', {
+    p_freigabe_id: freigabeId,
+  })
+  if (error) throw new Error(error.message)
+}

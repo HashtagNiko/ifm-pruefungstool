@@ -10,9 +10,10 @@ import {
   ErrorBanner,
   IconButton,
 } from '../components/ui'
-import { TrashIcon } from '../components/icons'
+import { ShareIcon, TrashIcon } from '../components/icons'
 import { StatusBadge } from '../components/pruefungStatus'
 import { tauscheFrage, wuerfleNeu } from '../lib/pruefungErstellen'
+import PruefungTeilenModal from '../components/PruefungTeilenModal'
 
 type PruefungRow = Tables<'pruefung'> & {
   pruefungsvorlage:
@@ -49,6 +50,9 @@ export default function PruefungDetailPage() {
   const [busy, setBusy] = useState(false)
   const [loeschOffen, setLoeschOffen] = useState(false)
   const [wuerfelnOffen, setWuerfelnOffen] = useState(false)
+  const [teilenOffen, setTeilenOffen] = useState(false)
+  // null = eigene Prüfung (alles erlaubt); Set = eingeschränkt geteilte Prüfung (nur diese Themengebiete)
+  const [bearbeitbareTg, setBearbeitbareTg] = useState<Set<string> | null>(null)
   const [teilnehmer, setTeilnehmer] = useState<
     {
       id: string
@@ -98,6 +102,15 @@ export default function PruefungDetailPage() {
         .returns<PruefungRow>()
       if (error) setFehler(error.message)
       else setPruefung(data)
+      // Eingeschränkt geteilte (übernommene) Prüfung? Dann freigegebene Themengebiete laden.
+      if (data?.quelle_freigabe_id) {
+        const { data: fr } = await supabase
+          .from('pruefung_freigabe')
+          .select('bearbeitbare_themengebiete')
+          .eq('id', data.quelle_freigabe_id)
+          .maybeSingle()
+        setBearbeitbareTg(new Set(fr?.bearbeitbare_themengebiete ?? []))
+      }
       await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
       setLaden(false)
     })()
@@ -120,6 +133,13 @@ export default function PruefungDetailPage() {
   }, [id, ladeTeilnehmer])
 
   const istEntwurf = pruefung?.status === 'entwurf'
+  const istEmpfaenger = bearbeitbareTg !== null
+  const darfWuerfeln = istEntwurf && !istEmpfaenger
+  function darfTauschen(themengebietId: string | null): boolean {
+    if (!istEntwurf) return false
+    if (!istEmpfaenger) return true
+    return themengebietId != null && bearbeitbareTg!.has(themengebietId)
+  }
 
   async function frageTauschen(row: SnapshotRow) {
     if (!pruefung?.pruefungsvorlage) return
@@ -276,6 +296,11 @@ export default function PruefungDetailPage() {
             </span>
           ) : (
             <StatusBadge status={pruefung.status} />
+          )}
+          {!istEmpfaenger && (
+            <IconButton label="Prüfung teilen" onClick={() => setTeilenOffen(true)}>
+              <ShareIcon />
+            </IconButton>
           )}
           <IconButton variant="danger" label="Prüfung löschen" onClick={() => setLoeschOffen(true)}>
             <TrashIcon />
@@ -469,7 +494,7 @@ export default function PruefungDetailPage() {
               Vorschau / Test-Durchlauf
             </Link>
           )}
-          {istEntwurf && (
+          {darfWuerfeln && (
             <Button
               variant="secondary"
               onClick={() => setWuerfelnOffen(true)}
@@ -485,6 +510,12 @@ export default function PruefungDetailPage() {
         <p className="mt-1 text-sm text-ifm-gray">
           Der Snapshot ist fixiert (Status „{pruefung.status}"). Würfeln/Tauschen ist nur im
           Entwurf möglich.
+        </p>
+      )}
+
+      {istEntwurf && istEmpfaenger && (
+        <p className="mt-1 text-sm text-ifm-gray">
+          Geteilte Prüfung: Fragen lassen sich nur in den freigegebenen Themengebieten tauschen.
         </p>
       )}
 
@@ -510,7 +541,7 @@ export default function PruefungDetailPage() {
                           {row.frage?.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
                         </span>
                       </div>
-                      {istEntwurf && (
+                      {darfTauschen(row.themengebiet_id) && (
                         <Button
                           variant="ghost"
                           className="shrink-0"
@@ -563,6 +594,14 @@ export default function PruefungDetailPage() {
         onConfirm={alleNeuWuerfeln}
         onClose={() => setWuerfelnOffen(false)}
       />
+
+      {teilenOffen && (
+        <PruefungTeilenModal
+          pruefungId={pruefung.id}
+          pruefungName={vorlage?.name ?? 'Prüfung'}
+          onClose={() => setTeilenOffen(false)}
+        />
+      )}
     </div>
   )
 }

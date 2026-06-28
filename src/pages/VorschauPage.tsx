@@ -30,6 +30,8 @@ export default function VorschauPage() {
   const [titel, setTitel] = useState('Vorschau')
   const [kursId, setKursId] = useState('')
   const [editierbar, setEditierbar] = useState(false)
+  // null = eigene Prüfung (alles); Set = eingeschränkt geteilt (nur diese Themengebiete tauschbar)
+  const [bearbeitbareTg, setBearbeitbareTg] = useState<Set<string> | null>(null)
   const [fragen, setFragen] = useState<VFrage[]>([])
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
@@ -46,17 +48,26 @@ export default function VorschauPage() {
       try {
         const { data: pr } = await supabase
           .from('pruefung')
-          .select('status, uebungsmodus, pruefungsvorlage(name, kurs_id)')
+          .select('status, uebungsmodus, quelle_freigabe_id, pruefungsvorlage(name, kurs_id)')
           .eq('id', id)
           .single()
           .returns<{
             status: string
             uebungsmodus: boolean
+            quelle_freigabe_id: string | null
             pruefungsvorlage: { name: string; kurs_id: string } | null
           }>()
         if (pr?.pruefungsvorlage?.name) setTitel(pr.pruefungsvorlage.name)
         if (pr?.pruefungsvorlage?.kurs_id) setKursId(pr.pruefungsvorlage.kurs_id)
         setEditierbar(pr?.status === 'entwurf' || pr?.uebungsmodus === true)
+        if (pr?.quelle_freigabe_id) {
+          const { data: fr } = await supabase
+            .from('pruefung_freigabe')
+            .select('bearbeitbare_themengebiete')
+            .eq('id', pr.quelle_freigabe_id)
+            .maybeSingle()
+          setBearbeitbareTg(new Set(fr?.bearbeitbare_themengebiete ?? []))
+        }
 
         const { data: snap, error: snapErr } = await supabase
           .from('pruefung_frage')
@@ -186,6 +197,11 @@ export default function VorschauPage() {
     )
 
   const frage = fragen[aktuell]
+  function darfTauschen(themengebietId: string | null): boolean {
+    if (!editierbar || !themengebietId) return false
+    if (bearbeitbareTg === null) return true
+    return bearbeitbareTg.has(themengebietId)
+  }
 
   return (
     <div className="max-w-3xl">
@@ -281,7 +297,7 @@ export default function VorschauPage() {
               <Button variant="secondary" onClick={() => loesungUmschalten(frage.pruefung_frage_id)}>
                 {geloest.has(frage.pruefung_frage_id) ? 'Lösung ausblenden' : 'Lösung anzeigen'}
               </Button>
-              {editierbar && frage.themengebiet_id && (
+              {darfTauschen(frage.themengebiet_id) && (
                 <Button
                   variant="secondary"
                   onClick={() => frageNeuWuerfeln(aktuell)}

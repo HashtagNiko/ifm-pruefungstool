@@ -281,6 +281,7 @@ export type Database = {
           id: string
           late_join_modus: string
           owner_id: string
+          quelle_freigabe_id: string | null
           start_zeit: string | null
           status: string
           uebungsmodus: boolean
@@ -294,6 +295,7 @@ export type Database = {
           id?: string
           late_join_modus?: string
           owner_id: string
+          quelle_freigabe_id?: string | null
           start_zeit?: string | null
           status?: string
           uebungsmodus?: boolean
@@ -307,6 +309,7 @@ export type Database = {
           id?: string
           late_join_modus?: string
           owner_id?: string
+          quelle_freigabe_id?: string | null
           start_zeit?: string | null
           status?: string
           uebungsmodus?: boolean
@@ -319,6 +322,13 @@ export type Database = {
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_quelle_freigabe_id_fkey"
+            columns: ["quelle_freigabe_id"]
+            isOneToOne: false
+            referencedRelation: "pruefung_freigabe"
             referencedColumns: ["id"]
           },
           {
@@ -372,6 +382,70 @@ export type Database = {
             columns: ["themengebiet_id"]
             isOneToOne: false
             referencedRelation: "themengebiet"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pruefung_freigabe: {
+        Row: {
+          bearbeitbare_themengebiete: string[]
+          besitzer_email: string | null
+          besitzer_id: string
+          created_at: string
+          empfaenger_email: string
+          empfaenger_id: string | null
+          id: string
+          modus: string
+          pruefung_id: string
+          pruefung_name: string
+          status: string
+        }
+        Insert: {
+          bearbeitbare_themengebiete?: string[]
+          besitzer_email?: string | null
+          besitzer_id: string
+          created_at?: string
+          empfaenger_email: string
+          empfaenger_id?: string | null
+          id?: string
+          modus: string
+          pruefung_id: string
+          pruefung_name: string
+          status?: string
+        }
+        Update: {
+          bearbeitbare_themengebiete?: string[]
+          besitzer_email?: string | null
+          besitzer_id?: string
+          created_at?: string
+          empfaenger_email?: string
+          empfaenger_id?: string | null
+          id?: string
+          modus?: string
+          pruefung_id?: string
+          pruefung_name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pruefung_freigabe_besitzer_id_fkey"
+            columns: ["besitzer_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_freigabe_empfaenger_id_fkey"
+            columns: ["empfaenger_id"]
+            isOneToOne: false
+            referencedRelation: "trainer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pruefung_freigabe_pruefung_id_fkey"
+            columns: ["pruefung_id"]
+            isOneToOne: false
+            referencedRelation: "pruefung"
             referencedColumns: ["id"]
           },
         ]
@@ -561,6 +635,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      anonymisiere_alte_teilnehmer: { Args: never; Returns: number }
       antwort_speichern: {
         Args: {
           p_optionen: string[]
@@ -569,6 +644,18 @@ export type Database = {
           p_unsicher: boolean
         }
         Returns: undefined
+      }
+      darf_geteilte_frage_lesen: {
+        Args: { p_frage_id: string }
+        Returns: boolean
+      }
+      darf_geteilte_vorlage_lesen: {
+        Args: { p_vorlage_id: string }
+        Returns: boolean
+      }
+      darf_geteiltes_themengebiet_lesen: {
+        Args: { p_tg_id: string }
+        Returns: boolean
       }
       darf_kurs_bearbeiten: { Args: { p_kurs_id: string }; Returns: boolean }
       darf_kurs_lesen: { Args: { p_kurs_id: string }; Returns: boolean }
@@ -580,13 +667,34 @@ export type Database = {
         Returns: undefined
       }
       pruefung_abgeben: { Args: { p_teilnehmer_id: string }; Returns: Json }
-      pruefung_anonymisieren: { Args: { p_pruefung_id: string }; Returns: number }
+      pruefung_anonymisieren: {
+        Args: { p_pruefung_id: string }
+        Returns: number
+      }
       pruefung_beitreten: {
         Args: { p_code: string; p_name: string }
         Returns: Json
       }
       pruefung_fragen: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_freigabe_ablehnen: {
+        Args: { p_freigabe_id: string }
+        Returns: undefined
+      }
+      pruefung_freigabe_annehmen: {
+        Args: { p_freigabe_id: string }
+        Returns: undefined
+      }
+      pruefung_klonen: { Args: { p_pruefung_id: string }; Returns: string }
       pruefung_status: { Args: { p_code: string }; Returns: Json }
+      pruefung_teilen: {
+        Args: {
+          p_email: string
+          p_modus: string
+          p_pruefung_id: string
+          p_themengebiete?: string[]
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
