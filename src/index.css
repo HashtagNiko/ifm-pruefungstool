@@ -1,13 +1,15 @@
 @import 'tailwindcss';
 
-/* IFM-Design-System — Farben & Schrift aus dem Konzept (Abschnitt 11) */
+/* ifmera-academy-Design-System — Farben & Schrift aus der Marken-Vorlage (ifmera-Vorlage.docx) */
 @theme {
-  --color-ifm-blue: #2a4566; /* Dunkelblau — Primärfarbe, Buttons, Überschriften */
-  --color-ifm-red: #ad0131; /* Rot — Akzent, Trennstriche, "falsch"-Marker */
-  --color-ifm-yellow: #fabb17; /* Gelb — Hinweise, "unsicher"-Marker */
+  --color-ifm-blue: #00444a; /* Dunkel-Petrol — Primärfarbe, Buttons, Überschriften */
+  --color-ifm-red: #ff7758; /* Koralle — Akzent, Trennstriche, Links, "falsch"-Marker */
+  --color-ifm-yellow: #fabb17; /* Bernstein — Hinweise, "unsicher"-Marker */
   --color-ifm-green: #1ba56e; /* Grün — Erfolg, "richtig"-Marker, bestanden */
-  --color-ifm-lightblue: #e1eaf5; /* Hellblau — Hintergrund-Boxen, Hinweis-Container */
-  --color-ifm-gray: #8293a7; /* Grau — Sekundärtext */
+  --color-ifm-lightblue: #dce9e9; /* Helles Teal — Hintergrund-Boxen, Hinweis-Container */
+  --color-ifm-gray: #6f8587; /* Teal-Grau — Sekundärtext */
+  --color-ifm-lime: #e6ff2a; /* Neon-Lime — Marken-Akzent, Highlights */
+  --color-ifm-cream: #faf5eb; /* Creme — Seiten-/Flächenhintergrund */
 
   --font-sans: 'Ubuntu', Arial, sans-serif;
 }

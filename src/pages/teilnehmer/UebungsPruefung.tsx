@@ -134,15 +134,9 @@ function Schirm({
   unter?: string
 }) {
   return (
-    <div className="min-h-full bg-ifm-lightblue flex items-center justify-center p-6">
+    <div className="min-h-full bg-ifm-cream flex items-center justify-center p-6">
       <div className="w-full max-w-md rounded-2xl bg-white shadow-sm p-8">
-        <div className="flex items-baseline gap-1 text-sm font-bold mb-6">
-          <span className="text-ifm-blue">Qualifizierung</span>
-          <span className="text-ifm-red">|</span>
-          <span className="text-ifm-blue">Coaching</span>
-          <span className="text-ifm-red">|</span>
-          <span className="text-ifm-blue">Consulting</span>
-        </div>
+        <img src="/logo.png" alt="ifmera academy" className="mb-6 h-8 w-auto" />
         {titel && <h1 className="text-xl font-bold text-ifm-blue">{titel}</h1>}
         {unter && <p className="mb-4 mt-1 text-sm text-ifm-gray">{unter}</p>}
         {!unter && titel && <div className="mb-4" />}

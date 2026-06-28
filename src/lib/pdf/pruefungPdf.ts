@@ -10,11 +10,11 @@ import {
 import type { FrageAuswertung } from '../auswertung'
 
 const FARBE = {
-  blau: '#2A4566',
-  rot: '#AD0131',
-  gruen: '#1BA56E',
-  hellblau: '#E1EAF5',
-  grau: '#8293A7',
+  blau: '#00444A', // Dunkel-Petrol — Primärfarbe (ifmera academy)
+  rot: '#FF7758', // Koralle — Akzent / "falsch"
+  gruen: '#1BA56E', // Grün — Erfolg / "richtig"
+  hellblau: '#DCE9E9', // Helles Teal — Boxen / Tabellenfüllung
+  grau: '#6F8587', // Teal-Grau — Sekundärtext
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -175,38 +175,16 @@ function baueDocDefinition(daten: AuswertungsDaten, logoDataUrl: string): TDocum
     pageMargins: [40, 90, 40, 60],
     defaultStyle: { font: 'Ubuntu', fontSize: 12, color: FARBE.blau },
     header: () => ({
-      margin: [40, 20, 40, 0],
-      columns: [
-        { image: logoDataUrl, width: 90, fit: [90, 40] },
-        {
-          alignment: 'right',
-          margin: [0, 8, 0, 0],
-          text: [
-            { text: 'Qualifizierung', color: FARBE.blau, bold: true },
-            { text: ' | ', color: FARBE.rot, bold: true },
-            { text: 'Coaching', color: FARBE.blau, bold: true },
-            { text: ' | ', color: FARBE.rot, bold: true },
-            { text: 'Consulting', color: FARBE.blau, bold: true },
-          ],
-        },
-      ],
+      margin: [40, 22, 40, 0],
+      image: logoDataUrl,
+      fit: [150, 50],
     }),
     footer: (currentPage: number, pageCount: number) => ({
       margin: [40, 10, 40, 0],
-      stack: [
-        {
-          columns: [
-            { text: '© IFM Institut für Managementberatung GmbH', fontSize: 9, color: FARBE.grau },
-            { text: `Seite ${currentPage} von ${pageCount}`, fontSize: 9, color: FARBE.grau, alignment: 'right' },
-          ],
-        },
-        {
-          columns: [
-            { text: daten.trainerName, fontSize: 9, color: FARBE.grau },
-            { text: 'www.ifm-business.de', fontSize: 9, color: FARBE.blau, bold: true, alignment: 'right' },
-          ],
-          margin: [0, 2, 0, 0],
-        },
+      columns: [
+        { text: '© ifmera academy GmbH', fontSize: 9, color: FARBE.grau },
+        { text: daten.trainerName, fontSize: 9, color: FARBE.grau, alignment: 'center' },
+        { text: `Seite ${currentPage} von ${pageCount}`, fontSize: 9, color: FARBE.grau, alignment: 'right' },
       ],
     }),
     content: [

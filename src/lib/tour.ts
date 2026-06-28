@@ -14,7 +14,7 @@ const SCHRITTE: TourSchritt[] = [
   {
     route: '/kurse',
     popover: {
-      title: 'Willkommen beim IFM-Prüfungstool',
+      title: 'Willkommen beim Prüfungstool',
       description:
         'Diese Tour führt dich durch alle Bereiche. Sie wechselt automatisch die Seiten – ' +
         'klick dich einfach mit „Weiter" durch. Unten rechts kannst du sie über das ?-Symbol ' +
@@ -161,7 +161,7 @@ const SCHRITTE: TourSchritt[] = [
       description:
         'Ein Klick auf eine Prüfung öffnet die Steuerung: Lobby öffnen, starten, live verfolgen ' +
         '(wer wartet/schreibt/abgegeben hat), Teilnehmer-Link teilen. Danach wertest du jeden ' +
-        'Teilnehmer aus – mit Feedback, PDF- und ZIP-Export im IFM-Design.',
+        'Teilnehmer aus – mit Feedback, PDF- und ZIP-Export im ifmera-Design.',
     },
   },
 

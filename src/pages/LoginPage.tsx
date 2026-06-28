@@ -40,20 +40,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-full bg-ifm-lightblue flex items-center justify-center p-6">
+    <div className="min-h-full bg-ifm-cream flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8">
-        <div className="flex items-baseline gap-1 text-sm font-bold mb-6">
-          <span className="text-ifm-blue">Qualifizierung</span>
-          <span className="text-ifm-red">|</span>
-          <span className="text-ifm-blue">Coaching</span>
-          <span className="text-ifm-red">|</span>
-          <span className="text-ifm-blue">Consulting</span>
-        </div>
+        <img src="/logo.png" alt="ifmera academy" className="mb-6 h-9 w-auto" />
 
         <h1 className="text-2xl font-bold text-ifm-blue">
           {modus === 'login' ? 'Anmelden' : 'Passwort zurücksetzen'}
         </h1>
-        <p className="mt-1 text-sm text-ifm-gray">IFM-Prüfungstool · Trainer-Bereich</p>
+        <p className="mt-1 text-sm text-ifm-gray">Prüfungstool · Trainer-Bereich</p>
 
         {!isSupabaseConfigured && (
           <p className="mt-4 rounded-lg bg-ifm-yellow/20 text-ifm-blue text-sm p-3">

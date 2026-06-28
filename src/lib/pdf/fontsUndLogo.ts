@@ -1,5 +1,7 @@
 import pdfMake from 'pdfmake/build/pdfmake'
-import logoUrl from '../../../logo.png'
+
+// Logo wird aus public/ geladen (served unter /logo.png) — kein Bundle-Import nötig.
+const logoUrl = '/logo.png'
 
 /**
  * Lädt Ubuntu-Fonts zur Laufzeit (Google Fonts via CDN) und registriert sie bei pdfmake.
@@ -50,7 +52,7 @@ export async function ensureFonts(): Promise<void> {
 
 let logoCache: string | null = null
 
-/** IFM-Logo als Data-URL (für pdfmake-Image). Einmal gecacht. */
+/** ifmera-Logo als Data-URL (für pdfmake-Image). Einmal gecacht. */
 export async function ladeLogoDataUrl(): Promise<string> {
   if (logoCache) return logoCache
   const res = await fetch(logoUrl)

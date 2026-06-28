@@ -45,7 +45,10 @@ export default function DashboardLayout() {
       <aside className="md:w-64 shrink-0 bg-ifm-blue text-white flex flex-col">
         <div className="p-5 flex items-center justify-between">
           <div>
-            <div className="text-lg font-bold">IFM-Prüfungstool</div>
+            <div className="inline-flex rounded-lg bg-white px-3 py-2 shadow-sm">
+              <img src="/logo.png" alt="ifmera academy" className="h-7 w-auto" />
+            </div>
+            <div className="mt-2 text-sm font-bold">Prüfungstool</div>
             <div className="text-xs text-white/60">Trainer-Dashboard</div>
           </div>
           <button
@@ -115,7 +118,7 @@ export default function DashboardLayout() {
       </button>
 
       {/* Hauptbereich */}
-      <main className="flex-1 bg-ifm-lightblue/40 p-6 md:p-10">
+      <main className="flex-1 bg-ifm-cream p-6 md:p-10">
         <Outlet />
       </main>
 
