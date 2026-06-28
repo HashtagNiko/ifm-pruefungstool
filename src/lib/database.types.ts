@@ -141,6 +141,7 @@ export type Database = {
       frage: {
         Row: {
           erstellt_am: string
+          erstellt_von: string | null
           id: string
           kurs_id: string
           text: string
@@ -149,6 +150,7 @@ export type Database = {
         }
         Insert: {
           erstellt_am?: string
+          erstellt_von?: string | null
           id?: string
           kurs_id: string
           text: string
@@ -157,6 +159,7 @@ export type Database = {
         }
         Update: {
           erstellt_am?: string
+          erstellt_von?: string | null
           id?: string
           kurs_id?: string
           text?: string
@@ -644,6 +647,14 @@ export type Database = {
           p_unsicher: boolean
         }
         Returns: undefined
+      }
+      darf_antwortoption_geteilt: {
+        Args: { p_frage_id: string }
+        Returns: boolean
+      }
+      darf_frage_anlegen_geteilt: {
+        Args: { p_kurs_id: string; p_themengebiet_id: string }
+        Returns: boolean
       }
       darf_geteilte_frage_lesen: {
         Args: { p_frage_id: string }

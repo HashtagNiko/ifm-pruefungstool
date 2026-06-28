@@ -14,6 +14,7 @@ import { ShareIcon, TrashIcon } from '../components/icons'
 import { StatusBadge } from '../components/pruefungStatus'
 import { tauscheFrage, wuerfleNeu } from '../lib/pruefungErstellen'
 import PruefungTeilenModal from '../components/PruefungTeilenModal'
+import FrageModal from '../components/FrageModal'
 
 type PruefungRow = Tables<'pruefung'> & {
   pruefungsvorlage:
@@ -53,6 +54,9 @@ export default function PruefungDetailPage() {
   const [teilenOffen, setTeilenOffen] = useState(false)
   // null = eigene Prüfung (alles erlaubt); Set = eingeschränkt geteilte Prüfung (nur diese Themengebiete)
   const [bearbeitbareTg, setBearbeitbareTg] = useState<Set<string> | null>(null)
+  // Für Empfänger: freigegebene Themengebiete (zum Anlegen eigener Fragen im Pool des Besitzers)
+  const [freigegebeneThemen, setFreigegebeneThemen] = useState<Tables<'themengebiet'>[]>([])
+  const [frageNeuOffen, setFrageNeuOffen] = useState(false)
   const [teilnehmer, setTeilnehmer] = useState<
     {
       id: string
@@ -109,7 +113,16 @@ export default function PruefungDetailPage() {
           .select('bearbeitbare_themengebiete')
           .eq('id', data.quelle_freigabe_id)
           .maybeSingle()
-        setBearbeitbareTg(new Set(fr?.bearbeitbare_themengebiete ?? []))
+        const tgIds = fr?.bearbeitbare_themengebiete ?? []
+        setBearbeitbareTg(new Set(tgIds))
+        if (tgIds.length > 0) {
+          const { data: tgs } = await supabase
+            .from('themengebiet')
+            .select('*')
+            .in('id', tgIds)
+            .order('sortierung', { ascending: true })
+          setFreigegebeneThemen(tgs ?? [])
+        }
       }
       await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
       setLaden(false)
@@ -503,6 +516,11 @@ export default function PruefungDetailPage() {
               Alle neu würfeln
             </Button>
           )}
+          {istEmpfaenger && freigegebeneThemen.length > 0 && (
+            <Button variant="secondary" onClick={() => setFrageNeuOffen(true)}>
+              Frage zum Pool hinzufügen
+            </Button>
+          )}
         </div>
       </div>
 
@@ -600,6 +618,21 @@ export default function PruefungDetailPage() {
           pruefungId={pruefung.id}
           pruefungName={vorlage?.name ?? 'Prüfung'}
           onClose={() => setTeilenOffen(false)}
+        />
+      )}
+
+      {frageNeuOffen && vorlage && (
+        <FrageModal
+          kursId={vorlage.kurs_id}
+          themengebiete={freigegebeneThemen}
+          frage={null}
+          onClose={() => setFrageNeuOffen(false)}
+          onSaved={() => {
+            setFrageNeuOffen(false)
+            setHinweis(
+              'Frage zum Pool hinzugefügt. Du kannst sie über „Tauschen" im jeweiligen Themengebiet einsetzen.',
+            )
+          }}
         />
       )}
     </div>
