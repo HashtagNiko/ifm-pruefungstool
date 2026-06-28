@@ -31,14 +31,27 @@ export const supabase = isSupabaseConfigured
     ) as ReturnType<typeof createClient<Database>>)
 
 /**
- * Liefert die ID des aktuell angemeldeten Trainers – frisch aus der verifizierten
- * Session (nicht aus möglicherweise veraltetem React-State). So passt eine gesendete
- * `owner_id` immer zu `auth.uid()` der Anfrage; bei abgelaufener Sitzung wird geworfen.
+ * Liefert die ID des aktuell angemeldeten Trainers und stellt sicher, dass das
+ * Zugriffstoken gültig ist. Ein abgelaufenes Token würde sonst dazu führen, dass die
+ * Anfrage „anonym" bei der DB ankommt (auth.uid() = NULL) und an der RLS scheitert –
+ * genau das verursachte „new row violates row-level security policy". Daher: bei
+ * abgelaufenem (oder fast abgelaufenem) Token vorher auffrischen.
  */
 export async function aktuelleUserId(): Promise<string> {
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data.user) {
-    throw new Error('Deine Sitzung ist nicht mehr aktiv. Bitte neu anmelden.')
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  if (!session) {
+    throw new Error('Deine Sitzung ist nicht mehr aktiv. Bitte melde dich neu an.')
   }
-  return data.user.id
+  // expires_at ist in Sekunden; mit 30 s Puffer rechtzeitig auffrischen
+  const abgelaufen = session.expires_at ? session.expires_at * 1000 < Date.now() + 30_000 : false
+  if (abgelaufen) {
+    const { data, error } = await supabase.auth.refreshSession()
+    if (error || !data.session) {
+      throw new Error('Deine Sitzung ist abgelaufen. Bitte melde dich neu an.')
+    }
+    return data.session.user.id
+  }
+  return session.user.id
 }
