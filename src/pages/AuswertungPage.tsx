@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
 import { Button, Card, ErrorBanner, Textarea } from '../components/ui'
 import {
@@ -11,6 +12,8 @@ import {
 
 type Teilnehmer = Tables<'teilnehmer'>
 
+type KorrekturInfo = { trainer_id: string; trainer_name: string | null }
+
 interface FeedbackEintrag {
   id?: string
   text: string
@@ -18,7 +21,14 @@ interface FeedbackEintrag {
 
 export default function AuswertungPage() {
   const { id: pruefungId, teilnehmerId } = useParams<{ id: string; teilnehmerId: string }>()
+  const { user } = useAuth()
   const [teilnehmer, setTeilnehmer] = useState<Teilnehmer | null>(null)
+  // Korrektur-Kontext (Feature „Gemeinsam korrigieren")
+  const [istBesitzer, setIstBesitzer] = useState(true)
+  const [zugewieseneTg, setZugewieseneTg] = useState<Set<string> | null>(null) // null = Besitzer (alle)
+  const [kollaborativ, setKollaborativ] = useState(false)
+  const [meinName, setMeinName] = useState('')
+  const [korrekturStatus, setKorrekturStatus] = useState<Record<string, KorrekturInfo>>({})
   const [vorlageName, setVorlageName] = useState('')
   const [kursName, setKursName] = useState('')
   const [schwelleGesamt, setSchwelleGesamt] = useState(50)
@@ -56,11 +66,12 @@ export default function AuswertungPage() {
           supabase
             .from('pruefung')
             .select(
-              'pruefungsvorlage(name, bestehensschwelle_prozent, bestehensschwelle_pro_themengebiet_prozent, kurs(name))',
+              'owner_id, pruefungsvorlage(name, bestehensschwelle_prozent, bestehensschwelle_pro_themengebiet_prozent, kurs(name))',
             )
             .eq('id', pruefungId)
             .single()
             .returns<{
+              owner_id: string
               pruefungsvorlage: {
                 name: string
                 bestehensschwelle_prozent: number
@@ -156,18 +167,93 @@ export default function AuswertungPage() {
           fbMap[feedbackKey(f.ebene, f.bezug_id)] = { id: f.id, text: f.text }
         }
         setFeedback(fbMap)
+
+        // Korrektur-Kontext (Feature „Gemeinsam korrigieren")
+        const besitzer = prRes.data.owner_id === user?.id
+        setIstBesitzer(besitzer)
+        const { data: frg } = await supabase
+          .from('pruefung_freigabe')
+          .select('empfaenger_id, bearbeitbare_themengebiete, status')
+          .eq('pruefung_id', pruefungId)
+          .eq('modus', 'korrektur')
+        const angenommene = (frg ?? []).filter((f) => f.status === 'angenommen')
+        setKollaborativ(angenommene.length > 0)
+        if (besitzer) {
+          setZugewieseneTg(null)
+        } else {
+          const meine = angenommene.find((f) => f.empfaenger_id === user?.id)
+          setZugewieseneTg(new Set(meine?.bearbeitbare_themengebiete ?? []))
+        }
+        const { data: ks } = await supabase
+          .from('korrektur_status')
+          .select('themengebiet_id, trainer_id, trainer_name')
+          .eq('teilnehmer_id', teilnehmerId)
+        const ksMap: Record<string, KorrekturInfo> = {}
+        for (const k of ks ?? [])
+          ksMap[k.themengebiet_id] = { trainer_id: k.trainer_id, trainer_name: k.trainer_name }
+        setKorrekturStatus(ksMap)
+        if (user) {
+          const { data: tr } = await supabase
+            .from('trainer')
+            .select('name, email')
+            .eq('id', user.id)
+            .single()
+          setMeinName(tr?.name || tr?.email || 'Trainer')
+        }
       } catch (err) {
         setFehler(err instanceof Error ? err.message : 'Laden fehlgeschlagen.')
       } finally {
         setLaden(false)
       }
     })()
-  }, [pruefungId, teilnehmerId])
+  }, [pruefungId, teilnehmerId, user?.id])
 
   const auswertung: GesamtAuswertung | null = useMemo(() => {
     if (fragen.length === 0) return null
     return werteAus(fragen, antwortenMap, schwelleGesamt, schwelleProThema)
   }, [fragen, antwortenMap, schwelleGesamt, schwelleProThema])
+
+  /** Darf der aktuelle Nutzer dieses Themengebiet korrigieren (Feedback/Status)? */
+  function darfKorrigieren(themengebietId: string | null): boolean {
+    if (istBesitzer) return true
+    if (!themengebietId || zugewieseneTg === null) return false
+    return zugewieseneTg.has(themengebietId)
+  }
+
+  async function korrekturUmschalten(themengebietId: string) {
+    if (!teilnehmerId || !user) return
+    const schon = korrekturStatus[themengebietId]
+    try {
+      if (schon) {
+        // Nur der jeweilige Korrektor (oder Besitzer) darf entfernen
+        const { error } = await supabase
+          .from('korrektur_status')
+          .delete()
+          .eq('teilnehmer_id', teilnehmerId)
+          .eq('themengebiet_id', themengebietId)
+        if (error) throw error
+        setKorrekturStatus((alt) => {
+          const neu = { ...alt }
+          delete neu[themengebietId]
+          return neu
+        })
+      } else {
+        const { error } = await supabase.from('korrektur_status').insert({
+          teilnehmer_id: teilnehmerId,
+          themengebiet_id: themengebietId,
+          trainer_id: user.id,
+          trainer_name: meinName,
+        })
+        if (error) throw error
+        setKorrekturStatus((alt) => ({
+          ...alt,
+          [themengebietId]: { trainer_id: user.id, trainer_name: meinName },
+        }))
+      }
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Korrektur-Status fehlgeschlagen.')
+    }
+  }
 
   function feedbackText(ebene: string, bezugId: string | null): string {
     return feedback[feedbackKey(ebene, bezugId)]?.text ?? ''
@@ -322,17 +408,19 @@ export default function AuswertungPage() {
             {schwelleProThema != null && ` · ${schwelleProThema} % je Themengebiet`}
           </p>
 
-          {/* Gesamtfeedback */}
-          <Card className="mt-5">
-            <Textarea
-              label="Gesamtfeedback (optional)"
-              rows={3}
-              value={feedbackText('gesamt', null)}
-              onChange={(e) => setFeedbackText('gesamt', null, e.target.value)}
-              onBlur={() => speichereFeedback('gesamt', null)}
-              placeholder="Feedback an den Teilnehmer …"
-            />
-          </Card>
+          {/* Gesamtfeedback – nur Prüfungs-Besitzer */}
+          {istBesitzer && (
+            <Card className="mt-5">
+              <Textarea
+                label="Gesamtfeedback (optional)"
+                rows={3}
+                value={feedbackText('gesamt', null)}
+                onChange={(e) => setFeedbackText('gesamt', null, e.target.value)}
+                onBlur={() => speichereFeedback('gesamt', null)}
+                placeholder="Feedback an den Teilnehmer …"
+              />
+            </Card>
+          )}
 
           {/* Fragen-Detail */}
           <h2 className="mt-8 mb-3 text-lg font-semibold text-ifm-blue">Fragen</h2>
@@ -419,6 +507,7 @@ export default function AuswertungPage() {
                     value={feedbackText('frage', fa.frage.frage_id)}
                     onChange={(e) => setFeedbackText('frage', fa.frage.frage_id, e.target.value)}
                     onBlur={() => speichereFeedback('frage', fa.frage.frage_id)}
+                    disabled={!darfKorrigieren(fa.frage.themengebiet_id)}
                   />
                 </div>
               </Card>
@@ -432,17 +521,43 @@ export default function AuswertungPage() {
           <div className="space-y-3">
             {auswertung.proThemengebiet
               .filter((t) => t.id != null)
-              .map((t) => (
-                <Card key={t.id}>
-                  <Textarea
-                    label={t.name}
-                    rows={2}
-                    value={feedbackText('themengebiet', t.id)}
-                    onChange={(e) => setFeedbackText('themengebiet', t.id, e.target.value)}
-                    onBlur={() => speichereFeedback('themengebiet', t.id)}
-                  />
-                </Card>
-              ))}
+              .map((t) => {
+                const tgId = t.id as string
+                const status = korrekturStatus[tgId]
+                const darf = darfKorrigieren(tgId)
+                return (
+                  <Card key={tgId}>
+                    {kollaborativ && (
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        {status ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-ifm-green/15 px-2 py-0.5 text-xs font-medium text-ifm-green">
+                            ✓ korrigiert von {status.trainer_name ?? 'Trainer'}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-ifm-gray">noch nicht korrigiert</span>
+                        )}
+                        {darf && (
+                          <Button
+                            variant="ghost"
+                            className="!px-2 !py-1 text-xs"
+                            onClick={() => korrekturUmschalten(tgId)}
+                          >
+                            {status ? 'Markierung entfernen' : 'Als korrigiert markieren'}
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                    <Textarea
+                      label={t.name}
+                      rows={2}
+                      value={feedbackText('themengebiet', tgId)}
+                      onChange={(e) => setFeedbackText('themengebiet', tgId, e.target.value)}
+                      onBlur={() => speichereFeedback('themengebiet', tgId)}
+                      disabled={!darf}
+                    />
+                  </Card>
+                )
+              })}
           </div>
         </>
       )}

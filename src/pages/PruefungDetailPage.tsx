@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
 import {
   Button,
@@ -43,7 +44,12 @@ const LATE_JOIN_LABEL: Record<string, string> = {
 export default function PruefungDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [pruefung, setPruefung] = useState<PruefungRow | null>(null)
+  // Korrektur-Chips: teilnehmer_id -> Liste korrigierter Themengebiete
+  const [korrekturProTeilnehmer, setKorrekturProTeilnehmer] = useState<
+    Record<string, { themengebiet_id: string; trainer_name: string | null }[]>
+  >({})
   const [snapshot, setSnapshot] = useState<SnapshotRow[]>([])
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
@@ -125,6 +131,22 @@ export default function PruefungDetailPage() {
         }
       }
       await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
+      const { data: tnIds } = await supabase.from('teilnehmer').select('id').eq('pruefung_id', id)
+      const ids = (tnIds ?? []).map((t) => t.id)
+      if (ids.length > 0) {
+        const { data: ks } = await supabase
+          .from('korrektur_status')
+          .select('teilnehmer_id, themengebiet_id, trainer_name')
+          .in('teilnehmer_id', ids)
+        const map: Record<string, { themengebiet_id: string; trainer_name: string | null }[]> = {}
+        for (const k of ks ?? []) {
+          ;(map[k.teilnehmer_id] ??= []).push({
+            themengebiet_id: k.themengebiet_id,
+            trainer_name: k.trainer_name,
+          })
+        }
+        setKorrekturProTeilnehmer(map)
+      }
       setLaden(false)
     })()
   }, [id, ladeSnapshot, ladeTeilnehmer])
@@ -146,10 +168,12 @@ export default function PruefungDetailPage() {
   }, [id, ladeTeilnehmer])
 
   const istEntwurf = pruefung?.status === 'entwurf'
+  const istBesitzer = !!pruefung && pruefung.owner_id === user?.id
+  const istKorrektor = !!pruefung && pruefung.owner_id !== user?.id // Zugriff via Korrektur-Freigabe
   const istEmpfaenger = bearbeitbareTg !== null
-  const darfWuerfeln = istEntwurf && !istEmpfaenger
+  const darfWuerfeln = istBesitzer && istEntwurf && !istEmpfaenger
   function darfTauschen(themengebietId: string | null): boolean {
-    if (!istEntwurf) return false
+    if (!istEntwurf || !istBesitzer) return false
     if (!istEmpfaenger) return true
     return themengebietId != null && bearbeitbareTg!.has(themengebietId)
   }
@@ -288,6 +312,12 @@ export default function PruefungDetailPage() {
     else gruppen.push({ name, rows: [row] })
   }
 
+  // Themengebiet-Namen für die Korrektur-Chips
+  const tgName: Record<string, string> = {}
+  for (const row of snapshot) {
+    if (row.themengebiet_id) tgName[row.themengebiet_id] = row.themengebiet?.name ?? 'Themengebiet'
+  }
+
   return (
     <div>
       <Link to="/pruefungen" className="text-sm text-ifm-gray hover:underline">
@@ -310,14 +340,16 @@ export default function PruefungDetailPage() {
           ) : (
             <StatusBadge status={pruefung.status} />
           )}
-          {!istEmpfaenger && (
+          {istBesitzer && !istEmpfaenger && (
             <IconButton label="Prüfung teilen" onClick={() => setTeilenOffen(true)}>
               <ShareIcon />
             </IconButton>
           )}
-          <IconButton variant="danger" label="Prüfung löschen" onClick={() => setLoeschOffen(true)}>
-            <TrashIcon />
-          </IconButton>
+          {istBesitzer && (
+            <IconButton variant="danger" label="Prüfung löschen" onClick={() => setLoeschOffen(true)}>
+              <TrashIcon />
+            </IconButton>
+          )}
         </div>
       </div>
 
@@ -360,7 +392,16 @@ export default function PruefungDetailPage() {
         </dl>
       </Card>
 
+      {/* Korrektor-Hinweis */}
+      {istKorrektor && (
+        <div className="mt-4 rounded-lg bg-ifm-lightblue/60 text-ifm-blue text-sm p-3">
+          Du korrigierst diese Prüfung mit. Öffne unten einen abgegebenen Teilnehmer und gib in
+          deinen zugewiesenen Themengebieten Feedback bzw. markiere sie als korrigiert.
+        </div>
+      )}
+
       {/* Teilnehmer-Link */}
+      {istBesitzer && (
       <Card className="mt-4">
         <div className="text-sm font-medium text-ifm-blue mb-2">Teilnehmer-Link</div>
         <div className="flex flex-wrap items-center gap-2">
@@ -377,8 +418,10 @@ export default function PruefungDetailPage() {
             : 'Teilnehmer öffnen diesen Link, geben ihren Namen ein und warten in der Lobby, bis du startest.'}
         </p>
       </Card>
+      )}
 
       {/* Steuerung */}
+      {istBesitzer && (
       <Card className="mt-4">
         <div className="text-sm font-medium text-ifm-blue mb-3">Steuerung</div>
         {pruefung.uebungsmodus ? (
@@ -420,9 +463,10 @@ export default function PruefungDetailPage() {
         </div>
         )}
       </Card>
+      )}
 
       {/* Teilnehmer (ab Lobby) */}
-      {pruefung.status !== 'entwurf' && (
+      {(istKorrektor || pruefung.status !== 'entwurf') && (
         <Card className="mt-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-medium text-ifm-blue">
@@ -432,12 +476,12 @@ export default function PruefungDetailPage() {
               <span className="text-xs text-ifm-gray">
                 {teilnehmer.filter((t) => t.abgegeben_am).length} abgegeben
               </span>
-              {teilnehmer.some((t) => t.abgegeben_am) && (
+              {istBesitzer && teilnehmer.some((t) => t.abgegeben_am) && (
                 <Button variant="secondary" onClick={zipExport} disabled={zipBusy}>
                   {zipBusy ? 'ZIP wird erstellt …' : 'ZIP-Export (PDFs)'}
                 </Button>
               )}
-              {teilnehmer.some((t) => !t.anonymisiert_am) && (
+              {istBesitzer && teilnehmer.some((t) => !t.anonymisiert_am) && (
                 <Button variant="ghost" onClick={() => setAnonOffen(true)}>
                   Namen anonymisieren
                 </Button>
@@ -460,10 +504,26 @@ export default function PruefungDetailPage() {
                   : t.gestartet_am
                     ? { label: 'schreibt', cls: 'text-ifm-blue' }
                     : { label: 'wartet', cls: 'text-ifm-gray' }
+                const korr = korrekturProTeilnehmer[t.id] ?? []
                 const inhalt = (
                   <>
-                    <span className="text-ifm-blue">{t.name}</span>
-                    <span className="flex items-center gap-3">
+                    <span className="flex min-w-0 flex-col">
+                      <span className="text-ifm-blue">{t.name}</span>
+                      {korr.length > 0 && (
+                        <span className="mt-1 flex flex-wrap gap-1">
+                          {korr.map((k) => (
+                            <span
+                              key={k.themengebiet_id}
+                              className="inline-flex items-center gap-1 rounded-full bg-ifm-green/15 px-2 py-0.5 text-[11px] font-medium text-ifm-green"
+                            >
+                              ✓ {tgName[k.themengebiet_id] ?? 'Themengebiet'}
+                              {k.trainer_name ? ` · ${k.trainer_name}` : ''}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-3">
                       {t.abgegeben_am && t.punkte_max != null && (
                         <span className="text-ifm-gray">
                           {t.punkte_gesamt}/{t.punkte_max} · {t.prozent} %

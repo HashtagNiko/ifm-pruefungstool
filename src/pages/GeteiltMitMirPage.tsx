@@ -96,7 +96,9 @@ export default function GeteiltMitMirPage() {
       setHinweis(
         f.modus === 'kopie'
           ? `Kopie von „${f.pruefung_name}" (inkl. Kurs & Fragen) wurde in deinem Konto angelegt – unter „Prüfungen".`
-          : `„${f.pruefung_name}" ist jetzt als eigene Prüfung unter „Prüfungen" verfügbar.`,
+          : f.modus === 'korrektur'
+            ? `Du korrigierst jetzt bei „${f.pruefung_name}" mit – die Prüfung erscheint unter „Prüfungen" (zur Korrektur).`
+            : `„${f.pruefung_name}" ist jetzt als eigene Prüfung unter „Prüfungen" verfügbar.`,
       )
       await laden_()
     } catch (err) {

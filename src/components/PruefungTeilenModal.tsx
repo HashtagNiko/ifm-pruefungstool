@@ -8,7 +8,7 @@ import {
 } from '../lib/sharing'
 import { Button, ErrorBanner, Modal, TextInput } from './ui'
 
-const MODI: PruefungFreigabeModus[] = ['eingeschraenkt', 'kopie']
+const MODI: PruefungFreigabeModus[] = ['eingeschraenkt', 'korrektur', 'kopie']
 
 type Themengebiet = { id: string; name: string }
 
@@ -121,14 +121,15 @@ export default function PruefungTeilenModal({
           </div>
         </div>
 
-        {modus === 'eingeschraenkt' && (
+        {modus !== 'kopie' && (
           <div>
             <span className="block text-sm font-medium text-ifm-blue mb-1">
-              Bearbeitbare Themengebiete
+              {modus === 'korrektur' ? 'Zu korrigierende Themengebiete' : 'Bearbeitbare Themengebiete'}
             </span>
             <p className="mb-2 text-xs text-ifm-gray">
-              Nur in den ausgewählten Themengebieten darf der Trainer Fragen tauschen/neu würfeln.
-              Alle anderen Fragen bleiben fixiert.
+              {modus === 'korrektur'
+                ? 'Der eingeladene Trainer darf in den ausgewählten Themengebieten Feedback geben und sie als korrigiert markieren.'
+                : 'Nur in den ausgewählten Themengebieten darf der Trainer Fragen tauschen/neu würfeln. Alle anderen Fragen bleiben fixiert.'}
             </p>
             {themengebiete.length === 0 ? (
               <p className="text-xs text-ifm-gray">Keine Themengebiete im Snapshot.</p>

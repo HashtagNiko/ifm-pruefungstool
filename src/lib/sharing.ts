@@ -57,11 +57,12 @@ export async function meineFreigegebenenKurse(
 
 /* ===================== Prüfungs-Freigaben ===================== */
 
-export type PruefungFreigabeModus = 'eingeschraenkt' | 'kopie'
+export type PruefungFreigabeModus = 'eingeschraenkt' | 'kopie' | 'korrektur'
 
 export const PRUEFUNG_MODUS_LABEL: Record<PruefungFreigabeModus, string> = {
   eingeschraenkt: 'Eingeschränkt nutzen',
   kopie: 'Kopie übernehmen',
+  korrektur: 'Gemeinsam korrigieren',
 }
 
 export const PRUEFUNG_MODUS_BESCHREIBUNG: Record<PruefungFreigabeModus, string> = {
@@ -71,6 +72,9 @@ export const PRUEFUNG_MODUS_BESCHREIBUNG: Record<PruefungFreigabeModus, string> 
   kopie:
     'Erhält eine vollständige eigene Kopie (Kurs, Fragenpool, Vorlage und diese Prüfung) ' +
     'und kann danach alles selbst bearbeiten.',
+  korrektur:
+    'Keine Kopie: Beide arbeiten an DERSELBEN Prüfung. Der eingeladene Trainer korrigiert ' +
+    'seine zugewiesenen Themengebiete (Feedback + Korrektur-Status), sichtbar für beide.',
 }
 
 export async function pruefungTeilen(
@@ -83,7 +87,7 @@ export async function pruefungTeilen(
     p_pruefung_id: pruefungId,
     p_email: email,
     p_modus: modus,
-    p_themengebiete: modus === 'eingeschraenkt' ? themengebiete : [],
+    p_themengebiete: modus === 'kopie' ? [] : themengebiete,
   })
   if (error) throw new Error(error.message)
 }

@@ -108,10 +108,16 @@ export default function PruefungenPage() {
                   </div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  {p.quelle_freigabe_id && (
+                  {p.owner_id !== user?.id ? (
                     <span className="rounded-full bg-ifm-lightblue px-2 py-0.5 text-xs font-medium text-ifm-blue">
-                      geteilt
+                      zur Korrektur
                     </span>
+                  ) : (
+                    p.quelle_freigabe_id && (
+                      <span className="rounded-full bg-ifm-lightblue px-2 py-0.5 text-xs font-medium text-ifm-blue">
+                        geteilt
+                      </span>
+                    )
                   )}
                   {p.uebungsmodus ? (
                     <span className="rounded-full bg-ifm-yellow/25 px-3 py-1 text-xs font-medium text-ifm-blue">
@@ -120,7 +126,7 @@ export default function PruefungenPage() {
                   ) : (
                     <StatusBadge status={p.status} />
                   )}
-                  {!p.quelle_freigabe_id && (
+                  {p.owner_id === user?.id && !p.quelle_freigabe_id && (
                     <IconButton
                       label="Prüfung teilen"
                       onClick={(e) => {

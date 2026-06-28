@@ -276,6 +276,33 @@ export type Database = {
           },
         ]
       }
+      korrektur_status: {
+        Row: {
+          id: string
+          korrigiert_am: string
+          teilnehmer_id: string
+          themengebiet_id: string
+          trainer_id: string
+          trainer_name: string | null
+        }
+        Insert: {
+          id?: string
+          korrigiert_am?: string
+          teilnehmer_id: string
+          themengebiet_id: string
+          trainer_id: string
+          trainer_name?: string | null
+        }
+        Update: {
+          id?: string
+          korrigiert_am?: string
+          teilnehmer_id?: string
+          themengebiet_id?: string
+          trainer_id?: string
+          trainer_name?: string | null
+        }
+        Relationships: []
+      }
       pruefung: {
         Row: {
           created_at: string
