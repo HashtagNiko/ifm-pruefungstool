@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { supabase, aktuelleUserId } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
 import {
@@ -140,10 +140,9 @@ export default function KursePage() {
         </div>
       )}
 
-      {bearbeite && user && (
+      {bearbeite && (
         <KursModal
           kurs={bearbeite}
-          ownerId={user.id}
           onClose={() => setBearbeite(null)}
           onGespeichert={(gespeichert) => {
             setKurse((alt) => {
@@ -184,12 +183,10 @@ export default function KursePage() {
 
 function KursModal({
   kurs,
-  ownerId,
   onClose,
   onGespeichert,
 }: {
   kurs: Partial<Kurs>
-  ownerId: string
   onClose: () => void
   onGespeichert: (kurs: Kurs) => void
 }) {
@@ -205,9 +202,10 @@ function KursModal({
     setBusy(true)
     try {
       if (istNeu) {
+        const owner_id = await aktuelleUserId()
         const { data, error } = await supabase
           .from('kurs')
-          .insert({ name, beschreibung: beschreibung || null, owner_id: ownerId })
+          .insert({ name, beschreibung: beschreibung || null, owner_id })
           .select()
           .single()
         if (error) throw error
@@ -223,7 +221,13 @@ function KursModal({
         onGespeichert(data)
       }
     } catch (err) {
-      setFehler(err instanceof Error ? err.message : 'Speichern fehlgeschlagen.')
+      const msg =
+        err instanceof Error
+          ? err.message
+          : err && typeof err === 'object' && 'message' in err
+            ? String((err as { message: unknown }).message)
+            : 'Speichern fehlgeschlagen.'
+      setFehler(msg)
     } finally {
       setBusy(false)
     }

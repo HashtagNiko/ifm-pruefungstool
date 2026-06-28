@@ -17,12 +17,10 @@ const LATE_JOIN_OPTIONEN = [
 
 export default function NeuePruefungModal({
   vorlagen,
-  ownerId,
   onClose,
   onCreated,
 }: {
   vorlagen: VorlageOption[]
-  ownerId: string
   onClose: () => void
   onCreated: (pruefungId: string) => void
 }) {
@@ -47,7 +45,6 @@ export default function NeuePruefungModal({
       const pruefung = await erstellePruefung({
         vorlageId: vorlage.id,
         kursId: vorlage.kurs_id,
-        ownerId,
         datum: datum || null,
         lateJoinModus: lateJoin,
         uebungsmodus,

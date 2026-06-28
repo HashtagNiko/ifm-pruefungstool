@@ -29,3 +29,16 @@ export const supabase = isSupabaseConfigured
         },
       },
     ) as ReturnType<typeof createClient<Database>>)
+
+/**
+ * Liefert die ID des aktuell angemeldeten Trainers – frisch aus der verifizierten
+ * Session (nicht aus möglicherweise veraltetem React-State). So passt eine gesendete
+ * `owner_id` immer zu `auth.uid()` der Anfrage; bei abgelaufener Sitzung wird geworfen.
+ */
+export async function aktuelleUserId(): Promise<string> {
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data.user) {
+    throw new Error('Deine Sitzung ist nicht mehr aktiv. Bitte neu anmelden.')
+  }
+  return data.user.id
+}

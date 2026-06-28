@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase, aktuelleUserId } from './supabase'
 import type { Tables } from './database.types'
 
 /**
@@ -94,17 +94,18 @@ async function schreibeSnapshot(pruefungId: string, auswahl: Auswahl[]): Promise
 export async function erstellePruefung(opts: {
   vorlageId: string
   kursId: string
-  ownerId: string
   datum: string | null
   lateJoinModus: 'zeit_reduziert' | 'volle_zeit' | 'gesperrt'
   uebungsmodus?: boolean
 }): Promise<Pruefung> {
   const auswahl = await zieheAuswahl(opts.kursId, opts.vorlageId)
 
+  // owner_id frisch aus der verifizierten Session (passt zu auth.uid() der Anfrage)
+  const owner_id = await aktuelleUserId()
   // Übungsmodus: dauerhaft offen -> direkt als "läuft" markieren (kein Trainer-Start nötig)
   const basis = {
     vorlage_id: opts.vorlageId,
-    owner_id: opts.ownerId,
+    owner_id,
     datum: opts.datum,
     late_join_modus: opts.lateJoinModus,
   }

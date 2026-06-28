@@ -145,10 +145,9 @@ export default function PruefungenPage() {
         </div>
       )}
 
-      {modalOffen && user && (
+      {modalOffen && (
         <NeuePruefungModal
           vorlagen={vorlagen}
-          ownerId={user.id}
           onClose={() => setModalOffen(false)}
           onCreated={(id) => navigate(`/pruefungen/${id}`)}
         />
