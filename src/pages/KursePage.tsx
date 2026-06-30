@@ -65,6 +65,12 @@ export default function KursePage() {
     setLoeschBusy(false)
   }
 
+  // Nur eigene + per Kurs-Freigabe geteilte Kurse verwalten. Kurse, die nur über eine
+  // geteilte PRÜFUNG lesbar sind (für den Kursnamen), gehören nicht in diese Liste.
+  const sichtbareKurse = kurse.filter(
+    (k) => k.owner_id === user?.id || freigabeMap[k.id] !== undefined,
+  )
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -89,11 +95,11 @@ export default function KursePage() {
 
       {laden ? (
         <p className="text-ifm-gray">Lädt …</p>
-      ) : kurse.length === 0 ? (
+      ) : sichtbareKurse.length === 0 ? (
         <EmptyState>Noch keine Kurse. Lege deinen ersten Kurs an.</EmptyState>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {kurse.map((kurs) => {
+          {sichtbareKurse.map((kurs) => {
             const istBesitzer = kurs.owner_id === user?.id
             const modus = freigabeMap[kurs.id]
             const darfBearbeiten = istBesitzer || modus === 'gemeinsam'

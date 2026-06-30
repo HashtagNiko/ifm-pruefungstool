@@ -708,6 +708,10 @@ export type Database = {
       }
       darf_kurs_bearbeiten: { Args: { p_kurs_id: string }; Returns: boolean }
       darf_kurs_lesen: { Args: { p_kurs_id: string }; Returns: boolean }
+      darf_kurs_lesen_via_pruefung: {
+        Args: { p_kurs_id: string }
+        Returns: boolean
+      }
       freigabe_ablehnen: { Args: { p_freigabe_id: string }; Returns: undefined }
       freigabe_annehmen: { Args: { p_freigabe_id: string }; Returns: undefined }
       kurs_klonen: { Args: { p_kurs_id: string }; Returns: string }
