@@ -183,6 +183,24 @@ export type Database = {
           },
         ]
       }
+      frage_ausgeblendet: {
+        Row: {
+          created_at: string
+          frage_id: string
+          trainer_id: string
+        }
+        Insert: {
+          created_at?: string
+          frage_id: string
+          trainer_id: string
+        }
+        Update: {
+          created_at?: string
+          frage_id?: string
+          trainer_id?: string
+        }
+        Relationships: []
+      }
       kurs: {
         Row: {
           beschreibung: string | null
@@ -684,6 +702,10 @@ export type Database = {
       }
       darf_frage_anlegen_geteilt: {
         Args: { p_kurs_id: string; p_themengebiet_id: string }
+        Returns: boolean
+      }
+      darf_frage_ausblenden: {
+        Args: { p_frage_id: string }
         Returns: boolean
       }
       darf_geteilte_frage_lesen: {

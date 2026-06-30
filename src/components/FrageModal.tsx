@@ -19,12 +19,15 @@ export default function FrageModal({
   kursId,
   themengebiete,
   frage,
+  vorauswahlThemengebietId,
   onClose,
   onSaved,
 }: {
   kursId: string
   themengebiete: Themengebiet[]
   frage: FrageMitOptionen | null
+  /** Vorauswahl für neue Fragen (z. B. beim Anlegen in einem bestimmten Themengebiet) */
+  vorauswahlThemengebietId?: string
   onClose: () => void
   onSaved: () => void
 }) {
@@ -33,7 +36,9 @@ export default function FrageModal({
   const [typ, setTyp] = useState<'single' | 'multi'>(
     (frage?.typ as 'single' | 'multi') ?? 'single',
   )
-  const [themengebietId, setThemengebietId] = useState(frage?.themengebiet_id ?? '')
+  const [themengebietId, setThemengebietId] = useState(
+    frage?.themengebiet_id ?? vorauswahlThemengebietId ?? '',
+  )
   const [optionen, setOptionen] = useState<OptionEntwurf[]>(
     frage
       ? [...frage.antwortoption]
