@@ -8,6 +8,7 @@ import { TrashIcon } from '../components/icons'
 import {
   freigabeAblehnen,
   freigabeAnnehmen,
+  geteiltePruefungKursKopieren,
   MODUS_LABEL,
   PRUEFUNG_MODUS_LABEL,
   pruefungFreigabeAblehnen,
@@ -29,6 +30,8 @@ export default function GeteiltMitMirPage() {
   const [busyId, setBusyId] = useState<string | null>(null)
   const [widerrufen, setWiderrufen] = useState<Freigabe | null>(null)
   const [widerrufenP, setWiderrufenP] = useState<PFreigabe | null>(null)
+  const [kopierKandidat, setKopierKandidat] = useState<PFreigabe | null>(null)
+  const [kopierBusy, setKopierBusy] = useState(false)
 
   const laden_ = useCallback(async () => {
     const [kRes, pRes] = await Promise.all([
@@ -118,6 +121,24 @@ export default function GeteiltMitMirPage() {
       setFehler(err instanceof Error ? err.message : 'Ablehnen fehlgeschlagen.')
     } finally {
       setBusyId(null)
+    }
+  }
+
+  async function kopierBestaetigt() {
+    if (!kopierKandidat) return
+    setKopierBusy(true)
+    setFehler(null)
+    try {
+      await geteiltePruefungKursKopieren(kopierKandidat.id)
+      setHinweis(
+        `Kurs von „${kopierKandidat.pruefung_name}" wurde in dein Konto kopiert – ` +
+          'unter „Kurse" (und als Prüfung unter „Prüfungen").',
+      )
+      setKopierKandidat(null)
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Kopieren fehlgeschlagen.')
+    } finally {
+      setKopierBusy(false)
     }
   }
 
@@ -242,16 +263,21 @@ export default function GeteiltMitMirPage() {
           <h3 className="mt-6 mb-2 text-sm font-semibold text-ifm-gray">Angenommene Prüfungen</h3>
           <div className="space-y-2">
             {pAngenommen.map((f) => (
-              <Card key={f.id} className="flex items-center justify-between gap-3">
+              <Card key={f.id} className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <span className="font-medium text-ifm-blue">{f.pruefung_name}</span>
                   <span className="ml-2 text-sm text-ifm-gray">
                     {PRUEFUNG_MODUS_LABEL[f.modus as PruefungFreigabeModus]}
                   </span>
                 </div>
-                <Link to="/pruefungen" className="text-sm text-ifm-blue hover:underline">
-                  Zu den Prüfungen →
-                </Link>
+                <div className="flex items-center gap-3">
+                  <Button variant="secondary" onClick={() => setKopierKandidat(f)}>
+                    Kurs kopieren
+                  </Button>
+                  <Link to="/pruefungen" className="text-sm text-ifm-blue hover:underline">
+                    Zu den Prüfungen →
+                  </Link>
+                </div>
               </Card>
             ))}
           </div>
@@ -339,6 +365,28 @@ export default function GeteiltMitMirPage() {
         busy={busyId === widerrufenP?.id}
         onConfirm={widerrufenPBestaetigt}
         onClose={() => setWiderrufenP(null)}
+      />
+
+      <ConfirmDialog
+        open={kopierKandidat !== null}
+        title="Kurs in meinen Account kopieren"
+        message={
+          <>
+            Du kopierst den <strong>Kurs</strong> der geteilten Prüfung „
+            {kopierKandidat?.pruefung_name}" in deinen Account.
+            <br />
+            <br />
+            <strong>Wichtig:</strong> Du bearbeitest damit <strong>nicht</strong> die bereits
+            geplante Prüfung, sondern erhältst den Kurs samt allen Fragen als eigenständige Kopie.
+            Wenn du die geplante (geteilte) Prüfung bearbeiten möchtest, nutze bitte den Tab{' '}
+            <strong>„Prüfungen"</strong>.
+          </>
+        }
+        confirmLabel="Kurs kopieren"
+        variant="primary"
+        busy={kopierBusy}
+        onConfirm={kopierBestaetigt}
+        onClose={() => setKopierKandidat(null)}
       />
     </div>
   )

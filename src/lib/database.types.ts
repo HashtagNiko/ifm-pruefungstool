@@ -713,6 +713,10 @@ export type Database = {
         Returns: boolean
       }
       freigabe_ablehnen: { Args: { p_freigabe_id: string }; Returns: undefined }
+      geteilte_pruefung_kurs_kopieren: {
+        Args: { p_freigabe_id: string }
+        Returns: string
+      }
       freigabe_annehmen: { Args: { p_freigabe_id: string }; Returns: undefined }
       kurs_klonen: { Args: { p_kurs_id: string }; Returns: string }
       kurs_teilen: {

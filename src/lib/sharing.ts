@@ -107,3 +107,11 @@ export async function pruefungFreigabeAblehnen(freigabeId: string): Promise<void
   })
   if (error) throw new Error(error.message)
 }
+
+/** Kopiert den kompletten Kurs (inkl. Pool, Vorlage, dieser Prüfung) in das eigene Konto. */
+export async function geteiltePruefungKursKopieren(freigabeId: string): Promise<void> {
+  const { error } = await supabase.rpc('geteilte_pruefung_kurs_kopieren', {
+    p_freigabe_id: freigabeId,
+  })
+  if (error) throw new Error(error.message)
+}
