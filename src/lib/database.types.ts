@@ -698,6 +698,10 @@ export type Database = {
         Args: { p_tg_id: string }
         Returns: boolean
       }
+      darf_pruefung_frage_bearbeiten_korrektur: {
+        Args: { p_pruefung_id: string; p_themengebiet_id: string }
+        Returns: boolean
+      }
       darf_pruefung_leiten: {
         Args: { p_pruefung_id: string }
         Returns: boolean

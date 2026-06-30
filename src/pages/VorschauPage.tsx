@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../lib/AuthContext'
 import { Button, Card, EmptyState, ErrorBanner } from '../components/ui'
 import { tauscheFrage } from '../lib/pruefungErstellen'
 import { seededShuffle } from '../lib/seededShuffle'
@@ -27,6 +28,7 @@ interface VFrage {
  */
 export default function VorschauPage() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
   const [titel, setTitel] = useState('Vorschau')
   const [kursId, setKursId] = useState('')
   const [editierbar, setEditierbar] = useState(false)
@@ -48,12 +50,13 @@ export default function VorschauPage() {
       try {
         const { data: pr } = await supabase
           .from('pruefung')
-          .select('status, uebungsmodus, quelle_freigabe_id, pruefungsvorlage(name, kurs_id)')
+          .select('status, uebungsmodus, owner_id, quelle_freigabe_id, pruefungsvorlage(name, kurs_id)')
           .eq('id', id)
           .single()
           .returns<{
             status: string
             uebungsmodus: boolean
+            owner_id: string
             quelle_freigabe_id: string | null
             pruefungsvorlage: { name: string; kurs_id: string } | null
           }>()
@@ -61,10 +64,22 @@ export default function VorschauPage() {
         if (pr?.pruefungsvorlage?.kurs_id) setKursId(pr.pruefungsvorlage.kurs_id)
         setEditierbar(pr?.status === 'entwurf' || pr?.uebungsmodus === true)
         if (pr?.quelle_freigabe_id) {
+          // Eingeschränkt-Kopie: freigegebene Themengebiete aus der Quell-Freigabe
           const { data: fr } = await supabase
             .from('pruefung_freigabe')
             .select('bearbeitbare_themengebiete')
             .eq('id', pr.quelle_freigabe_id)
+            .maybeSingle()
+          setBearbeitbareTg(new Set(fr?.bearbeitbare_themengebiete ?? []))
+        } else if (pr && user && pr.owner_id !== user.id) {
+          // Gemeinsam korrigieren: eigene Korrektur-Freigabe -> freigegebene Themengebiete
+          const { data: fr } = await supabase
+            .from('pruefung_freigabe')
+            .select('bearbeitbare_themengebiete')
+            .eq('pruefung_id', id)
+            .eq('empfaenger_id', user.id)
+            .eq('modus', 'korrektur')
+            .eq('status', 'angenommen')
             .maybeSingle()
           setBearbeitbareTg(new Set(fr?.bearbeitbare_themengebiete ?? []))
         }
@@ -118,7 +133,7 @@ export default function VorschauPage() {
         setLaden(false)
       }
     })()
-  }, [id])
+  }, [id, user?.id])
 
   function optionUmschalten(frage: VFrage, optionId: string) {
     setAuswahl((alt) => {

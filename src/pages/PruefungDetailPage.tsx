@@ -132,17 +132,27 @@ export default function PruefungDetailPage() {
           setFreigegebeneThemen(tgs ?? [])
         }
       }
-      // Geteilt zur Korrektur (fremde Prüfung)? Leiter-Recht laden.
+      // Geteilt zur Korrektur (fremde Prüfung)? Leiter-Recht + freigegebene Themengebiete laden.
       if (data && user && data.owner_id !== user.id) {
         const { data: fr } = await supabase
           .from('pruefung_freigabe')
-          .select('empfaenger_leitet')
+          .select('empfaenger_leitet, bearbeitbare_themengebiete')
           .eq('pruefung_id', id)
           .eq('empfaenger_id', user.id)
           .eq('modus', 'korrektur')
           .eq('status', 'angenommen')
           .maybeSingle()
         setEmpfaengerLeitet(fr?.empfaenger_leitet ?? false)
+        const tgIds = fr?.bearbeitbare_themengebiete ?? []
+        setBearbeitbareTg(new Set(tgIds))
+        if (tgIds.length > 0) {
+          const { data: tgs } = await supabase
+            .from('themengebiet')
+            .select('*')
+            .in('id', tgIds)
+            .order('sortierung', { ascending: true })
+          setFreigegebeneThemen(tgs ?? [])
+        }
       }
       await Promise.all([ladeSnapshot(), ladeTeilnehmer()])
       const { data: tnIds } = await supabase.from('teilnehmer').select('id').eq('pruefung_id', id)
@@ -188,9 +198,11 @@ export default function PruefungDetailPage() {
   const istEmpfaenger = bearbeitbareTg !== null
   const darfWuerfeln = istBesitzer && istEntwurf && !istEmpfaenger
   function darfTauschen(themengebietId: string | null): boolean {
-    if (!istEntwurf || !istBesitzer) return false
-    if (!istEmpfaenger) return true
-    return themengebietId != null && bearbeitbareTg!.has(themengebietId)
+    if (!istEntwurf) return false
+    // Eingeschränkt-Kopie ODER Korrektur-Empfänger: nur in freigegebenen Themengebieten
+    if (bearbeitbareTg !== null) return themengebietId != null && bearbeitbareTg.has(themengebietId)
+    // Eigene Prüfung: voller Zugriff
+    return istBesitzer
   }
 
   async function frageTauschen(row: SnapshotRow) {
@@ -592,7 +604,7 @@ export default function PruefungDetailPage() {
               Alle neu würfeln
             </Button>
           )}
-          {istEmpfaenger && freigegebeneThemen.length > 0 && (
+          {istEmpfaenger && istEntwurf && freigegebeneThemen.length > 0 && (
             <Button variant="secondary" onClick={() => setFrageNeuOffen(true)}>
               Frage zum Pool hinzufügen
             </Button>
