@@ -145,6 +145,18 @@ export async function wuerfleNeu(
   await schreibeSnapshot(pruefungId, auswahl)
 }
 
+/** Eine bestimmte Frage gezielt in einen Snapshot-Slot setzen. */
+export async function setzeFrageInSlot(
+  pruefungFrageId: string,
+  neueFrageId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('pruefung_frage')
+    .update({ frage_id: neueFrageId })
+    .eq('id', pruefungFrageId)
+  if (error) throw error
+}
+
 /**
  * Eine einzelne Frage im Snapshot gegen eine andere zufällige Frage desselben
  * Themengebiets tauschen (die noch nicht im Snapshot ist).

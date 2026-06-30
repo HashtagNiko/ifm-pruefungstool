@@ -4,7 +4,7 @@ import type { Tables } from '../lib/database.types'
 import { Button, ErrorBanner, IconButton, Modal, TextInput, Textarea } from './ui'
 import { PlusIcon, TrashIcon } from './icons'
 
-type Themengebiet = Tables<'themengebiet'>
+type Themengebiet = Pick<Tables<'themengebiet'>, 'id' | 'name'>
 type Frage = Tables<'frage'>
 type Antwortoption = Tables<'antwortoption'>
 

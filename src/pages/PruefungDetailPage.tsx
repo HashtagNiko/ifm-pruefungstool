@@ -16,6 +16,7 @@ import { StatusBadge } from '../components/pruefungStatus'
 import { tauscheFrage, wuerfleNeu } from '../lib/pruefungErstellen'
 import PruefungTeilenModal from '../components/PruefungTeilenModal'
 import FrageModal from '../components/FrageModal'
+import FrageWaehlenModal from '../components/FrageWaehlenModal'
 
 type PruefungRow = Tables<'pruefung'> & {
   pruefungsvorlage:
@@ -65,6 +66,7 @@ export default function PruefungDetailPage() {
   // Für Empfänger: freigegebene Themengebiete (zum Anlegen eigener Fragen im Pool des Besitzers)
   const [freigegebeneThemen, setFreigegebeneThemen] = useState<Tables<'themengebiet'>[]>([])
   const [frageNeuOffen, setFrageNeuOffen] = useState(false)
+  const [waehlenFuer, setWaehlenFuer] = useState<SnapshotRow | null>(null)
   const [teilnehmer, setTeilnehmer] = useState<
     {
       id: string
@@ -648,14 +650,24 @@ export default function PruefungDetailPage() {
                         </span>
                       </div>
                       {darfTauschen(row.themengebiet_id) && (
-                        <Button
-                          variant="ghost"
-                          className="shrink-0"
-                          onClick={() => frageTauschen(row)}
-                          disabled={busy}
-                        >
-                          Tauschen
-                        </Button>
+                        <div className="flex shrink-0 items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            className="shrink-0"
+                            onClick={() => setWaehlenFuer(row)}
+                            disabled={busy}
+                          >
+                            Wählen
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            className="shrink-0"
+                            onClick={() => frageTauschen(row)}
+                            disabled={busy}
+                          >
+                            Zufall
+                          </Button>
+                        </div>
                       )}
                     </li>
                   ))}
@@ -718,8 +730,25 @@ export default function PruefungDetailPage() {
           onSaved={() => {
             setFrageNeuOffen(false)
             setHinweis(
-              'Frage zum Pool hinzugefügt. Du kannst sie über „Tauschen" im jeweiligen Themengebiet einsetzen.',
+              'Frage zum Pool hinzugefügt. Setze sie über „Wählen" gezielt in einen Slot ein.',
             )
+          }}
+        />
+      )}
+
+      {waehlenFuer && vorlage && waehlenFuer.themengebiet_id && (
+        <FrageWaehlenModal
+          pruefungFrageId={waehlenFuer.id}
+          kursId={vorlage.kurs_id}
+          themengebietId={waehlenFuer.themengebiet_id}
+          themengebietName={waehlenFuer.themengebiet?.name ?? 'Themengebiet'}
+          aktuelleFrageId={waehlenFuer.frage_id}
+          belegteFrageIds={snapshot.map((s) => s.frage_id)}
+          onClose={() => setWaehlenFuer(null)}
+          onGewaehlt={() => {
+            setWaehlenFuer(null)
+            setHinweis('Frage übernommen.')
+            ladeSnapshot()
           }}
         />
       )}
