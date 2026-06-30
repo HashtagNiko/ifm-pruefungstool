@@ -67,6 +67,11 @@ export default function PruefungDetailPage() {
   const [freigegebeneThemen, setFreigegebeneThemen] = useState<Tables<'themengebiet'>[]>([])
   const [frageNeuOffen, setFrageNeuOffen] = useState(false)
   const [waehlenFuer, setWaehlenFuer] = useState<SnapshotRow | null>(null)
+  // Aufklappbare Fragen im Snapshot (Antwortoptionen anzeigen)
+  const [offeneFragen, setOffeneFragen] = useState<Set<string>>(new Set())
+  const [optionenProFrage, setOptionenProFrage] = useState<
+    Record<string, { id: string; text: string; ist_richtig: boolean; sortierung: number }[]>
+  >({})
   const [teilnehmer, setTeilnehmer] = useState<
     {
       id: string
@@ -99,7 +104,26 @@ export default function PruefungDetailPage() {
       .order('sortierung', { ascending: true })
       .returns<SnapshotRow[]>()
     if (error) setFehler(error.message)
-    else if (data) setSnapshot(data)
+    else if (data) {
+      setSnapshot(data)
+      // Antwortoptionen aller Snapshot-Fragen laden (zum Aufklappen)
+      const frageIds = data.map((s) => s.frage_id)
+      if (frageIds.length > 0) {
+        const { data: opts } = await supabase
+          .from('antwortoption')
+          .select('id, frage_id, text, ist_richtig, sortierung')
+          .in('frage_id', frageIds)
+        const map: Record<
+          string,
+          { id: string; text: string; ist_richtig: boolean; sortierung: number }[]
+        > = {}
+        for (const o of opts ?? []) {
+          ;(map[o.frage_id] ??= []).push(o)
+        }
+        for (const k of Object.keys(map)) map[k].sort((a, b) => a.sortierung - b.sortierung)
+        setOptionenProFrage(map)
+      }
+    }
   }, [id])
 
   useEffect(() => {
@@ -199,6 +223,15 @@ export default function PruefungDetailPage() {
   const darfLeiten = istBesitzer || empfaengerLeitet // Lobby öffnen/starten/beenden
   const istEmpfaenger = bearbeitbareTg !== null
   const darfWuerfeln = istBesitzer && istEntwurf && !istEmpfaenger
+  function frageAufklappen(rowId: string) {
+    setOffeneFragen((alt) => {
+      const neu = new Set(alt)
+      if (neu.has(rowId)) neu.delete(rowId)
+      else neu.add(rowId)
+      return neu
+    })
+  }
+
   function darfTauschen(themengebietId: string | null): boolean {
     if (!istEntwurf) return false
     // Eingeschränkt-Kopie ODER Korrektur-Empfänger: nur in freigegebenen Themengebieten
@@ -638,39 +671,82 @@ export default function PruefungDetailPage() {
               </div>
               <Card className="p-0 overflow-hidden">
                 <ul className="divide-y divide-ifm-lightblue">
-                  {g.rows.map((row) => (
-                    <li key={row.id} className="flex items-start gap-3 px-4 py-3">
-                      <span className="text-ifm-gray text-sm pt-0.5 w-7 text-right">
-                        {row.sortierung + 1}.
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-ifm-blue">{row.frage?.text}</p>
-                        <span className="text-xs text-ifm-gray">
-                          {row.frage?.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                  {g.rows.map((row) => {
+                    const offen = offeneFragen.has(row.id)
+                    const opts = optionenProFrage[row.frage_id] ?? []
+                    return (
+                    <li key={row.id} className="px-4 py-3">
+                      <div className="flex items-start gap-3">
+                        <span className="text-ifm-gray text-sm pt-0.5 w-7 text-right">
+                          {row.sortierung + 1}.
                         </span>
+                        <button
+                          type="button"
+                          onClick={() => frageAufklappen(row.id)}
+                          className="flex-1 min-w-0 text-left"
+                          aria-expanded={offen}
+                        >
+                          <span className="flex items-start gap-1.5 text-ifm-blue">
+                            <span className="select-none pt-0.5 text-ifm-gray">
+                              {offen ? '▾' : '▸'}
+                            </span>
+                            <span>{row.frage?.text}</span>
+                          </span>
+                          <span className="ml-4 block text-xs text-ifm-gray">
+                            {row.frage?.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                          </span>
+                        </button>
+                        {darfTauschen(row.themengebiet_id) && (
+                          <div className="flex shrink-0 items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              className="shrink-0"
+                              onClick={() => setWaehlenFuer(row)}
+                              disabled={busy}
+                            >
+                              Wählen
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              className="shrink-0"
+                              onClick={() => frageTauschen(row)}
+                              disabled={busy}
+                            >
+                              Zufall
+                            </Button>
+                          </div>
+                        )}
                       </div>
-                      {darfTauschen(row.themengebiet_id) && (
-                        <div className="flex shrink-0 items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            className="shrink-0"
-                            onClick={() => setWaehlenFuer(row)}
-                            disabled={busy}
-                          >
-                            Wählen
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="shrink-0"
-                            onClick={() => frageTauschen(row)}
-                            disabled={busy}
-                          >
-                            Zufall
-                          </Button>
-                        </div>
+                      {offen && (
+                        <ul className="mt-2 ml-11 space-y-1">
+                          {opts.length === 0 ? (
+                            <li className="text-xs text-ifm-gray">Keine Antwortoptionen.</li>
+                          ) : (
+                            opts.map((o) => (
+                              <li
+                                key={o.id}
+                                className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ${
+                                  o.ist_richtig ? 'bg-ifm-green/10' : 'bg-ifm-lightblue/30'
+                                }`}
+                              >
+                                <span
+                                  className={`w-4 shrink-0 text-center font-bold ${
+                                    o.ist_richtig ? 'text-ifm-green' : 'text-transparent'
+                                  }`}
+                                >
+                                  ✓
+                                </span>
+                                <span className={o.ist_richtig ? 'text-ifm-green' : 'text-ifm-blue'}>
+                                  {o.text}
+                                </span>
+                              </li>
+                            ))
+                          )}
+                        </ul>
                       )}
                     </li>
-                  ))}
+                    )
+                  })}
                 </ul>
               </Card>
             </div>
