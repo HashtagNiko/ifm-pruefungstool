@@ -11,6 +11,8 @@ export interface StatusInfo {
   vorlage_name: string
   kurs_name: string
   uebungsmodus: boolean
+  /** Teilnehmer sehen nach Abgabe die Detail-Lösungen und dürfen wiederholen */
+  ergebnis_detail_sichtbar: boolean
 }
 
 export interface BeitretenInfo {
@@ -52,6 +54,29 @@ export interface ErgebnisInfo {
   punkte_gesamt: number
   punkte_max: number
   prozent: number
+}
+
+export interface DetailOption {
+  id: string
+  text: string
+  ist_richtig: boolean
+}
+
+export interface DetailFrage {
+  pruefung_frage_id: string
+  sortierung: number
+  typ: 'single' | 'multi'
+  text: string
+  themengebiet: string | null
+  optionen: DetailOption[]
+  gewaehlt: string[]
+}
+
+export interface ErgebnisDetail {
+  punkte_gesamt: number
+  punkte_max: number
+  prozent: number
+  fragen: DetailFrage[]
 }
 
 export async function statusLaden(code: string): Promise<StatusInfo> {
@@ -98,4 +123,22 @@ export async function abgeben(teilnehmerId: string): Promise<ErgebnisInfo> {
   })
   if (error) throw new Error(error.message)
   return data as unknown as ErgebnisInfo
+}
+
+export async function ergebnisDetailLaden(teilnehmerId: string): Promise<ErgebnisDetail> {
+  const { data, error } = await supabaseP.rpc('pruefung_ergebnis_detail', {
+    p_teilnehmer_id: teilnehmerId,
+  })
+  if (error) throw new Error(error.message)
+  return data as unknown as ErgebnisDetail
+}
+
+export async function neuerVersuch(
+  teilnehmerId: string,
+): Promise<{ teilnehmer_id: string; name: string }> {
+  const { data, error } = await supabaseP.rpc('pruefung_neuer_versuch', {
+    p_teilnehmer_id: teilnehmerId,
+  })
+  if (error) throw new Error(error.message)
+  return data as unknown as { teilnehmer_id: string; name: string }
 }

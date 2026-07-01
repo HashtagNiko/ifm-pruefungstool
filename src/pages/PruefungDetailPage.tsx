@@ -301,6 +301,19 @@ export default function PruefungDetailPage() {
     setBusy(false)
   }
 
+  async function setzeDetailSichtbar(wert: boolean) {
+    if (!pruefung) return
+    setBusy(true)
+    setFehler(null)
+    const { error } = await supabase
+      .from('pruefung')
+      .update({ ergebnis_detail_sichtbar: wert })
+      .eq('id', pruefung.id)
+    if (error) setFehler(error.message)
+    else setPruefung((p) => (p ? { ...p, ergebnis_detail_sichtbar: wert } : p))
+    setBusy(false)
+  }
+
   const [zipBusy, setZipBusy] = useState(false)
   async function zipExport() {
     if (!pruefung) return
@@ -536,6 +549,23 @@ export default function PruefungDetailPage() {
           )}
         </div>
         )}
+
+        <label className="mt-4 flex gap-2 rounded-lg border border-ifm-gray/30 p-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={pruefung.ergebnis_detail_sichtbar}
+            onChange={(e) => setzeDetailSichtbar(e.target.checked)}
+            disabled={busy}
+            className="mt-1 accent-ifm-blue"
+          />
+          <span>
+            <span className="block font-medium text-ifm-blue">Detailergebnis für Teilnehmer</span>
+            <span className="block text-xs text-ifm-gray">
+              Teilnehmer sehen nach der Abgabe, welche Fragen sie richtig/falsch beantwortet haben,
+              und können die Prüfung wiederholen.
+            </span>
+          </span>
+        </label>
       </Card>
       )}
 

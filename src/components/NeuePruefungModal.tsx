@@ -29,6 +29,7 @@ export default function NeuePruefungModal({
   const [lateJoin, setLateJoin] =
     useState<(typeof LATE_JOIN_OPTIONEN)[number]['wert']>('zeit_reduziert')
   const [uebungsmodus, setUebungsmodus] = useState(false)
+  const [ergebnisDetail, setErgebnisDetail] = useState(false)
   const [fehler, setFehler] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -48,6 +49,7 @@ export default function NeuePruefungModal({
         datum: datum || null,
         lateJoinModus: lateJoin,
         uebungsmodus,
+        ergebnisDetailSichtbar: ergebnisDetail,
       })
       onCreated(pruefung.id)
     } catch (err) {
@@ -122,6 +124,24 @@ export default function NeuePruefungModal({
               Dauerhaft offen, ohne Trainer-Start. Teilnehmer geben ihren Namen ein, warten kurz
               und können die Prüfung beliebig oft wiederholen (Timer läuft je Versuch). Ideal zum
               Testen.
+            </span>
+          </span>
+        </label>
+
+        <label className="flex gap-2 rounded-lg border border-ifm-gray/30 p-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={ergebnisDetail}
+            onChange={(e) => setErgebnisDetail(e.target.checked)}
+            className="mt-1 accent-ifm-blue"
+          />
+          <span>
+            <span className="block font-medium text-ifm-blue">
+              Detailergebnis für Teilnehmer
+            </span>
+            <span className="block text-xs text-ifm-gray">
+              Nach der Abgabe sehen Teilnehmer, welche Fragen sie richtig/falsch beantwortet haben,
+              und können die Prüfung wiederholen. Ideal für Selbsttests.
             </span>
           </span>
         </label>

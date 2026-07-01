@@ -4,11 +4,15 @@ import { ensureAnonSession } from '../../lib/supabaseParticipant'
 import {
   abgeben,
   beitreten,
+  ergebnisDetailLaden,
+  neuerVersuch,
   statusLaden,
+  type ErgebnisDetail,
   type ErgebnisInfo,
   type StatusInfo,
 } from '../../lib/teilnehmerApi'
 import { Button, ErrorBanner, TextInput } from '../../components/ui'
+import ErgebnisDetailListe from '../../components/ErgebnisDetailListe'
 import PruefungLauf from './PruefungLauf'
 import UebungsPruefung from './UebungsPruefung'
 
@@ -17,6 +21,7 @@ export default function TeilnehmerPage() {
   const [status, setStatus] = useState<StatusInfo | null>(null)
   const [teilnehmerId, setTeilnehmerId] = useState<string | null>(null)
   const [ergebnis, setErgebnis] = useState<ErgebnisInfo | null>(null)
+  const [detail, setDetail] = useState<ErgebnisDetail | null>(null)
   const [init, setInit] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
 
@@ -65,13 +70,38 @@ export default function TeilnehmerPage() {
   }, [init, ergebnis, status, teilnehmerId, ladeStatus])
 
   // Prüfung beendet + beigetreten + noch kein Ergebnis -> finalisieren
+  // (nicht im Selbsttest: dort läuft der Versuch mit eigenem Timer weiter)
   useEffect(() => {
-    if (status?.status === 'beendet' && teilnehmerId && !ergebnis) {
+    if (
+      status?.status === 'beendet' &&
+      teilnehmerId &&
+      !ergebnis &&
+      !status.ergebnis_detail_sichtbar
+    ) {
       abgeben(teilnehmerId)
         .then(setErgebnis)
         .catch((err) => setFehler(err instanceof Error ? err.message : 'Abgabe fehlgeschlagen.'))
     }
   }, [status, teilnehmerId, ergebnis])
+
+  // Nach Abgabe: Detailergebnis laden, wenn freigegeben
+  useEffect(() => {
+    if (ergebnis && teilnehmerId && status?.ergebnis_detail_sichtbar && !detail) {
+      ergebnisDetailLaden(teilnehmerId).then(setDetail).catch(() => {})
+    }
+  }, [ergebnis, teilnehmerId, status, detail])
+
+  async function wiederholen() {
+    if (!teilnehmerId) return
+    try {
+      const info = await neuerVersuch(teilnehmerId)
+      setDetail(null)
+      setErgebnis(null)
+      setTeilnehmerId(info.teilnehmer_id)
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Wiederholen fehlgeschlagen.')
+    }
+  }
 
   if (init) return <Schirm><p className="text-ifm-gray">Verbindung wird hergestellt …</p></Schirm>
 
@@ -93,10 +123,21 @@ export default function TeilnehmerPage() {
   if (status?.uebungsmodus) return <UebungsPruefung code={code} status={status} />
 
   // Ergebnis hat Vorrang
-  if (ergebnis) return <ErgebnisAnsicht ergebnis={ergebnis} kursName={status?.kurs_name} />
+  if (ergebnis)
+    return (
+      <ErgebnisAnsicht
+        ergebnis={ergebnis}
+        detail={detail}
+        kursName={status?.kurs_name}
+        onWiederholen={status?.ergebnis_detail_sichtbar ? wiederholen : undefined}
+      />
+    )
 
-  // Laufende Prüfung
-  if (status?.status === 'laeuft' && teilnehmerId) {
+  // Laufende Prüfung (Selbsttest darf auch nach 'beendet' weiterlaufen)
+  if (
+    teilnehmerId &&
+    (status?.status === 'laeuft' || (status?.ergebnis_detail_sichtbar && status?.status === 'beendet'))
+  ) {
     return (
       <PruefungLauf
         teilnehmerId={teilnehmerId}
@@ -204,23 +245,34 @@ function BeitretenForm({
 
 function ErgebnisAnsicht({
   ergebnis,
+  detail,
   kursName,
+  onWiederholen,
 }: {
   ergebnis: ErgebnisInfo
+  detail: ErgebnisDetail | null
   kursName?: string
+  onWiederholen?: () => void
 }) {
   return (
-    <Schirm titel="Abgegeben" unter={kursName}>
+    <Schirm titel="Abgegeben" unter={kursName} breit={!!detail}>
       <div className="text-center">
         <p className="text-ifm-gray">Dein Ergebnis</p>
         <div className="mt-2 text-4xl font-bold text-ifm-blue">
           {ergebnis.punkte_gesamt} / {ergebnis.punkte_max}
         </div>
         <div className="mt-1 text-lg text-ifm-blue">{ergebnis.prozent} %</div>
-        <p className="mt-6 text-sm text-ifm-gray">
+      </div>
+      {detail && <ErgebnisDetailListe detail={detail} />}
+      {onWiederholen ? (
+        <Button onClick={onWiederholen} className="mt-6 w-full">
+          Prüfung wiederholen
+        </Button>
+      ) : (
+        <p className="mt-6 text-center text-sm text-ifm-gray">
           Dein Trainer schickt dir eine ausführliche Auswertung als PDF.
         </p>
-      </div>
+      )}
     </Schirm>
   )
 }
@@ -230,14 +282,18 @@ function Schirm({
   children,
   titel,
   unter,
+  breit,
 }: {
   children: React.ReactNode
   titel?: string
   unter?: string
+  breit?: boolean
 }) {
   return (
     <div className="min-h-full bg-ifm-cream flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-sm p-8">
+      <div
+        className={`w-full rounded-2xl bg-white shadow-sm p-8 ${breit ? 'max-w-2xl' : 'max-w-md'}`}
+      >
         <img src="/logo.png" alt="ifmera academy" className="mb-6 h-8 w-auto" />
         {titel && <h1 className="text-xl font-bold text-ifm-blue">{titel}</h1>}
         {unter && <p className="mb-4 mt-1 text-sm text-ifm-gray">{unter}</p>}

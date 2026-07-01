@@ -97,6 +97,7 @@ export async function erstellePruefung(opts: {
   datum: string | null
   lateJoinModus: 'zeit_reduziert' | 'volle_zeit' | 'gesperrt'
   uebungsmodus?: boolean
+  ergebnisDetailSichtbar?: boolean
 }): Promise<Pruefung> {
   const auswahl = await zieheAuswahl(opts.kursId, opts.vorlageId)
 
@@ -108,6 +109,7 @@ export async function erstellePruefung(opts: {
     owner_id,
     datum: opts.datum,
     late_join_modus: opts.lateJoinModus,
+    ergebnis_detail_sichtbar: opts.ergebnisDetailSichtbar ?? false,
   }
   const insertDaten = opts.uebungsmodus
     ? {

@@ -1,6 +1,13 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
-import { beitreten, type ErgebnisInfo, type StatusInfo } from '../../lib/teilnehmerApi'
+import {
+  beitreten,
+  ergebnisDetailLaden,
+  type ErgebnisDetail,
+  type ErgebnisInfo,
+  type StatusInfo,
+} from '../../lib/teilnehmerApi'
 import { Button, ErrorBanner, TextInput } from '../../components/ui'
+import ErgebnisDetailListe from '../../components/ErgebnisDetailListe'
 import PruefungLauf from './PruefungLauf'
 
 type Phase = 'name' | 'lobby' | 'lauf' | 'ergebnis'
@@ -20,9 +27,16 @@ export default function UebungsPruefung({
   const [name, setName] = useState('')
   const [teilnehmerId, setTeilnehmerId] = useState<string | null>(null)
   const [ergebnis, setErgebnis] = useState<ErgebnisInfo | null>(null)
+  const [detail, setDetail] = useState<ErgebnisDetail | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [lobbySek, setLobbySek] = useState(10)
+
+  // Nach Abgabe: Detailergebnis laden, wenn freigegeben
+  useEffect(() => {
+    if (phase !== 'ergebnis' || !teilnehmerId || !status.ergebnis_detail_sichtbar) return
+    ergebnisDetailLaden(teilnehmerId).then(setDetail).catch(() => {})
+  }, [phase, teilnehmerId, status.ergebnis_detail_sichtbar])
 
   async function starten(n: string) {
     const sauber = n.trim()
@@ -33,6 +47,7 @@ export default function UebungsPruefung({
       const info = await beitreten(code, sauber) // im Übungsmodus -> neuer Versuch
       setTeilnehmerId(info.teilnehmer_id)
       setErgebnis(null)
+      setDetail(null)
       setLobbySek(10)
       setPhase('lobby')
     } catch (err) {
@@ -71,8 +86,10 @@ export default function UebungsPruefung({
     starten(name)
   }
 
+  const breit = phase === 'ergebnis' && !!detail
+
   return (
-    <Schirm titel={status.vorlage_name} unter={status.kurs_name}>
+    <Schirm titel={status.vorlage_name} unter={status.kurs_name} breit={breit}>
       <div className="mb-4 rounded-lg bg-ifm-yellow/20 px-3 py-2 text-sm text-ifm-blue">
         Übungsmodus – du kannst diese Prüfung beliebig oft durchspielen.
       </div>
@@ -109,14 +126,17 @@ export default function UebungsPruefung({
       )}
 
       {phase === 'ergebnis' && ergebnis && (
-        <div className="text-center">
-          <p className="text-ifm-gray">Dein Ergebnis</p>
-          <div className="mt-2 text-4xl font-bold text-ifm-blue">
-            {ergebnis.punkte_gesamt} / {ergebnis.punkte_max}
+        <div>
+          <div className="text-center">
+            <p className="text-ifm-gray">Dein Ergebnis</p>
+            <div className="mt-2 text-4xl font-bold text-ifm-blue">
+              {ergebnis.punkte_gesamt} / {ergebnis.punkte_max}
+            </div>
+            <div className="mt-1 text-lg text-ifm-blue">{ergebnis.prozent} %</div>
           </div>
-          <div className="mt-1 text-lg text-ifm-blue">{ergebnis.prozent} %</div>
+          {detail && <ErgebnisDetailListe detail={detail} />}
           <Button onClick={() => starten(name)} disabled={busy} className="mt-6 w-full">
-            {busy ? 'Bitte warten …' : 'Noch einmal starten'}
+            {busy ? 'Bitte warten …' : 'Prüfung wiederholen'}
           </Button>
         </div>
       )}
@@ -128,14 +148,18 @@ function Schirm({
   children,
   titel,
   unter,
+  breit,
 }: {
   children: ReactNode
   titel?: string
   unter?: string
+  breit?: boolean
 }) {
   return (
     <div className="min-h-full bg-ifm-cream flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-sm p-8">
+      <div
+        className={`w-full rounded-2xl bg-white shadow-sm p-8 ${breit ? 'max-w-2xl' : 'max-w-md'}`}
+      >
         <img src="/logo.png" alt="ifmera academy" className="mb-6 h-8 w-auto" />
         {titel && <h1 className="text-xl font-bold text-ifm-blue">{titel}</h1>}
         {unter && <p className="mb-4 mt-1 text-sm text-ifm-gray">{unter}</p>}

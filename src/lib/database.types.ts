@@ -329,6 +329,7 @@ export type Database = {
           created_at: string
           datum: string | null
           end_zeit: string | null
+          ergebnis_detail_sichtbar: boolean
           id: string
           late_join_modus: string
           owner_id: string
@@ -343,6 +344,7 @@ export type Database = {
           created_at?: string
           datum?: string | null
           end_zeit?: string | null
+          ergebnis_detail_sichtbar?: boolean
           id?: string
           late_join_modus?: string
           owner_id: string
@@ -357,6 +359,7 @@ export type Database = {
           created_at?: string
           datum?: string | null
           end_zeit?: string | null
+          ergebnis_detail_sichtbar?: boolean
           id?: string
           late_join_modus?: string
           owner_id?: string
@@ -755,6 +758,8 @@ export type Database = {
         Returns: undefined
       }
       pruefung_abgeben: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_ergebnis_detail: { Args: { p_teilnehmer_id: string }; Returns: Json }
+      pruefung_neuer_versuch: { Args: { p_teilnehmer_id: string }; Returns: Json }
       pruefung_anonymisieren: {
         Args: { p_pruefung_id: string }
         Returns: number
