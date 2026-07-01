@@ -9,6 +9,7 @@ import {
   type FrageDaten,
   type GesamtAuswertung,
 } from '../lib/auswertung'
+import { trainerAnzeigeName } from '../lib/trainerName'
 
 type Teilnehmer = Tables<'teilnehmer'>
 
@@ -195,10 +196,10 @@ export default function AuswertungPage() {
         if (user) {
           const { data: tr } = await supabase
             .from('trainer')
-            .select('name, email')
+            .select('vorname, nachname, name, email')
             .eq('id', user.id)
             .single()
-          setMeinName(tr?.name || tr?.email || 'Trainer')
+          setMeinName(tr ? trainerAnzeigeName(tr) : 'Trainer')
         }
       } catch (err) {
         setFehler(err instanceof Error ? err.message : 'Laden fehlgeschlagen.')
@@ -408,6 +409,52 @@ export default function AuswertungPage() {
             {schwelleProThema != null && ` · ${schwelleProThema} % je Themengebiet`}
           </p>
 
+          {/* Korrektur-Status je Themengebiet (nur bei gemeinsamer Korrektur) */}
+          {kollaborativ && (
+            <Card className="mt-5">
+              <div className="text-sm font-medium text-ifm-blue mb-3">
+                Korrektur-Status je Themengebiet
+              </div>
+              <div className="space-y-2">
+                {auswertung.proThemengebiet
+                  .filter((t) => t.id != null)
+                  .map((t) => {
+                    const tgId = t.id as string
+                    const status = korrekturStatus[tgId]
+                    const darf = darfKorrigieren(tgId)
+                    return (
+                      <div
+                        key={tgId}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-ifm-gray/20 px-3 py-2"
+                      >
+                        <span className="text-sm font-medium text-ifm-blue">{t.name}</span>
+                        <div className="flex items-center gap-2">
+                          {status ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-ifm-green/15 px-2.5 py-0.5 text-xs font-medium text-ifm-green">
+                              ✓ korrigiert von {status.trainer_name ?? 'Trainer'}
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-ifm-gray/10 px-2.5 py-0.5 text-xs text-ifm-gray">
+                              offen
+                            </span>
+                          )}
+                          {darf && (
+                            <Button
+                              variant="ghost"
+                              className="!px-2 !py-1 text-xs"
+                              onClick={() => korrekturUmschalten(tgId)}
+                            >
+                              {status ? 'zurücksetzen' : 'als korrigiert markieren'}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+            </Card>
+          )}
+
           {/* Gesamtfeedback – nur Prüfungs-Besitzer */}
           {istBesitzer && (
             <Card className="mt-5">
@@ -514,51 +561,6 @@ export default function AuswertungPage() {
             ))}
           </div>
 
-          {/* Themengebiet-Feedback */}
-          <h2 className="mt-8 mb-3 text-lg font-semibold text-ifm-blue">
-            Feedback je Themengebiet
-          </h2>
-          <div className="space-y-3">
-            {auswertung.proThemengebiet
-              .filter((t) => t.id != null)
-              .map((t) => {
-                const tgId = t.id as string
-                const status = korrekturStatus[tgId]
-                const darf = darfKorrigieren(tgId)
-                return (
-                  <Card key={tgId}>
-                    {kollaborativ && (
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        {status ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-ifm-green/15 px-2 py-0.5 text-xs font-medium text-ifm-green">
-                            ✓ korrigiert von {status.trainer_name ?? 'Trainer'}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-ifm-gray">noch nicht korrigiert</span>
-                        )}
-                        {darf && (
-                          <Button
-                            variant="ghost"
-                            className="!px-2 !py-1 text-xs"
-                            onClick={() => korrekturUmschalten(tgId)}
-                          >
-                            {status ? 'Markierung entfernen' : 'Als korrigiert markieren'}
-                          </Button>
-                        )}
-                      </div>
-                    )}
-                    <Textarea
-                      label={t.name}
-                      rows={2}
-                      value={feedbackText('themengebiet', tgId)}
-                      onChange={(e) => setFeedbackText('themengebiet', tgId, e.target.value)}
-                      onBlur={() => speichereFeedback('themengebiet', tgId)}
-                      disabled={!darf}
-                    />
-                  </Card>
-                )
-              })}
-          </div>
         </>
       )}
     </div>

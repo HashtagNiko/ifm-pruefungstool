@@ -81,23 +81,28 @@ function detailInhalt(daten: AuswertungsDaten): any[] {
   const inhalt: any[] = []
   let aktuellesTg: string | null = null
   let nr = 0
-  let gruppeTgId: string | null = null
 
   sortiert.forEach((fa, i) => {
     const tgKey = fa.frage.themengebiet_id ?? '∅'
     if (tgKey !== aktuellesTg) {
-      // vorherige Themengebiet-Feedbackbox einfügen
-      if (aktuellesTg !== null) {
-        inhalt.push(...feedbackBox(daten.feedback[feedbackKey('themengebiet', gruppeTgId)]))
-      }
       aktuellesTg = tgKey
-      gruppeTgId = fa.frage.themengebiet_id
       inhalt.push({
         text: fa.frage.themengebiet_name,
         bold: true,
         fontSize: 14,
         color: FARBE.blau,
-        margin: [0, i === 0 ? 0 : 10, 0, 6],
+        margin: [0, i === 0 ? 0 : 10, 0, 2],
+      })
+      // Wer hat dieses Themengebiet korrigiert?
+      const korr = fa.frage.themengebiet_id
+        ? daten.korrekturProThemengebiet[fa.frage.themengebiet_id]
+        : undefined
+      inhalt.push({
+        text: korr ? `korrigiert von ${korr}` : 'noch nicht korrigiert',
+        italics: true,
+        fontSize: 9,
+        color: korr ? FARBE.gruen : FARBE.grau,
+        margin: [0, 0, 0, 6],
       })
     }
     nr += 1
@@ -119,10 +124,6 @@ function detailInhalt(daten: AuswertungsDaten): any[] {
     inhalt.push(...feedbackBox(daten.feedback[feedbackKey('frage', fa.frage.frage_id)]))
   })
 
-  // letztes Themengebiet-Feedback
-  if (aktuellesTg !== null) {
-    inhalt.push(...feedbackBox(daten.feedback[feedbackKey('themengebiet', gruppeTgId)]))
-  }
   return inhalt
 }
 

@@ -1,5 +1,6 @@
 import { supabase } from '../supabase'
 import { werteAus, type FrageDaten, type GesamtAuswertung } from '../auswertung'
+import { trainerAnzeigeName } from '../trainerName'
 
 export function feedbackKey(ebene: string, bezugId: string | null): string {
   return `${ebene}:${bezugId ?? ''}`
@@ -18,6 +19,8 @@ export interface AuswertungsDaten {
   auswertung: GesamtAuswertung
   /** key = `${ebene}:${bezugId ?? ''}` -> Text */
   feedback: Record<string, string>
+  /** themengebiet_id -> Name des korrigierenden Trainers */
+  korrekturProThemengebiet: Record<string, string>
 }
 
 /** Lädt alle Daten einer Teilnehmer-Auswertung und berechnet die Punkte. */
@@ -81,9 +84,18 @@ export async function ladeAuswertungsdaten(
   // Trainer-Name (Owner = aktueller Trainer)
   const { data: trainer } = await supabase
     .from('trainer')
-    .select('name')
+    .select('vorname, nachname, name, email')
     .eq('id', prRes.data.owner_id)
     .maybeSingle()
+
+  // Korrektur-Status je Themengebiet (wer hat korrigiert)
+  const { data: korrektur } = await supabase
+    .from('korrektur_status')
+    .select('themengebiet_id, trainer_name')
+    .eq('teilnehmer_id', teilnehmerId)
+  const korrekturProThemengebiet: Record<string, string> = {}
+  for (const k of korrektur ?? [])
+    if (k.trainer_name) korrekturProThemengebiet[k.themengebiet_id] = k.trainer_name
 
   const snapshot = snapRes.data
   const frageIds = snapshot.map((s) => s.frage_id)
@@ -140,11 +152,12 @@ export async function ladeAuswertungsdaten(
     kursName: v?.kurs?.name ?? '',
     vorlageName: v?.name ?? 'Prüfung',
     datum: prRes.data.datum,
-    trainerName: trainer?.name ?? '',
+    trainerName: trainer ? trainerAnzeigeName(trainer) : '',
     abgegeben: tnRes.data.abgegeben_am != null,
     schwelleGesamt,
     schwelleProThema,
     auswertung: werteAus(fragen, antwortenMap, schwelleGesamt, schwelleProThema),
     feedback,
+    korrekturProThemengebiet,
   }
 }
