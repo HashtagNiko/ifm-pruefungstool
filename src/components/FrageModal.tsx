@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Tables } from '../lib/database.types'
 import { Button, ErrorBanner, IconButton, Modal, TextInput, Textarea } from './ui'
@@ -53,22 +53,40 @@ export default function FrageModal({
   )
   const [fehler, setFehler] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // Obergrenze richtiger Antworten bei Multi-Choice (kursabhängig, Standard 2)
+  const [maxRichtig, setMaxRichtig] = useState(2)
+
+  useEffect(() => {
+    supabase
+      .from('kurs')
+      .select('multi_max_richtig')
+      .eq('id', kursId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.multi_max_richtig) setMaxRichtig(data.multi_max_richtig)
+      })
+  }, [kursId])
 
   const anzahlRichtig = optionen.filter((o) => o.ist_richtig).length
+  const multiOk = anzahlRichtig >= 2 && anzahlRichtig <= maxRichtig
 
   function setOption(index: number, patch: Partial<OptionEntwurf>) {
     setOptionen((alt) => alt.map((o, i) => (i === index ? { ...o, ...patch } : o)))
   }
 
   function richtigUmschalten(index: number) {
-    setOptionen((alt) =>
-      alt.map((o, i) => {
+    setOptionen((alt) => {
+      const aktiviert = !alt[index].ist_richtig
+      const anzahl = alt.filter((o) => o.ist_richtig).length
+      // Bei Multi-Choice die kursabhängige Obergrenze respektieren
+      if (typ === 'multi' && aktiviert && anzahl >= maxRichtig) return alt
+      return alt.map((o, i) => {
         if (i === index) return { ...o, ist_richtig: !o.ist_richtig }
         // Bei single nur eine richtige Antwort zulassen
         if (typ === 'single') return { ...o, ist_richtig: false }
         return o
-      }),
-    )
+      })
+    })
   }
 
   function typWechseln(neu: 'single' | 'multi') {
@@ -98,8 +116,10 @@ export default function FrageModal({
     const richtig = gefuellte.filter((o) => o.ist_richtig).length
     if (typ === 'single' && richtig !== 1)
       return 'Bei Single-Choice muss genau eine Antwort richtig sein.'
-    if (typ === 'multi' && richtig !== 2)
-      return 'Bei Multi-Choice müssen genau zwei Antworten richtig sein.'
+    if (typ === 'multi' && (richtig < 2 || richtig > maxRichtig))
+      return maxRichtig > 2
+        ? `Bei Multi-Choice müssen 2 bis ${maxRichtig} Antworten richtig sein.`
+        : 'Bei Multi-Choice müssen genau zwei Antworten richtig sein.'
     return null
   }
 
@@ -181,7 +201,11 @@ export default function FrageModal({
               className="w-full rounded-lg border border-ifm-gray/40 px-3 py-2 text-ifm-blue outline-none focus:border-ifm-blue focus:ring-2 focus:ring-ifm-blue/20"
             >
               <option value="single">Single-Choice (1 richtig, max 1 Punkt)</option>
-              <option value="multi">Multi-Choice (2 richtig, max 2 Punkte)</option>
+              <option value="multi">
+                {maxRichtig > 2
+                  ? `Multi-Choice (2–${maxRichtig} richtig)`
+                  : 'Multi-Choice (2 richtig, max 2 Punkte)'}
+              </option>
             </select>
           </label>
           <label className="block">
@@ -208,13 +232,13 @@ export default function FrageModal({
               Antwortoptionen{' '}
               <span
                 className={
-                  (typ === 'single' && anzahlRichtig === 1) ||
-                  (typ === 'multi' && anzahlRichtig === 2)
+                  (typ === 'single' && anzahlRichtig === 1) || (typ === 'multi' && multiOk)
                     ? 'text-ifm-green'
                     : 'text-ifm-gray'
                 }
               >
-                ({anzahlRichtig} richtig {typ === 'single' ? '/ 1' : '/ 2'})
+                ({anzahlRichtig} richtig{' '}
+                {typ === 'single' ? '/ 1' : maxRichtig > 2 ? `/ 2–${maxRichtig}` : '/ 2'})
               </span>
             </span>
           </div>

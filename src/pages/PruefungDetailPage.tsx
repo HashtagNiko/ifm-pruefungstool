@@ -718,7 +718,7 @@ export default function PruefungDetailPage() {
                             <span>{row.frage?.text}</span>
                           </span>
                           <span className="ml-4 block text-xs text-ifm-gray">
-                            {row.frage?.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                            {row.frage?.typ === 'multi' ? 'Multi' : 'Single'}
                           </span>
                         </button>
                         {darfTauschen(row.themengebiet_id) && (

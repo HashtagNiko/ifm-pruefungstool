@@ -206,6 +206,7 @@ export type Database = {
           beschreibung: string | null
           created_at: string
           id: string
+          multi_max_richtig: number
           name: string
           owner_id: string
         }
@@ -213,6 +214,7 @@ export type Database = {
           beschreibung?: string | null
           created_at?: string
           id?: string
+          multi_max_richtig?: number
           name: string
           owner_id: string
         }
@@ -220,6 +222,7 @@ export type Database = {
           beschreibung?: string | null
           created_at?: string
           id?: string
+          multi_max_richtig?: number
           name?: string
           owner_id?: string
         }

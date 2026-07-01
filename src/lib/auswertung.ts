@@ -63,8 +63,9 @@ export function bewerteFrage(
   if (frage.typ === 'single') {
     return { punkte: n === 1 && richtigGewaehlt === 1 ? 1 : 0, max: 1 }
   }
-  // multi: 0 oder >2 angekreuzt -> 0; sonst Anzahl richtig angekreuzter
-  return { punkte: n >= 1 && n <= 2 ? richtigGewaehlt : 0, max: 2 }
+  // multi: max Punkte = Anzahl richtiger Optionen; mehr angekreuzt als richtige -> 0
+  const k = richtigeIds.size || 2
+  return { punkte: n >= 1 && n <= k ? richtigGewaehlt : 0, max: k }
 }
 
 function runde(n: number): number {

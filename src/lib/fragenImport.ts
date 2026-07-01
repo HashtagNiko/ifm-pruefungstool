@@ -77,8 +77,8 @@ export function parseExport(text: string): ParseErgebnis {
     if (f.typ === 'single' && richtige !== 1) {
       warnungen.push(`${pos} (single): hat ${richtige} richtige Antworten, erwartet genau 1.`)
     }
-    if (f.typ === 'multi' && richtige !== 2) {
-      warnungen.push(`${pos} (multi): hat ${richtige} richtige Antworten, erwartet genau 2.`)
+    if (f.typ === 'multi' && richtige < 2) {
+      warnungen.push(`${pos} (multi): hat ${richtige} richtige Antworten, erwartet mindestens 2.`)
     }
     fragen.push({
       nr: f.nr,

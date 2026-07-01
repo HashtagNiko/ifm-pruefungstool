@@ -272,7 +272,9 @@ export default function VorschauPage() {
             </div>
             <h2 className="mt-2 text-lg font-semibold text-ifm-blue">{frage.text}</h2>
             <p className="mt-1 text-xs text-ifm-gray">
-              {frage.typ === 'multi' ? 'Mehrfachauswahl (2 richtig)' : 'Einfachauswahl (1 richtig)'}
+              {frage.typ === 'multi'
+                ? `Mehrfachauswahl (${frage.optionen.filter((o) => o.ist_richtig).length} richtig)`
+                : 'Einfachauswahl (1 richtig)'}
             </p>
 
             <ul className="mt-4 space-y-2">

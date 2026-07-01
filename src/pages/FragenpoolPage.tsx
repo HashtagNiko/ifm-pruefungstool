@@ -361,7 +361,7 @@ export default function FragenpoolPage() {
                                         : 'bg-ifm-green/10 text-ifm-green'
                                     }`}
                                   >
-                                    {f.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                                    {f.typ === 'multi' ? 'Multi' : 'Single'}
                                   </span>
                                   <span className="text-ifm-gray">
                                     {f.antwortoption.length} Optionen · {richtig} richtig
