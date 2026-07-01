@@ -69,6 +69,7 @@ export default function PruefungDetailPage() {
   const [waehlenFuer, setWaehlenFuer] = useState<SnapshotRow | null>(null)
   // Aufklappbare Fragen im Snapshot (Antwortoptionen anzeigen)
   const [offeneFragen, setOffeneFragen] = useState<Set<string>>(new Set())
+  const [offeneGruppen, setOffeneGruppen] = useState<Set<string>>(new Set())
   const [optionenProFrage, setOptionenProFrage] = useState<
     Record<string, { id: string; text: string; ist_richtig: boolean; sortierung: number }[]>
   >({})
@@ -232,6 +233,15 @@ export default function PruefungDetailPage() {
     })
   }
 
+  function gruppeAufklappen(key: string) {
+    setOffeneGruppen((alt) => {
+      const neu = new Set(alt)
+      if (neu.has(key)) neu.delete(key)
+      else neu.add(key)
+      return neu
+    })
+  }
+
   function darfTauschen(themengebietId: string | null): boolean {
     if (!istEntwurf) return false
     // Eingeschränkt-Kopie ODER Korrektur-Empfänger: nur in freigegebenen Themengebieten
@@ -366,12 +376,13 @@ export default function PruefungDetailPage() {
   const teilnehmerLink = `${window.location.origin}/p/${pruefung.zugangscode}`
 
   // Snapshot nach Themengebiet gruppieren (Reihenfolge über sortierung gegeben)
-  const gruppen: { name: string; rows: SnapshotRow[] }[] = []
+  const gruppen: { key: string; name: string; rows: SnapshotRow[] }[] = []
   for (const row of snapshot) {
     const name = row.themengebiet?.name ?? 'Ohne Themengebiet'
+    const key = row.themengebiet_id ?? 'ohne'
     const letzte = gruppen[gruppen.length - 1]
-    if (letzte && letzte.name === name) letzte.rows.push(row)
-    else gruppen.push({ name, rows: [row] })
+    if (letzte && letzte.key === key) letzte.rows.push(row)
+    else gruppen.push({ key, name, rows: [row] })
   }
 
   // Themengebiet-Namen für die Korrektur-Chips
@@ -660,17 +671,31 @@ export default function PruefungDetailPage() {
         </p>
       )}
 
-      <div className="mt-3 space-y-5">
+      <div className="mt-3 space-y-3">
         {snapshot.length === 0 ? (
           <EmptyState>Kein Snapshot vorhanden.</EmptyState>
         ) : (
-          gruppen.map((g) => (
-            <div key={g.name}>
-              <div className="mb-2 text-sm font-medium text-ifm-gray">
-                {g.name} ({g.rows.length})
-              </div>
-              <Card className="p-0 overflow-hidden">
-                <ul className="divide-y divide-ifm-lightblue">
+          gruppen.map((g) => {
+            const gruppeAuf = offeneGruppen.has(g.key)
+            return (
+            <div
+              key={g.key}
+              className="rounded-xl border border-ifm-gray/20 bg-white overflow-hidden"
+            >
+              <button
+                type="button"
+                onClick={() => gruppeAufklappen(g.key)}
+                className="flex w-full items-center gap-2 px-4 py-3 text-left hover:bg-ifm-lightblue/30"
+                aria-expanded={gruppeAuf}
+              >
+                <span className="select-none text-ifm-gray">{gruppeAuf ? '▾' : '▸'}</span>
+                <span className="font-semibold text-ifm-blue">{g.name}</span>
+                <span className="rounded-full bg-ifm-lightblue px-2 py-0.5 text-xs text-ifm-blue">
+                  {g.rows.length}
+                </span>
+              </button>
+              {gruppeAuf && (
+                <ul className="border-t border-ifm-lightblue divide-y divide-ifm-lightblue">
                   {g.rows.map((row) => {
                     const offen = offeneFragen.has(row.id)
                     const opts = optionenProFrage[row.frage_id] ?? []
@@ -748,9 +773,10 @@ export default function PruefungDetailPage() {
                     )
                   })}
                 </ul>
-              </Card>
+              )}
             </div>
-          ))
+            )
+          })
         )}
       </div>
 
