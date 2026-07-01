@@ -3,13 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import type { Tables } from '../lib/database.types'
-import {
-  Button,
-  ConfirmDialog,
-  EmptyState,
-  ErrorBanner,
-  IconButton,
-} from '../components/ui'
+import { ConfirmDialog, EmptyState, ErrorBanner, IconButton } from '../components/ui'
 import { PencilIcon, PlusIcon, TrashIcon } from '../components/icons'
 import FrageModal, { type FrageMitOptionen } from '../components/FrageModal'
 import FragenImportModal from '../components/FragenImportModal'
@@ -31,6 +25,7 @@ export default function FragenpoolPage() {
   // Vom aktuellen Trainer ausgeblendete Fragen (eigene "Löschungen" an geteilten Kursen)
   const [ausgeblendet, setAusgeblendet] = useState<Set<string>>(new Set())
   const [offen, setOffen] = useState<Set<string>>(new Set())
+  const [offeneFragen, setOffeneFragen] = useState<Set<string>>(new Set())
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
   const [hinweis, setHinweis] = useState<string | null>(null)
@@ -116,6 +111,15 @@ export default function FragenpoolPage() {
 
   function toggle(id: string) {
     setOffen((alt) => {
+      const neu = new Set(alt)
+      if (neu.has(id)) neu.delete(id)
+      else neu.add(id)
+      return neu
+    })
+  }
+
+  function frageAufklappen(id: string) {
+    setOffeneFragen((alt) => {
       const neu = new Set(alt)
       if (neu.has(id)) neu.delete(id)
       else neu.add(id)
@@ -311,13 +315,13 @@ export default function FragenpoolPage() {
                     )}
                   </button>
                   {editierbar && s.tgId && (
-                    <Button
-                      variant="ghost"
-                      className="shrink-0 !px-2 !py-1 text-xs"
+                    <button
+                      type="button"
                       onClick={() => frageAnlegen(s.tgId!)}
+                      className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-ifm-blue px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-ifm-blue/90"
                     >
-                      + Frage
-                    </Button>
+                      <PlusIcon className="h-4 w-4" /> Frage
+                    </button>
                   )}
                 </div>
 
@@ -329,43 +333,86 @@ export default function FragenpoolPage() {
                       s.fragen.map((f, i) => {
                         const richtig = f.antwortoption.filter((o) => o.ist_richtig).length
                         const eigene = f.erstellt_von === user?.id
+                        const auf = offeneFragen.has(f.id)
+                        const opts = [...f.antwortoption].sort((a, b) => a.sortierung - b.sortierung)
                         return (
-                          <div key={f.id} className="flex items-start gap-3 px-4 py-3">
-                            <span className="text-ifm-gray text-sm pt-0.5 w-6 text-right">
-                              {i + 1}.
-                            </span>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-ifm-blue">{f.text}</p>
-                              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs">
-                                <span
-                                  className={`rounded-full px-2 py-0.5 font-medium ${
-                                    f.typ === 'multi'
-                                      ? 'bg-ifm-blue/10 text-ifm-blue'
-                                      : 'bg-ifm-green/10 text-ifm-green'
-                                  }`}
-                                >
-                                  {f.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                          <div key={f.id} className="px-4 py-3">
+                            <div className="flex items-start gap-3">
+                              <span className="text-ifm-gray text-sm pt-0.5 w-6 text-right">
+                                {i + 1}.
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => frageAufklappen(f.id)}
+                                className="flex-1 min-w-0 text-left"
+                                aria-expanded={auf}
+                              >
+                                <span className="flex items-start gap-1.5 text-ifm-blue">
+                                  <span className="select-none pt-0.5 text-ifm-gray">
+                                    {auf ? '▾' : '▸'}
+                                  </span>
+                                  <span>{f.text}</span>
                                 </span>
-                                <span className="text-ifm-gray">
-                                  {f.antwortoption.length} Optionen · {richtig} richtig
+                                <span className="ml-4 mt-1.5 flex flex-wrap items-center gap-2 text-xs">
+                                  <span
+                                    className={`rounded-full px-2 py-0.5 font-medium ${
+                                      f.typ === 'multi'
+                                        ? 'bg-ifm-blue/10 text-ifm-blue'
+                                        : 'bg-ifm-green/10 text-ifm-green'
+                                    }`}
+                                  >
+                                    {f.typ === 'multi' ? 'Multi (2 richtig)' : 'Single (1 richtig)'}
+                                  </span>
+                                  <span className="text-ifm-gray">
+                                    {f.antwortoption.length} Optionen · {richtig} richtig
+                                  </span>
                                 </span>
-                              </div>
-                            </div>
-                            {editierbar && (
-                              <div className="flex items-center gap-1 shrink-0">
-                                {(istBesitzer || eigene) && (
-                                  <IconButton label="Bearbeiten" onClick={() => setBearbeite(f)}>
-                                    <PencilIcon />
+                              </button>
+                              {editierbar && (
+                                <div className="flex items-center gap-1 shrink-0">
+                                  {(istBesitzer || eigene) && (
+                                    <IconButton label="Bearbeiten" onClick={() => setBearbeite(f)}>
+                                      <PencilIcon />
+                                    </IconButton>
+                                  )}
+                                  <IconButton
+                                    variant="danger"
+                                    label={istBesitzer ? 'Löschen' : 'Ausblenden'}
+                                    onClick={() => setLoeschKandidat(f)}
+                                  >
+                                    <TrashIcon />
                                   </IconButton>
+                                </div>
+                              )}
+                            </div>
+                            {auf && (
+                              <ul className="mt-2 ml-9 space-y-1">
+                                {opts.length === 0 ? (
+                                  <li className="text-xs text-ifm-gray">Keine Antwortoptionen.</li>
+                                ) : (
+                                  opts.map((o) => (
+                                    <li
+                                      key={o.id}
+                                      className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ${
+                                        o.ist_richtig ? 'bg-ifm-green/10' : 'bg-ifm-lightblue/30'
+                                      }`}
+                                    >
+                                      <span
+                                        className={`w-4 shrink-0 text-center font-bold ${
+                                          o.ist_richtig ? 'text-ifm-green' : 'text-transparent'
+                                        }`}
+                                      >
+                                        ✓
+                                      </span>
+                                      <span
+                                        className={o.ist_richtig ? 'text-ifm-green' : 'text-ifm-blue'}
+                                      >
+                                        {o.text}
+                                      </span>
+                                    </li>
+                                  ))
                                 )}
-                                <IconButton
-                                  variant="danger"
-                                  label={istBesitzer ? 'Löschen' : 'Ausblenden'}
-                                  onClick={() => setLoeschKandidat(f)}
-                                >
-                                  <TrashIcon />
-                                </IconButton>
-                              </div>
+                              </ul>
                             )}
                           </div>
                         )
