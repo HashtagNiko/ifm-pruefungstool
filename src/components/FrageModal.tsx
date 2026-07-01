@@ -148,7 +148,13 @@ export default function FrageModal({
 
       onSaved()
     } catch (err) {
-      setFehler(err instanceof Error ? err.message : 'Speichern fehlgeschlagen.')
+      const msg =
+        err instanceof Error
+          ? err.message
+          : err && typeof err === 'object' && 'message' in err
+            ? String((err as { message: unknown }).message)
+            : 'Speichern fehlgeschlagen.'
+      setFehler(msg)
     } finally {
       setBusy(false)
     }
