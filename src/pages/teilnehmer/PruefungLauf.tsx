@@ -264,7 +264,7 @@ export default function PruefungLauf({
           <h1 className="mt-3 text-xl font-semibold text-ifm-blue">{frage.text}</h1>
           <p className="mt-1 text-sm text-ifm-gray">
             {frage.typ === 'multi'
-              ? 'Mehrfachauswahl (2 Antworten richtig, max. 2 Punkte)'
+              ? `Mehrfachauswahl (${frage.richtige_anzahl} Antworten richtig, max. ${frage.richtige_anzahl} Punkte)`
               : 'Einfachauswahl (1 Antwort richtig, max. 1 Punkt)'}
           </p>
 

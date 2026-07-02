@@ -33,6 +33,8 @@ export interface TeilnehmerFrage {
   typ: 'single' | 'multi'
   text: string
   themengebiet: string | null
+  /** Anzahl richtiger Antworten (ohne zu verraten, welche) */
+  richtige_anzahl: number
   optionen: TeilnehmerOption[]
 }
 
