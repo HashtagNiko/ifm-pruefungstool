@@ -80,7 +80,7 @@ export default function FragenpoolPage() {
     else if (f) setFragen(f)
 
     if (!besitzer && user) {
-      // Geteilter Kurs: freigegebene Themengebiete + eigene Ausblendungen laden
+      // Geteilter Kurs: zusätzlich die freigegebenen Themengebiete laden
       const themenIds = new Set((t ?? []).map((x) => x.id))
       const { data: frgs } = await supabase
         .from('pruefung_freigabe')
@@ -92,14 +92,20 @@ export default function FragenpoolPage() {
       for (const fr of frgs ?? [])
         for (const tg of fr.bearbeitbare_themengebiete ?? []) if (themenIds.has(tg)) freig.add(tg)
       setFreigegebeneTg(freig)
+    } else {
+      setFreigegebeneTg(new Set())
+    }
 
+    // Ausblendungen gelten auch im eigenen Kurs: Fragen, die in einer gelaufenen
+    // Prüfung stecken, lassen sich nicht löschen (FK `on delete restrict`) – sie
+    // aus dem Pool zu nehmen ist dort der einzige Weg.
+    if (user) {
       const { data: aus } = await supabase
         .from('frage_ausgeblendet')
         .select('frage_id')
         .eq('trainer_id', user.id)
       setAusgeblendet(new Set((aus ?? []).map((x) => x.frage_id)))
     } else {
-      setFreigegebeneTg(new Set())
       setAusgeblendet(new Set())
     }
   }, [kursId, kurse, user])
