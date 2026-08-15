@@ -38,19 +38,23 @@ export async function freigabeAblehnen(freigabeId: string): Promise<void> {
   if (error) throw new Error(error.message)
 }
 
-/** Map kurs_id -> Modus für angenommene Freigaben an den aktuellen Trainer. */
+export type KursFreigabeInfo = { freigabeId: string; modus: FreigabeModus }
+
+/** Map kurs_id -> Freigabe für angenommene Freigaben an den aktuellen Trainer. */
 export async function meineFreigegebenenKurse(
   empfaengerId: string,
-): Promise<Record<string, FreigabeModus>> {
+): Promise<Record<string, KursFreigabeInfo>> {
   const { data, error } = await supabase
     .from('kurs_freigabe')
-    .select('kurs_id, modus')
+    .select('id, kurs_id, modus')
     .eq('empfaenger_id', empfaengerId)
     .eq('status', 'angenommen')
   if (error || !data) return {}
-  const map: Record<string, FreigabeModus> = {}
+  const map: Record<string, KursFreigabeInfo> = {}
   for (const f of data) {
-    if (f.modus !== 'kopie') map[f.kurs_id] = f.modus as FreigabeModus
+    if (f.modus !== 'kopie') {
+      map[f.kurs_id] = { freigabeId: f.id, modus: f.modus as FreigabeModus }
+    }
   }
   return map
 }

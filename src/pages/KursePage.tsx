@@ -16,7 +16,12 @@ import {
 } from '../components/ui'
 import { PencilIcon, PlusIcon, ShareIcon, TrashIcon } from '../components/icons'
 import TeilenModal from '../components/TeilenModal'
-import { meineFreigegebenenKurse, MODUS_LABEL, type FreigabeModus } from '../lib/sharing'
+import {
+  freigabeAblehnen,
+  meineFreigegebenenKurse,
+  MODUS_LABEL,
+  type KursFreigabeInfo,
+} from '../lib/sharing'
 
 type Kurs = Tables<'kurs'>
 
@@ -32,8 +37,11 @@ export default function KursePage() {
   const [loeschKandidat, setLoeschKandidat] = useState<Kurs | null>(null)
   const [loeschBusy, setLoeschBusy] = useState(false)
   // Sharing
-  const [freigabeMap, setFreigabeMap] = useState<Record<string, FreigabeModus>>({})
+  const [freigabeMap, setFreigabeMap] = useState<Record<string, KursFreigabeInfo>>({})
   const [teilenKurs, setTeilenKurs] = useState<Kurs | null>(null)
+  // Geteilten Kurs aus dem eigenen Konto entfernen (Freigabe zurückgeben)
+  const [entfernKandidat, setEntfernKandidat] = useState<Kurs | null>(null)
+  const [entfernBusy, setEntfernBusy] = useState(false)
 
   async function laden_() {
     setLaden(true)
@@ -63,6 +71,33 @@ export default function KursePage() {
       setLoeschKandidat(null)
     }
     setLoeschBusy(false)
+  }
+
+  /**
+   * Geteilten Kurs aus dem eigenen Konto entfernen: die Freigabe geht per
+   * `freigabe_ablehnen` auf 'abgelehnt' zurück, womit `darf_kurs_lesen` nicht mehr
+   * greift. Der Kurs des Besitzers bleibt unangetastet.
+   */
+  async function entfernenBestaetigt() {
+    if (!entfernKandidat) return
+    const info = freigabeMap[entfernKandidat.id]
+    if (!info) return
+    setEntfernBusy(true)
+    setFehler(null)
+    try {
+      await freigabeAblehnen(info.freigabeId)
+      setKurse((k) => k.filter((x) => x.id !== entfernKandidat.id))
+      setFreigabeMap((alt) => {
+        const neu = { ...alt }
+        delete neu[entfernKandidat.id]
+        return neu
+      })
+      setEntfernKandidat(null)
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Entfernen fehlgeschlagen.')
+    } finally {
+      setEntfernBusy(false)
+    }
   }
 
   // Nur eigene + per Kurs-Freigabe geteilte Kurse verwalten. Kurse, die nur über eine
@@ -101,7 +136,7 @@ export default function KursePage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sichtbareKurse.map((kurs) => {
             const istBesitzer = kurs.owner_id === user?.id
-            const modus = freigabeMap[kurs.id]
+            const modus = freigabeMap[kurs.id]?.modus
             const darfBearbeiten = istBesitzer || modus === 'gemeinsam'
             return (
               <Card key={kurs.id} className="flex flex-col">
@@ -130,11 +165,19 @@ export default function KursePage() {
                       <PencilIcon />
                     </IconButton>
                   )}
-                  {istBesitzer && (
+                  {istBesitzer ? (
                     <IconButton
                       variant="danger"
                       label="Löschen"
                       onClick={() => setLoeschKandidat(kurs)}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      variant="danger"
+                      label="Aus meinem Konto entfernen"
+                      onClick={() => setEntfernKandidat(kurs)}
                     >
                       <TrashIcon />
                     </IconButton>
@@ -174,6 +217,27 @@ export default function KursePage() {
         busy={loeschBusy}
         onConfirm={loeschenBestaetigt}
         onClose={() => setLoeschKandidat(null)}
+      />
+
+      <ConfirmDialog
+        open={entfernKandidat !== null}
+        title="Kurs aus meinem Konto entfernen"
+        message={
+          <>
+            <strong>{entfernKandidat?.name}</strong> verschwindet aus deiner Kursliste. Der Kurs
+            selbst bleibt beim Besitzer vollständig erhalten – du gibst nur deinen Zugriff zurück
+            und kannst jederzeit neu eingeladen werden.
+            <br />
+            <br />
+            {entfernKandidat && freigabeMap[entfernKandidat.id]?.modus === 'gemeinsam'
+              ? 'Du verlierst dein Bearbeitungsrecht. Deine bisherigen Änderungen bleiben im Kurs erhalten.'
+              : 'Du kannst den Kurs danach nicht mehr für eigene Prüfungen verwenden.'}
+          </>
+        }
+        confirmLabel="Entfernen"
+        busy={entfernBusy}
+        onConfirm={entfernenBestaetigt}
+        onClose={() => setEntfernKandidat(null)}
       />
 
       {teilenKurs && (

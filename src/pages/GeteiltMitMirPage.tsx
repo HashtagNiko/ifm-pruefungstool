@@ -32,24 +32,41 @@ export default function GeteiltMitMirPage() {
   const [widerrufenP, setWiderrufenP] = useState<PFreigabe | null>(null)
   const [kopierKandidat, setKopierKandidat] = useState<PFreigabe | null>(null)
   const [kopierBusy, setKopierBusy] = useState(false)
+  const [entfernenK, setEntfernenK] = useState<Freigabe | null>(null)
+  const [entfernenP, setEntfernenP] = useState<PFreigabe | null>(null)
+  const [entfernenBusy, setEntfernenBusy] = useState(false)
+  const [auchPruefungLoeschen, setAuchPruefungLoeschen] = useState(false)
+  // Freigabe-ID -> IDs der eigenen Prüfungen, die aus dieser Freigabe entstanden sind
+  // (nur bei „Eingeschränkt nutzen"; Kopien haben keinen Rückverweis).
+  const [abgeleitet, setAbgeleitet] = useState<Record<string, string[]>>({})
+
+  const meineId = user?.id
 
   const laden_ = useCallback(async () => {
-    const [kRes, pRes] = await Promise.all([
+    const [kRes, pRes, aRes] = await Promise.all([
       supabase.from('kurs_freigabe').select('*').order('created_at', { ascending: false }),
       supabase.from('pruefung_freigabe').select('*').order('created_at', { ascending: false }),
+      supabase.from('pruefung').select('id, owner_id, quelle_freigabe_id').not('quelle_freigabe_id', 'is', null),
     ])
     if (kRes.error) setFehler(kRes.error.message)
     else setFreigaben(kRes.data)
     if (pRes.error) setFehler(pRes.error.message)
     else if (pRes.data) setPFreigaben(pRes.data)
+    if (aRes.data) {
+      const map: Record<string, string[]> = {}
+      for (const p of aRes.data) {
+        if (p.owner_id !== meineId || !p.quelle_freigabe_id) continue
+        ;(map[p.quelle_freigabe_id] ??= []).push(p.id)
+      }
+      setAbgeleitet(map)
+    }
     setLaden(false)
-  }, [])
+  }, [meineId])
 
   useEffect(() => {
     laden_()
   }, [laden_])
 
-  const meineId = user?.id
   const eingehend = freigaben.filter((f) => f.besitzer_id !== meineId)
   const offen = eingehend.filter((f) => f.status === 'eingeladen')
   const angenommen = eingehend.filter((f) => f.status === 'angenommen')
@@ -142,6 +159,53 @@ export default function GeteiltMitMirPage() {
     }
   }
 
+  /**
+   * Angenommene Freigabe zurückgeben. Der Status wandert auf 'abgelehnt' — und weil
+   * `darf_kurs_lesen` ausdrücklich 'angenommen' verlangt, verschwindet der Kurs sofort
+   * aus der eigenen Liste. Der Besitzer kann jederzeit neu einladen.
+   */
+  async function entfernenKBestaetigt() {
+    if (!entfernenK) return
+    setEntfernenBusy(true)
+    setFehler(null)
+    try {
+      await freigabeAblehnen(entfernenK.id)
+      setHinweis(`„${entfernenK.kurs_name}" wurde aus deinem Konto entfernt.`)
+      setEntfernenK(null)
+      await laden_()
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Entfernen fehlgeschlagen.')
+    } finally {
+      setEntfernenBusy(false)
+    }
+  }
+
+  async function entfernenPBestaetigt() {
+    if (!entfernenP) return
+    setEntfernenBusy(true)
+    setFehler(null)
+    try {
+      const eigene = abgeleitet[entfernenP.id] ?? []
+      if (auchPruefungLoeschen && eigene.length > 0) {
+        const { error } = await supabase.from('pruefung').delete().in('id', eigene)
+        if (error) throw new Error(error.message)
+      }
+      await pruefungFreigabeAblehnen(entfernenP.id)
+      setHinweis(`„${entfernenP.pruefung_name}" wurde aus deinem Konto entfernt.`)
+      setEntfernenP(null)
+      await laden_()
+    } catch (err) {
+      setFehler(err instanceof Error ? err.message : 'Entfernen fehlgeschlagen.')
+    } finally {
+      setEntfernenBusy(false)
+    }
+  }
+
+  function entfernenDialogOeffnen(f: PFreigabe) {
+    setAuchPruefungLoeschen(false)
+    setEntfernenP(f)
+  }
+
   async function widerrufenBestaetigt() {
     if (!widerrufen) return
     setBusyId(widerrufen.id)
@@ -221,9 +285,18 @@ export default function GeteiltMitMirPage() {
                     {MODUS_LABEL[f.modus as FreigabeModus]}
                   </span>
                 </div>
-                <Link to="/kurse" className="text-sm text-ifm-blue hover:underline">
-                  Zu den Kursen →
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link to="/kurse" className="text-sm text-ifm-blue hover:underline">
+                    Zu den Kursen →
+                  </Link>
+                  <IconButton
+                    variant="danger"
+                    label="Aus meinem Konto entfernen"
+                    onClick={() => setEntfernenK(f)}
+                  >
+                    <TrashIcon />
+                  </IconButton>
+                </div>
               </Card>
             ))}
           </div>
@@ -277,6 +350,13 @@ export default function GeteiltMitMirPage() {
                   <Link to="/pruefungen" className="text-sm text-ifm-blue hover:underline">
                     Zu den Prüfungen →
                   </Link>
+                  <IconButton
+                    variant="danger"
+                    label="Aus meinem Konto entfernen"
+                    onClick={() => entfernenDialogOeffnen(f)}
+                  >
+                    <TrashIcon />
+                  </IconButton>
                 </div>
               </Card>
             ))}
@@ -334,6 +414,71 @@ export default function GeteiltMitMirPage() {
           </ul>
         </Card>
       )}
+
+      <ConfirmDialog
+        open={entfernenK !== null}
+        title="Kurs aus meinem Konto entfernen"
+        message={
+          <>
+            <strong>{entfernenK?.kurs_name}</strong> verschwindet aus deiner Kursliste. Der Kurs
+            selbst bleibt bei {entfernenK?.besitzer_email ?? 'dem Besitzer'} vollständig erhalten –
+            du gibst nur deinen Zugriff zurück und kannst jederzeit neu eingeladen werden.
+            <br />
+            <br />
+            {entfernenK?.modus === 'kopie'
+              ? 'Deine übernommene Kopie gehört dir und bleibt unberührt.'
+              : entfernenK?.modus === 'gemeinsam'
+                ? 'Du verlierst dein Bearbeitungsrecht. Deine bisherigen Änderungen bleiben im Kurs erhalten.'
+                : 'Du kannst den Kurs danach nicht mehr für eigene Prüfungen verwenden.'}
+          </>
+        }
+        confirmLabel="Entfernen"
+        busy={entfernenBusy}
+        onConfirm={entfernenKBestaetigt}
+        onClose={() => setEntfernenK(null)}
+      />
+
+      <ConfirmDialog
+        open={entfernenP !== null}
+        title="Prüfung aus meinem Konto entfernen"
+        message={
+          <>
+            <strong>{entfernenP?.pruefung_name}</strong> verschwindet aus „Geteilt mit mir". Du
+            gibst damit die Freigabe an {entfernenP?.besitzer_email ?? 'den Besitzer'} zurück und
+            kannst jederzeit neu eingeladen werden.
+            <br />
+            <br />
+            {entfernenP?.modus === 'korrektur'
+              ? 'Du kannst danach nicht mehr mitkorrigieren. Bereits gespeicherte Korrekturen und Feedback bleiben erhalten.'
+              : entfernenP?.modus === 'kopie'
+                ? 'Deine übernommene Kopie gehört dir und bleibt unberührt.'
+                : 'Deine daraus erstellte Prüfung bleibt bestehen und lesbar; Fragen tauschen ist darin danach nicht mehr möglich.'}
+            {entfernenP && (abgeleitet[entfernenP.id]?.length ?? 0) > 0 && (
+              <label className="mt-4 flex gap-2 rounded-lg border border-ifm-gray/30 p-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={auchPruefungLoeschen}
+                  onChange={(e) => setAuchPruefungLoeschen(e.target.checked)}
+                  className="mt-1 accent-ifm-blue"
+                />
+                <span>
+                  <span className="block font-medium text-ifm-blue">
+                    Auch meine daraus erstellte Prüfung löschen
+                  </span>
+                  <span className="block text-sm text-ifm-gray">
+                    Achtung: Teilnehmer, Antworten und Ergebnisse dieser Prüfung werden dabei
+                    unwiderruflich gelöscht.
+                  </span>
+                </span>
+              </label>
+            )}
+          </>
+        }
+        confirmLabel="Entfernen"
+        busy={entfernenBusy}
+        onConfirm={entfernenPBestaetigt}
+        onClose={() => setEntfernenP(null)}
+      />
 
       <ConfirmDialog
         open={widerrufen !== null}
