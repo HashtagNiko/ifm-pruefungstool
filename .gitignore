@@ -43,10 +43,11 @@ hg-fragen-gesamt.json
 Fragen json
 
 
-# Pruefungs-Dokumente / Bearbeitungsboegen -> nicht ins (oeffentliche) Repo
-# (Marken-/Design-Vorlagen wie ifmera-Vorlage.docx bleiben erlaubt)
+# Pruefungs-Dokumente, Vorlagen, interne Projektunterlagen
+# -> nicht ins (oeffentliche) Repo
 *Bearbeitungsbogen*.docx
 *Pruefung*.docx
 *Pruefung*.pdf
 *ifmera-Vorlage*.docx
 *Konzept_Prüfungstool.md
+*Projektdateien
